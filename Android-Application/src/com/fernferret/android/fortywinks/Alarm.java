@@ -35,6 +35,25 @@ public class Alarm implements Parcelable {
             mCalendarDay = day;
         }
         
+        static Day fromCalendarDay(int day) {
+            switch (day) {
+                case Calendar.SUNDAY:
+                    return SUNDAY;
+                case Calendar.MONDAY:
+                    return MONDAY;
+                case Calendar.TUESDAY:
+                    return TUESDAY;
+                case Calendar.WEDNESDAY:
+                    return WEDNESDAY;
+                case Calendar.THURSDAY:
+                    return THURSDAY;
+                case Calendar.FRIDAY:
+                    return FRIDAY;
+                default:
+                    return SATURDAY;     
+            }
+        }
+        
         int getValue() { return mValue; }
         int getDay() { return mCalendarDay; }
     }
@@ -94,6 +113,10 @@ public class Alarm implements Parcelable {
         return (getDaysOfWeek() & mask) == mask;
     }
     
+    private boolean isCalendarDayEnabled(int day) {
+        return isDayEnabled(Day.fromCalendarDay(day));
+    }
+    
     public void makeOneTimeAlarm() {
         setDaysOfWeek(0);
     }
@@ -124,7 +147,20 @@ public class Alarm implements Parcelable {
             }
             
         } else {
-            // TODO: Make this actually work
+            
+            /* are we past the time for today? */
+            if (now.after(t)) {
+                
+                /* If so, increment our proposed day by one */
+                t.add(Calendar.DAY_OF_YEAR, 1);
+            }
+
+            /* Now walk through the days until we find one that's enabled */
+            while (!isCalendarDayEnabled(t.get(Calendar.DAY_OF_WEEK))) {
+                t.add(Calendar.DAY_OF_YEAR, 1);
+            }
+
+            /* And return it */
             return t.getTimeInMillis();
         }
     }
