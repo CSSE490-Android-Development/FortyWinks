@@ -34,7 +34,7 @@ public class DBAdapter extends SQLiteOpenHelper {
         s.bindString(8, (alarm.getEnabled() ? 1 : 0) + "");
         s.executeInsert();
     }
-    
+
     public List<Alarm> listAlarms() {
         List<Alarm> result = new ArrayList<Alarm>();
         String query = "SELECT * FROM alarms";
@@ -64,6 +64,39 @@ public class DBAdapter extends SQLiteOpenHelper {
         
         return result;
     }
+    
+    
+    public Alarm getQuickAlarm() {
+        Alarm result;
+        String query = "SELECT * FROM alarms WHERE days_of_week = 0 ORDER BY id DESC";
+        Cursor cursor = mDb.rawQuery(query, null);
+        
+        if (cursor.moveToFirst()) {
+            
+            /* Populate alarm object */
+            result = new Alarm(cursor.getInt(0));
+            result.setHour(cursor.getInt(1));
+            result.setMinute(cursor.getInt(2));
+            result.setThreshold(cursor.getInt(3));
+            result.setDaysOfWeek(cursor.getInt(4));
+            result.setFollowups(cursor.getInt(5));
+            result.setIntervalStart(cursor.getInt(6));
+            result.setIntervalEnd(cursor.getInt(7));
+            result.setEnabled(cursor.getInt(8) == 1);
+            
+        } else {
+            
+            /* We didn't find that one */
+            result = null;
+        }
+        
+        if (cursor != null && !cursor.isClosed()) {
+            cursor.close();
+        }
+        
+        return result;
+    }
+    
     
     public Alarm getAlarm(int id) {
         Alarm result = new Alarm(id);
