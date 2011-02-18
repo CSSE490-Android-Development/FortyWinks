@@ -34,10 +34,7 @@ public class Alarm implements Parcelable {
     public void setEnabled(boolean enabled) { mEnabled = enabled; }
 
     @Override
-    public int describeContents() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
+    public int describeContents() { return 0; }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
