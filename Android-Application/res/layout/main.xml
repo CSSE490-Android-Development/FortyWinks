@@ -24,14 +24,16 @@
 		android:layout_height="wrap_content"
 		android:text="2.9 remaining cycles"
 		android:textSize="20dip"/>
-		<View
-			android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:background=""/>
+	<View
+		android:layout_width="fill_parent"
+		android:layout_height="1dip"
+		android:layout_marginTop="10dip"
+		android:layout_marginBottom="10dip"
+		android:background="@color/seperator_color"/>
 	<TextView
-		android:id="@+id/main_time_left_to_sleep"
+		android:id="@+id/main_next_alarm_title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="4:29 left to sleep"
-		android:textSize="20dip"/>
+		android:text="Next Alarm at:"
+		android:textSize="30dip"/>
 </LinearLayout>
