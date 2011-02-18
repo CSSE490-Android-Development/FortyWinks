@@ -3,8 +3,12 @@ package com.fernferret.android.fortywinks;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -96,5 +100,31 @@ public class FortyWinks extends Activity {
 			button.setImageDrawable(mResources.getDrawable(R.drawable.drawer_closed));
 		}
 	};
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		
+		MenuInflater inflater = new MenuInflater(this);
+		inflater.inflate(R.menu.main_menu, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		return super.onPrepareOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+			case R.id.menu_options:
+				Intent options = new Intent(this, FortyPrefs.class);
+				startActivity(options);
+				break;
+		}
+		return true;
+	}
 	
 }
