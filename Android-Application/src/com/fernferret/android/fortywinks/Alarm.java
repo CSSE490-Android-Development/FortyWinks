@@ -9,7 +9,7 @@ public class Alarm implements Parcelable {
     private int mFollowups;
     private int mIntervalStart;
     private int mIntervalEnd;
-    private int mDaysOfWeek;
+    private int mDaysOfWeek = 0;
     private boolean mEnabled;
     
     public enum Day {
@@ -18,7 +18,8 @@ public class Alarm implements Parcelable {
         TUESDAY   (4),
         WEDNESDAY (8),
         THURSDAY (16),
-        FRIDAY   (32);
+        FRIDAY   (32),
+        SATURDAY (64);
         
         private int mValue;
         
@@ -48,7 +49,7 @@ public class Alarm implements Parcelable {
     public void setEnabled(boolean enabled) { mEnabled = enabled; }
     
     public void enableDay(Day day) {
-        setDaysOfWeek(getDaysOfWeek() & day.getValue());
+        setDaysOfWeek(getDaysOfWeek() | day.getValue());
     }
     
     public void disableDay(Day day) {
@@ -56,8 +57,8 @@ public class Alarm implements Parcelable {
     }
     
     public boolean isDayEnabled(Day day) {
-        int daysOfWeek = getDaysOfWeek();
-        return (daysOfWeek & day.getValue()) == daysOfWeek;
+        int mask = day.getValue();
+        return (getDaysOfWeek() & mask) == mask;
     }
 
     @Override
