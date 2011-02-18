@@ -66,6 +66,15 @@ public class Alarm implements Parcelable {
     public Alarm(int id) {
         mId = id;
     }
+    /**
+     * Creates an alarm from a Proposed alarm.  This will be a one time quick alarm with no repeating.
+     * @param a The Proposed alarm to scrape and create a real alarm from.
+     */
+    public Alarm(ProposedAlarm a) {
+    	this();
+    	setHour(a.getHour());
+    	setMinute(a.getMinute());
+    }
     
     public Alarm(Parcel in) {
         this(in.readInt());

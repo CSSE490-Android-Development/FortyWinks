@@ -2,6 +2,7 @@ package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -48,6 +49,9 @@ public class FortyWinks extends Activity {
 	
 	private ArrayList<ProposedAlarm> mQuickProposedAlarms;
 	
+	// Database Objects
+	private DBAdapter mDatabaseAdapter;
+	
 	
 	// Important values used in generating the drawer items
 	int mNumberOfAlarms;
@@ -61,6 +65,8 @@ public class FortyWinks extends Activity {
 		// Load Resources
 		mResources = getResources();
 		mSettings = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		mDatabaseAdapter = new DBAdapter(this);
 		
 		// Load UI Elements
 		mBigTime = (DigitalClock) findViewById(R.id.main_big_time);
@@ -81,8 +87,17 @@ public class FortyWinks extends Activity {
 		mDrawer.setOnClickListener(mOnDrawerClickListener);
 		mDoSleepButton.setOnClickListener(mOnButtonClickListener);
 		mQuickAlarmList.setOnItemClickListener(mListViewListener);
+		mQuickAlarmList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				ProposedAlarm a = mQuickProposedAlarms.get(position);
+				mDatabaseAdapter.saveAlarm(new Alarm(a));
+			}
+		});
 		
 	}
+	
+	
 	
 	@Override
 	protected void onResume() {
