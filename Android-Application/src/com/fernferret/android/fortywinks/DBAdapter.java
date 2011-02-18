@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 /**
  * Database adapter that allows easy communication with the SQLite DB with handeling of injection attacks.
- * @author ericstokes
+ * @author Jimmy Theis
  *
  */
 public class DBAdapter extends SQLiteOpenHelper {
