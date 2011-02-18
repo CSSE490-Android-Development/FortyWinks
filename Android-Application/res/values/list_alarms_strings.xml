@@ -1,3 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources><string name="activity_title_view_alarms">View your Alarms</string>
+<string name="activity_title_edit_alarm">Add or Edit an Alarm</string>
+<string name="activity_title_open_alarm">Get Up Now</string>
 </resources>

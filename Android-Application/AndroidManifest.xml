@@ -19,13 +19,13 @@
 		</activity>
 		<activity
 			android:name=".WakeUpAlert"
-			android:label="Get Up Now"/>
+			android:label="@string/activity_title_open_alarm"/>
 		<activity
 			android:name=".EditAlarm"
-			android:label="Add or Edit an Alarm"/>
+			android:label="@string/activity_title_edit_alarm"/>
 		<activity
 			android:name=".ListAlarms"
-			android:label="View your Alarms"/>
+			android:label="@string/activity_title_view_alarms"/>
 		<receiver
 			android:name=".SingleAlarm"
 			android:process=":remote"/>
