@@ -18,7 +18,11 @@ public class Alarm implements Parcelable {
     private int mIntervalEnd;
     private int mDaysOfWeek = 0;
     private boolean mEnabled;
-    
+    /**
+     * The Day Enum allows very easy access from any class to the concept of a named day
+     * @author Jimmy Theis
+     *
+     */
     public enum Day {
         SUNDAY    (1, Calendar.SUNDAY),
         MONDAY    (2, Calendar.MONDAY),
@@ -30,7 +34,11 @@ public class Alarm implements Parcelable {
         
         private int mValue;
         private int mCalendarDay;
-        
+        /**
+         * Constructs a new Day Enum
+         * @param val A value given to the day to represent enabled or disabled.
+         * @param day The day of the month that this day is on. This is done to avoid multiple day conflicts.
+         */
         Day (int val, int day) { 
             mValue = val; 
             mCalendarDay = day;
@@ -58,11 +66,16 @@ public class Alarm implements Parcelable {
         int getValue() { return mValue; }
         int getDay() { return mCalendarDay; }
     }
-    
+    /**
+     * Constructs a new Alarm
+     */
     public Alarm() {
         this(-1);
     }
-    
+    /**
+     * Constructs an alarm with the given id
+     * @param id The id to construct the point with.
+     */
     public Alarm(int id) {
         mId = id;
     }
@@ -75,7 +88,10 @@ public class Alarm implements Parcelable {
     	setHour(a.getHour());
     	setMinute(a.getMinute());
     }
-    
+    /**
+     * Constructs a new Alarm with a Parcel. This is required due to alarms being Parcelable so they can be transported.
+     * @param in The Parcel that is to be unpacked to an alarm.
+     */
     public Alarm(Parcel in) {
         this(in.readInt());
         setHour(in.readInt());

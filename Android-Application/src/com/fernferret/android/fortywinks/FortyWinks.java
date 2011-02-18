@@ -2,14 +2,17 @@ package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
+import java.util.Date;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,11 +23,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.DigitalClock;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
 import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FortyWinks extends Activity {
 	
@@ -42,6 +47,9 @@ public class FortyWinks extends Activity {
 	// ListViews
 	private ListView mQuickAlarmList;
 	
+	// LinearLayout
+	private LinearLayout mNextAlarmContainer;
+	
 	// Drawer
 	private SlidingDrawer mDrawer;
 	
@@ -52,11 +60,14 @@ public class FortyWinks extends Activity {
 	// Database Objects
 	private DBAdapter mDatabaseAdapter;
 	
-	
 	// Important values used in generating the drawer items
 	int mNumberOfAlarms;
 	int mCycleTime;
 	SharedPreferences mSettings;
+	
+	private static final int SINGLE_ALARM_RC = 0;
+	private static final int MULTI_ALARM_RC = 1;
+	private static final int NO_FLAGS = 0;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +89,8 @@ public class FortyWinks extends Activity {
 		
 		mQuickAlarmList = (ListView) findViewById(R.id.main_quick_alarms_list);
 		
+		mNextAlarmContainer = (LinearLayout) findViewById(R.id.main_next_alarm_container);
+		
 		mDrawer = (SlidingDrawer) findViewById(R.id.main_drawer);
 		
 		mQuickAlarmList.setAdapter(mQuickAlarmAdapter);
@@ -92,12 +105,12 @@ public class FortyWinks extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				ProposedAlarm a = mQuickProposedAlarms.get(position);
 				mDatabaseAdapter.saveAlarm(new Alarm(a));
+				setQuickAlarm();
+				mDrawer.close();
 			}
 		});
 		
 	}
-	
-	
 	
 	@Override
 	protected void onResume() {
@@ -121,6 +134,37 @@ public class FortyWinks extends Activity {
 		
 	}
 	
+	private void setQuickAlarm() {
+		Intent singleAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
+		
+		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, SINGLE_ALARM_RC, singleAlarmIntent, NO_FLAGS);
+		
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		Alarm a = mDatabaseAdapter.getQuickAlarm();
+		long futureTime = a.getNextAlarmTime();
+		long currentTime = System.currentTimeMillis();
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(futureTime);
+		
+		alarmManager.set(AlarmManager.RTC_WAKEUP, a.getNextAlarmTime(), singleAlarmPendingIntent);
+		mNextAlarmContainer.removeAllViews();
+		TextView newAlarm = new TextView(this);
+		String format = "%l:%M %p";
+		Date t = calendar.getTime();
+		int calHour = calendar.get(Calendar.HOUR);
+		if(calHour == 0) {
+			calHour = 12;
+		}
+		newAlarm.setText(
+				calHour + ":" + 
+				(calendar.get(Calendar.MINUTE) > 9 ? calendar.get(Calendar.MINUTE) : "0" + calendar.get(Calendar.MINUTE)) + " " + 
+				(calendar.get(Calendar.AM_PM) == 1 ? "PM" : "AM"));
+		newAlarm.setTextSize(20);
+		mNextAlarmContainer.addView(newAlarm);
+		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + " - " + calendar.get(Calendar.AM_PM), Toast.LENGTH_SHORT).show();
+	}
+	
 	private void generateAlarms() {
 		ArrayList<ProposedAlarm> listItems = new ArrayList<ProposedAlarm>();
 		long currentTime = System.currentTimeMillis();
@@ -134,12 +178,13 @@ public class FortyWinks extends Activity {
 		mQuickProposedAlarms = listItems;
 		
 	}
+	
 	private void refreshQuickAlarms() {
 		Log.w("40W", "40W - Refreshing Alarms");
 		long currentTime = System.currentTimeMillis();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(currentTime);
-		for(ProposedAlarm a : mQuickProposedAlarms) {
+		for (ProposedAlarm a : mQuickProposedAlarms) {
 			calendar.add(Calendar.MINUTE, mCycleTime);
 			a.updateCurrentTime(calendar);
 		}
@@ -172,8 +217,6 @@ public class FortyWinks extends Activity {
 			button.setImageDrawable(mResources.getDrawable(R.drawable.drawer_open));
 		}
 	};
-	
-	
 	
 	private OnDrawerCloseListener mDrawerCloseListener = new OnDrawerCloseListener() {
 		@Override

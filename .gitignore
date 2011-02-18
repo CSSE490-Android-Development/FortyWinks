@@ -3,3 +3,4 @@ gen/
 *.keystore
 .*.swp
 *.DS_Store
+*.mp3
