@@ -42,4 +42,26 @@ public class ProposedAlarm {
 		}
 		return timeInHours + " Hours";
 	}
+	
+	public int getHour() {
+		return mHour;
+	}
+	
+	public int getMinute() {
+		return mMinute;
+	}
+	
+	public void setHour(int hour) {
+		mHour = hour;
+		setTimeObject();
+	}
+	
+	public void setMinute(int minute) {
+		mMinute = minute;
+		setTimeObject();
+	}
+	
+	private void setTimeObject() {
+		mTime.set(mTime.second, mMinute, mHour, mTime.monthDay, mTime.month, mTime.year);
+	}
 }
