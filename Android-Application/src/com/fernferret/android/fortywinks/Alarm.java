@@ -6,7 +6,11 @@ import java.util.GregorianCalendar;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
+/**
+ * An incredible implementation of a very versitile Alarm.  This alarm will support single runs, and indefinetly scheduled runs, in addition to thresholds, followups and advanced intervals.
+ * @author Jimmy Theis
+ *
+ */
 public class Alarm implements Parcelable {
     
     private int mId;
@@ -131,19 +135,35 @@ public class Alarm implements Parcelable {
     public boolean getEnabled() { return mEnabled; }
     public void setEnabled(boolean enabled) { mEnabled = enabled; }
     
+    /**
+     * Enables the given day for this alarm.
+     * @param day The day to enable the alarm for
+     */
     public void enableDay(Day day) {
         setDaysOfWeek(getDaysOfWeek() | day.getValue());
     }
-    
+    /**
+     * Disables the given day for this alarm.
+     * @param day The day to disable the alarm for
+     */    
     public void disableDay(Day day) {
         setDaysOfWeek(getDaysOfWeek() & ~day.getValue());
     }
     
+    /**
+     * Returns true if the alarm will ring on the given day
+     * @param day The day to check alarm status for
+     * @return True if the alarm will ring on this day, false if not.
+     */
     public boolean isDayEnabled(Day day) {
         int mask = day.getValue();
         return (getDaysOfWeek() & mask) == mask;
     }
     
+    /**
+     * Gets an ArrayList of Days that are enabled. The max will obviously be 7 for the size of this list.
+     * @return ArrayList of Days that are enabled.
+     */
     public ArrayList<Day> getEnabledDays() {
     	ArrayList<Alarm.Day> days = new ArrayList<Alarm.Day>();
     	for(Day d : Day.values()) {
@@ -154,18 +174,34 @@ public class Alarm implements Parcelable {
     	return days;
     }
     
+    /**
+     * Checks to see if the date given is enabled for the current alarm. This is required to determine future alarm status and scheduling.
+     * @param day The day
+     * @return True if this particular calendar day will activate this alarm, false if not
+     */
     private boolean isCalendarDayEnabled(int day) {
         return isDayEnabled(Day.fromCalendarDay(day));
     }
     
+    /**
+     * Removes all repeating values of this alarm.  When the alarm cannot repeat, it will go off on the next time it sees its given time.
+     */
     public void makeOneTimeAlarm() {
         setDaysOfWeek(0);
     }
     
+    /**
+     * Returns true if this alarm will only ring once.
+     * @return True if this alarm will only ring once, false if it has future activations scheduled.
+     */
     public boolean isOneTimeAlarm() {
         return getDaysOfWeek() == 0;
     }
     
+    /**
+     * Returns the next alarm time for this alarm in Milliseconds. This method is what reminds me that Jimmy is truly a genius. Seriously.
+     * @return The next  activation time for this alarm in Milliseconds
+     */
     public long getNextAlarmTime() {
         GregorianCalendar now = new GregorianCalendar(); // now
         GregorianCalendar t = new GregorianCalendar(); // time to check against
