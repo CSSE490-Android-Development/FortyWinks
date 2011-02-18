@@ -30,4 +30,16 @@ public class ProposedAlarm {
 		String format = "%l:%M %p";
 		return mTime.format(format).toUpperCase();
 	}
+	
+	public String getPrettyCyclesTillAlarm() {
+		float timeInHours = ((float)mIntervalLength/(float)60.0) * mIntervalNumber;
+		// Grammar Matters.
+		if(timeInHours == 1) {
+			return  "1 Hour";
+		}
+		if(timeInHours == Math.round(timeInHours)) {
+			return (int)timeInHours + " Hours";
+		}
+		return timeInHours + " Hours";
+	}
 }
