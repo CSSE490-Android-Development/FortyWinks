@@ -7,7 +7,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-
+/**
+ * An extension of the ArrayAdapter to allow the drawer to show multiple quick alarms.
+ * @author Eric Stokes
+ *
+ */
 public class PreferenceViewAdapter extends ArrayAdapter<ProposedAlarm> {
 	
 	private Context mContext;

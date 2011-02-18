@@ -5,7 +5,11 @@ import java.text.NumberFormat;
 import java.util.Calendar;
 
 import android.text.format.Time;
-
+/**
+ * Provides the means for creating potential alarms. These never get saved to the database, nor do they get created into alarms, unless they are selected. They are a very inexpensive way of showing the user potential alarm possibilities.
+ * @author Eric Stokes
+ *
+ */
 public class ProposedAlarm {
 	
 	private int mHour;
@@ -29,12 +33,19 @@ public class ProposedAlarm {
 		mIntervalNumber = intervalNumber;
 		mIntervalLength = intervalLength;
 	}
-	
+	/**
+	 * Returns the time in a very pretty manner: 12:56 PM or 1:28 AM
+	 * @return A human readable time
+	 */
 	public String getPrettyTime() {
 		String format = "%l:%M %p";
 		return mTime.format(format).toUpperCase();
 	}
 	
+	/**
+	 * Returns a human readable representation of time the user will be asleep
+	 * @return a human readable representation of time the user will be asleep
+	 */
 	public String getPrettyCyclesTillAlarm() {
 		float timeInHours = ((float)mIntervalLength/(float)60.0) * mIntervalNumber;
 		// Grammar Matters.
@@ -69,7 +80,10 @@ public class ProposedAlarm {
 	private void setTimeObject() {
 		mTime.set(mTime.second, mMinute, mHour, mTime.monthDay, mTime.month, mTime.year);
 	}
-	
+	/**
+	 * Allows this Proposed alarm to be updated on the fly.  This is useful if users sit on pages too long and these values get out of sync.
+	 * @param c The Calendar object that contains the new time.  This object's values will be overridden.
+	 */
 	public void updateCurrentTime(Calendar c) {
 		mMinute = c.get(Calendar.MINUTE);
 		mHour = c.get(Calendar.HOUR_OF_DAY);
