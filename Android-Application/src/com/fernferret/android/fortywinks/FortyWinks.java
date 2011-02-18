@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.DigitalClock;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
@@ -30,7 +31,7 @@ public class FortyWinks extends Activity {
 	Resources mResources;
 	
 	// TextViews
-	private TextView mBigTime;
+	private DigitalClock mBigTime;
 	private TextView mTimeLeftToSleep;
 	private TextView mRemainingCycles;
 	
@@ -62,7 +63,8 @@ public class FortyWinks extends Activity {
 		mSettings = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		// Load UI Elements
-		mBigTime = (TextView) findViewById(R.id.main_big_time);
+		mBigTime = (DigitalClock) findViewById(R.id.main_big_time);
+		
 		mTimeLeftToSleep = (TextView) findViewById(R.id.main_time_left_to_sleep);
 		mRemainingCycles = (TextView) findViewById(R.id.main_remaining_cycles);
 		
@@ -71,21 +73,6 @@ public class FortyWinks extends Activity {
 		mQuickAlarmList = (ListView) findViewById(R.id.main_quick_alarms_list);
 		
 		mDrawer = (SlidingDrawer) findViewById(R.id.main_drawer);
-		
-		try {
-			mNumberOfAlarms = Integer.parseInt(mSettings.getString(getString(R.string.key_number_quick_alarms), "6"));
-		} catch (NumberFormatException e) {
-			mNumberOfAlarms = 6;
-		}
-		
-		try {
-			mCycleTime = Integer.parseInt(mSettings.getString(getString(R.string.key_cycle_time), "90"));
-		} catch (NumberFormatException e) {
-			// Someone entered NaN for their default value of REM cycle, let's use 90, the industry standard!
-			mCycleTime = 90;
-		}
-		generateAlarms();
-		mQuickAlarmAdapter = new PreferenceViewAdapter(this, R.layout.preference_view, R.id.preference_view_left_text, mQuickProposedAlarms);
 		
 		mQuickAlarmList.setAdapter(mQuickAlarmAdapter);
 		// Set Listeners
@@ -100,7 +87,22 @@ public class FortyWinks extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		try {
+			mNumberOfAlarms = Integer.parseInt(mSettings.getString(getString(R.string.key_number_quick_alarms), "6"));
+		} catch (NumberFormatException e) {
+			mNumberOfAlarms = 6;
+		}
 		
+		try {
+			mCycleTime = Integer.parseInt(mSettings.getString(getString(R.string.key_cycle_time), "90"));
+		} catch (NumberFormatException e) {
+			// Someone entered NaN for their default value of REM cycle, let's use 90, the industry standard!
+			mCycleTime = 90;
+		}
+		generateAlarms();
+		mQuickAlarmAdapter = new PreferenceViewAdapter(this, R.layout.preference_view, R.id.preference_view_left_text, mQuickProposedAlarms);
+		mQuickAlarmAdapter.notifyDataSetChanged();
+		mQuickAlarmList.setAdapter(mQuickAlarmAdapter);
 		
 	}
 	
@@ -115,6 +117,7 @@ public class FortyWinks extends Activity {
 			listItems.add(new ProposedAlarm(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), i, mCycleTime));
 		}
 		mQuickProposedAlarms = listItems;
+		
 	}
 	private void refreshQuickAlarms() {
 		Log.w("40W", "40W - Refreshing Alarms");

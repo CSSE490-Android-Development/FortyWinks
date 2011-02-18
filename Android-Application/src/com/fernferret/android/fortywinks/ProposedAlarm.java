@@ -1,5 +1,7 @@
 package com.fernferret.android.fortywinks;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Calendar;
 
 import android.text.format.Time;
@@ -42,7 +44,8 @@ public class ProposedAlarm {
 		if(timeInHours == Math.round(timeInHours)) {
 			return (int)timeInHours + " Hours";
 		}
-		return timeInHours + " Hours";
+		NumberFormat format = new DecimalFormat("0.0");
+		return format.format(timeInHours) + " Hours";
 	}
 	
 	public int getHour() {
