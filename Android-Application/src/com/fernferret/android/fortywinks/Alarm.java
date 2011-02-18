@@ -35,10 +35,34 @@ public class Alarm implements Parcelable {
 
     @Override
     public int describeContents() { return 0; }
+    
+    public static final Parcelable.Creator<Alarm> CREATOR = new Parcelable.Creator<Alarm>() {
+        
+        public Alarm createFromParcel(Parcel in) {
+            Alarm result = new Alarm(in.readInt());
+            result.setFollowups(in.readInt());
+            result.setIntervalStart(in.readInt());
+            result.setIntervalEnd(in.readInt());
+            result.setDaysOfWeek(in.readInt());
+            result.setEnabled(in.readInt() == 1);
+            return result;
+        }
+
+        @Override
+        public Alarm[] newArray(int size) {
+            return new Alarm[size];
+        }
+        
+    };
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        // TODO Auto-generated method stubs
+        dest.writeInt(getId());
+        dest.writeInt(getFollowups());
+        dest.writeInt(getIntervalStart());
+        dest.writeInt(getIntervalEnd());
+        dest.writeInt(getDaysOfWeek());
+        dest.writeInt(getEnabled() ? 1 : 0);
     }
 
 }
