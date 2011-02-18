@@ -24,14 +24,14 @@ public class DBAdapter extends SQLiteOpenHelper {
     public void saveAlarm(Alarm alarm) {
         mDb.delete("alarms", "id = ?", new String[] {alarm.getId() + ""});
         SQLiteStatement s = mDb.compileStatement("INSERT INTO alarms (hour, minute, threshold, days_of_week, followups, interval_start, interval_end, enabled) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
-        s.bindString(2, alarm.getHour() + "");
-        s.bindString(3, alarm.getMinute() + "");
-        s.bindString(4, alarm.getThreshold() + "");
-        s.bindString(5, alarm.getDaysOfWeek() + "");
-        s.bindString(6, alarm.getFollowups() + "");
-        s.bindString(7, alarm.getIntervalStart() + "");
-        s.bindString(8, alarm.getIntervalEnd() + "");
-        s.bindString(9, (alarm.getEnabled() ? 1 : 0) + "");
+        s.bindString(1, alarm.getHour() + "");
+        s.bindString(2, alarm.getMinute() + "");
+        s.bindString(3, alarm.getThreshold() + "");
+        s.bindString(4, alarm.getDaysOfWeek() + "");
+        s.bindString(5, alarm.getFollowups() + "");
+        s.bindString(6, alarm.getIntervalStart() + "");
+        s.bindString(7, alarm.getIntervalEnd() + "");
+        s.bindString(8, (alarm.getEnabled() ? 1 : 0) + "");
         s.executeInsert();
     }
     
