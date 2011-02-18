@@ -58,6 +58,10 @@ public class Alarm implements Parcelable {
         int getDay() { return mCalendarDay; }
     }
     
+    public Alarm() {
+        this(-1);
+    }
+    
     public Alarm(int id) {
         mId = id;
     }
@@ -75,6 +79,7 @@ public class Alarm implements Parcelable {
     }
     
     public int getId() { return mId; }
+    public void setId(int id) { mId = id; }
     
     public int getHour() { return mHour; }
     public void setHour(int hour){ mHour = hour; }
@@ -148,7 +153,7 @@ public class Alarm implements Parcelable {
             
         } else {
             
-            /* are we past the time for today? */
+            /* Are we past the time for today? */
             if (now.after(t)) {
                 
                 /* If so, increment our proposed day by one */
