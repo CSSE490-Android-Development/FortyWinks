@@ -47,7 +47,7 @@
 		android:textSize="30dip"/>
 	<ScrollView
 		android:layout_width="120dip"
-		android:layout_height="200dip"
+		android:layout_height="170dip"
 		android:layout_centerHorizontal="true"
 		android:layout_below="@id/main_next_alarm_title">
 		<LinearLayout
@@ -58,21 +58,21 @@
 			<TextView
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:textSize="30dip"
+				android:textSize="30sp"
 				android:text="6:30 AM"/>
 			<View
 				style="@style/NextAlarmSpacer"/>
 			<TextView
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:textSize="30dip"
+				android:textSize="30sp"
 				android:text="6:30 AM"/>
 			<View
 				style="@style/NextAlarmSpacer"/>
 			<TextView
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:textSize="30dip"
+				android:textSize="30sp"
 				android:text="6:30 AM"/>
 		</LinearLayout>
 	</ScrollView>
@@ -81,7 +81,36 @@
 		android:layout_width="wrap_content"
 		android:layout_centerHorizontal="true"
 		android:layout_alignParentBottom="true"
-		android:layout_marginBottom="10dip"
+		android:layout_marginBottom="50dip"
 		android:text="I'm Off To Bed Now"
 		android:textSize="20sp"/>
+	<SlidingDrawer
+		android:id="@+id/main_drawer"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:handle="@+id/main_drawer_button"
+		android:content="@+id/main_drawer_content"
+		android:topOffset="100dip">
+		<ImageView
+			android:id="@id/main_drawer_button"
+			android:src="@drawable/drawer_closed"
+			android:layout_centerHorizontal="true"
+			android:layout_alignParentBottom="true"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+		<LinearLayout
+			android:id="@id/main_drawer_content"
+			android:layout_width="fill_parent"
+			android:layout_height="250dip"
+			android:background="@color/drawer_bg">
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentTop="true"
+				android:layout_centerHorizontal="true"
+				android:textSize="30dip"
+				android:paddingTop="20dip"
+				android:text="2:01 AM"/>
+		</LinearLayout>
+	</SlidingDrawer>
 </RelativeLayout>
