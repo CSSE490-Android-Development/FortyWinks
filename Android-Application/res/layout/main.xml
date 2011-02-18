@@ -1,12 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
-    />
-</LinearLayout>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<TextView
+		android:id="@+id/main_big_time"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_alignParentTop="true"
+		android:text="2:01 AM"
+		android:textSize="55dip"
+		android:layout_marginTop="10dip"/>
+	<TextView
+		android:id="@+id/main_time_left_to_sleep"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@id/main_big_time"
+		android:text="4:29 left to sleep"
+		android:textSize="20dip"/>
+	<TextView
+		android:id="@+id/main_remaining_cycles"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@id/main_time_left_to_sleep"
+		android:text="2.9 remaining cycles"
+		android:textSize="20dip"/>
+	<View
+		android:id="@+id/main_primary_seperator"
+		android:layout_width="fill_parent"
+		android:layout_height="1dip"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@id/main_remaining_cycles"
+		android:layout_marginTop="10dip"
+		android:layout_marginBottom="10dip"
+		android:background="@color/seperator_color"/>
+	<TextView
+		android:id="@+id/main_next_alarm_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@id/main_primary_seperator"
+		android:text="Next Alarm at:"
+		android:textSize="30dip"/>
+	<ScrollView
+		android:layout_width="120dip"
+		android:layout_height="200dip"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@id/main_next_alarm_title">
+		<LinearLayout
+			android:id="@+id/main_next_alarm_container"
+			android:orientation="vertical"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent">
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:textSize="30dip"
+				android:text="6:30 AM"/>
+			<View
+				style="@style/NextAlarmSpacer"/>
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:textSize="30dip"
+				android:text="6:30 AM"/>
+			<View
+				style="@style/NextAlarmSpacer"/>
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:textSize="30dip"
+				android:text="6:30 AM"/>
+		</LinearLayout>
+	</ScrollView>
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_alignParentBottom="true"
+		android:layout_marginBottom="10dip"
+		android:text="I'm Off To Bed Now"
+		android:textSize="20sp"/>
+</RelativeLayout>
