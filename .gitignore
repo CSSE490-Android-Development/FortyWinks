@@ -1,0 +1,5 @@
+bin/
+gen/
+*.keystore
+.*.swp
+*.DS_Store
