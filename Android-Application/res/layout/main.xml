@@ -50,27 +50,24 @@
 				android:textSize="30dip"
 				android:text="6:30 AM"/>
 			<View
-				android:layout_width="fill_parent"
-				android:layout_height="1dip"
-				android:layout_marginTop="2dip"
-				android:layout_marginBottom="2dip"
-				android:background="@color/seperator_color"/>
+				style="@style/NextAlarmSpacer"/>
 			<TextView
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:textSize="30dip"
 				android:text="6:30 AM"/>
 			<View
-				android:layout_width="fill_parent"
-				android:layout_height="1dip"
-				android:layout_marginTop="2dip"
-				android:layout_marginBottom="2dip"
-				android:background="@color/seperator_color"/>
-				<TextView
+				style="@style/NextAlarmSpacer"/>
+			<TextView
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:textSize="30dip"
 				android:text="6:30 AM"/>
 		</LinearLayout>
+		<Button
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:text="I'm Off To Bed Now"
+			android:textSize="20dip"/>
 	</LinearLayout>
 </ScrollView>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="NextAlarmSpacer">
+		<item name="android:background">@color/seperator_color</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">1px</item>
+		<item name="android:layout_marginTop">2dip</item>
+		<item name="android:layout_marginBottom">2dip</item>
+	</style>
+</resources>
