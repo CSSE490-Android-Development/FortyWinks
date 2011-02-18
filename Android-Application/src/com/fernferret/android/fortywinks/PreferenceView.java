@@ -25,6 +25,8 @@ public class PreferenceView extends TableLayout {
 		mTableRow = (TableRow) findViewById(R.id.preference_view_row);
 		mLeftTextView = (TextView) findViewById(R.id.preference_view_left_text);
 		mRightTextView = (TextView) findViewById(R.id.preference_view_right_text);
+		
+		mTableRow.setOnClickListener(mOnRowClickListener);
 	}
 	
 	private View.OnClickListener mOnRowClickListener = new View.OnClickListener() {
