@@ -2,25 +2,36 @@ package com.fernferret.android.fortywinks;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
+/**
+ * A Special view that has 2 text components that can be re-aligned.
+ * @author Eric Stokes
+ *
+ */
 public class PreferenceView extends TableLayout {
 	
 	private Activity mContext;
 	private TextView mLeftTextView;
 	private TextView mRightTextView;
-	private TableRow mTableRow;
 	
+	/**
+	 * Creates a new Preference view with a context and a set of attributes. This is useful for creating within XML.
+	 * @param context The context to create the view in.
+	 * @param attributes The attributes to pass to this view.
+	 */
 	public PreferenceView(Context context, AttributeSet attributes) {
-	    this(context);
+		// This was the reason for the NullPointerException
+	    super(context, attributes);
 	}
 	
+	/**
+	 * Creates a new Preference view with a context.  This is useful for createing within code.
+	 * @param context The context to create the view in.
+	 */
 	public PreferenceView(Context context) {
 		super(context);
 		mContext = (Activity) context;
@@ -28,15 +39,16 @@ public class PreferenceView extends TableLayout {
 		LayoutInflater layoutInflater = mContext.getLayoutInflater();
 		layoutInflater.inflate(R.layout.preference_view, this);
 		
-		mTableRow = (TableRow) findViewById(R.id.preference_view_row);
 		mLeftTextView = (TextView) findViewById(R.id.preference_view_left_text);
 		mRightTextView = (TextView) findViewById(R.id.preference_view_right_text);
-		
-
-		
-		//mTableRow.setOnClickListener(mOnRowClickListener);
 	}
 	
+	/**
+	 * Creates a new PreferenceView with pre-set strings
+	 * @param context The context to create the view in.
+	 * @param left The text on the left side
+	 * @param right The text on the Right side
+	 */
 	public PreferenceView(Context context, String left, String right) {
 		this(context);
 		
@@ -44,27 +56,26 @@ public class PreferenceView extends TableLayout {
 		mRightTextView.setText(right);
 	}
 	
-//	private View.OnClickListener mOnRowClickListener = new View.OnClickListener() {
-//		@Override
-//		public void onClick(View v) {
-//			Log.w("40W", "40W - I was clicked!!!");
-//		}
-//	};
-	
 	public void setLeftText(String text) {
 		mLeftTextView.setText(text);
 	}
-	
-	public void setLeftAlign(int g) {
-		mRightTextView.setGravity(g);
+	/**
+	 * Set the alignment properties of the Right text box.  Use Gravity.[XMLATTRIBUTENAME] as the input.
+	 * @param gravity The gravity to apply to the Right text box.
+	 */
+	public void setLeftAlign(int gravity) {
+		mRightTextView.setGravity(gravity);
 	}
 	
 	public void setRightText(String text) {
 		mRightTextView.setText(text);
 	}
-	
-	public void setRightAlign(int g) {
-		mRightTextView.setGravity(g);
+	/**
+	 * Set the alignment properties of the Right text box.  Use Gravity.[XMLATTRIBUTENAME] as the input.
+	 * @param gravity The gravity to apply to the Right text box.
+	 */
+	public void setRightAlign(int gravity) {
+		mRightTextView.setGravity(gravity);
 	}
 	
 	
