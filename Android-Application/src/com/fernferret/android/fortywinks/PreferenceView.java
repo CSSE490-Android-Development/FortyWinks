@@ -3,6 +3,7 @@ package com.fernferret.android.fortywinks;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TableLayout;
@@ -15,6 +16,10 @@ public class PreferenceView extends TableLayout {
 	private TextView mLeftTextView;
 	private TextView mRightTextView;
 	private TableRow mTableRow;
+	
+	public PreferenceView(Context context, AttributeSet attributes) {
+	    this(context);
+	}
 	
 	public PreferenceView(Context context) {
 		super(context);
