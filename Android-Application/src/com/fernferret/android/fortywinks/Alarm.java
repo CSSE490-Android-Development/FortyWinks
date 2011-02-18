@@ -94,6 +94,10 @@ public class Alarm implements Parcelable {
         return (getDaysOfWeek() & mask) == mask;
     }
     
+    public void makeOneTimeAlarm() {
+        setDaysOfWeek(0);
+    }
+    
     public boolean isOneTimeAlarm() {
         return getDaysOfWeek() == 0;
     }
@@ -168,5 +172,9 @@ public class Alarm implements Parcelable {
                 getIntervalEnd() == a.getIntervalEnd() &&
                 getDaysOfWeek() == a.getDaysOfWeek() &&
                 getEnabled() == a.getEnabled();
+    }
+    
+    public String toString() {
+        return super.toString();
     }
 }
