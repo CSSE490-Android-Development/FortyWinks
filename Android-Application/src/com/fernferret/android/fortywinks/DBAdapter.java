@@ -23,8 +23,7 @@ public class DBAdapter extends SQLiteOpenHelper {
     
     public void saveAlarm(Alarm alarm) {
         mDb.delete("alarms", "id = ?", new String[] {alarm.getId() + ""});
-        SQLiteStatement s = mDb.compileStatement("INSERT INTO alarms VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        s.bindString(1, alarm.getId() + "");
+        SQLiteStatement s = mDb.compileStatement("INSERT INTO alarms (hour, minute, threshold, days_of_week, followups, interval_start, interval_end, enabled) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
         s.bindString(2, alarm.getHour() + "");
         s.bindString(3, alarm.getMinute() + "");
         s.bindString(4, alarm.getThreshold() + "");
