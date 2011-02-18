@@ -169,4 +169,8 @@ public class Alarm implements Parcelable {
                 getDaysOfWeek() == a.getDaysOfWeek() &&
                 getEnabled() == a.getEnabled();
     }
+    
+    public String toString() {
+        return super.toString();
+    }
 }

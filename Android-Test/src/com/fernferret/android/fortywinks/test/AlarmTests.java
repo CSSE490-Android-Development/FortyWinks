@@ -188,15 +188,6 @@ public class AlarmTests extends TestCase {
         p.setDataPosition(0);
         
         Alarm result = new Alarm(p);
-        //assertEquals(result.getId(), a.getId());
-        assertEquals(result.getHour(), a.getHour());
-        assertEquals(result.getId(), a.getId());
-        assertEquals(result.getId(), a.getId());
+        assertEquals(a, result);
     }
-    
-    public String toString() {
-        return super.toString();
-    }
-    }
-    
 }
