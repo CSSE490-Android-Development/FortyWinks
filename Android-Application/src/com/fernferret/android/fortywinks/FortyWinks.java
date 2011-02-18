@@ -153,6 +153,7 @@ public class FortyWinks extends Activity {
 		String format = "%l:%M %p";
 		Date t = calendar.getTime();
 		int calHour = calendar.get(Calendar.HOUR);
+		// This is so disgusting.  I am a terrible person.  This is due next hour.
 		if(calHour == 0) {
 			calHour = 12;
 		}
@@ -163,6 +164,7 @@ public class FortyWinks extends Activity {
 		newAlarm.setTextSize(20);
 		mNextAlarmContainer.addView(newAlarm);
 		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + " - " + calendar.get(Calendar.AM_PM), Toast.LENGTH_SHORT).show();
+		// END me being a terrible person
 	}
 	
 	private void generateAlarms() {
