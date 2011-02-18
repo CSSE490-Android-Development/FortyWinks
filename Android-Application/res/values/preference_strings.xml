@@ -2,4 +2,5 @@
 <resources><string name="pref_sleep_cycle_title">Enter Sleep Cycle Time</string>
 <string name="pref_sleep_cycle_summary">Please enter how long you need to complete one REM cycle on average</string>
 <string name="key_cycle_time">key_cycle_time</string>
+<string name="key_number_quick_alarms">key_number_quick_alarms</string>
 </resources>

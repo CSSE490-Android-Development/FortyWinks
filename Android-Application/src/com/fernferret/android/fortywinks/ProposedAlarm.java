@@ -1,5 +1,7 @@
 package com.fernferret.android.fortywinks;
 
+import java.util.Calendar;
+
 import android.text.format.Time;
 
 public class ProposedAlarm {
@@ -63,5 +65,11 @@ public class ProposedAlarm {
 	
 	private void setTimeObject() {
 		mTime.set(mTime.second, mMinute, mHour, mTime.monthDay, mTime.month, mTime.year);
+	}
+	
+	public void updateCurrentTime(Calendar c) {
+		mMinute = c.get(Calendar.MINUTE);
+		mHour = c.get(Calendar.HOUR_OF_DAY);
+		setTimeObject();
 	}
 }
