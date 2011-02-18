@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<color name="seperator_color">#C8C8C8</color>
+	<color name="drawer_bg">#7D7D7D</color>
 </resources>
