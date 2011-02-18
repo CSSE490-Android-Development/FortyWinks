@@ -3,5 +3,6 @@
 	xmlns:android="http://schemas.android.com/apk/res/android">
 	<item
 		android:id="@+id/menu_options"
-		android:title="Options"/>
+		android:title="Options"
+		android:icon="@drawable/ic_menu_preferences"/>
 </menu>

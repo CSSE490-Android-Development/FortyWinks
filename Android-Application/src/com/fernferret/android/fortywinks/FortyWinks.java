@@ -2,7 +2,6 @@ package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -12,7 +11,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -142,7 +140,6 @@ public class FortyWinks extends Activity {
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		Alarm a = mDatabaseAdapter.getQuickAlarm();
 		long futureTime = a.getNextAlarmTime();
-		long currentTime = System.currentTimeMillis();
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(futureTime);
@@ -150,8 +147,7 @@ public class FortyWinks extends Activity {
 		alarmManager.set(AlarmManager.RTC_WAKEUP, a.getNextAlarmTime(), singleAlarmPendingIntent);
 		mNextAlarmContainer.removeAllViews();
 		TextView newAlarm = new TextView(this);
-		String format = "%l:%M %p";
-		Date t = calendar.getTime();
+		
 		int calHour = calendar.get(Calendar.HOUR);
 		// This is so disgusting.  I am a terrible person.  This is due next hour.
 		if(calHour == 0) {
