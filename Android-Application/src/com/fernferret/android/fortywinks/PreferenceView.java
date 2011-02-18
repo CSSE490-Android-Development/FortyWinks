@@ -2,6 +2,7 @@ package com.fernferret.android.fortywinks;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TableLayout;
@@ -28,7 +29,7 @@ public class PreferenceView extends TableLayout {
 		
 
 		
-		mTableRow.setOnClickListener(mOnRowClickListener);
+		//mTableRow.setOnClickListener(mOnRowClickListener);
 	}
 	
 	public PreferenceView(Context context, String left, String right) {
@@ -38,12 +39,12 @@ public class PreferenceView extends TableLayout {
 		mRightTextView.setText(right);
 	}
 	
-	private View.OnClickListener mOnRowClickListener = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			
-		}
-	};
+//	private View.OnClickListener mOnRowClickListener = new View.OnClickListener() {
+//		@Override
+//		public void onClick(View v) {
+//			Log.w("40W", "40W - I was clicked!!!");
+//		}
+//	};
 	
 	public void setLeftText(String text) {
 		mLeftTextView.setText(text);

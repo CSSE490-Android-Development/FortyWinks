@@ -1,5 +1,6 @@
 package com.fernferret.android.fortywinks;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -116,6 +117,16 @@ public class Alarm implements Parcelable {
     public boolean isDayEnabled(Day day) {
         int mask = day.getValue();
         return (getDaysOfWeek() & mask) == mask;
+    }
+    
+    public ArrayList<Day> getEnabledDays() {
+    	ArrayList<Alarm.Day> days = new ArrayList<Alarm.Day>();
+    	for(Day d : Day.values()) {
+    		if(isDayEnabled(d)) {
+    			days.add(d);
+    		}
+    	}
+    	return days;
     }
     
     private boolean isCalendarDayEnabled(int day) {
