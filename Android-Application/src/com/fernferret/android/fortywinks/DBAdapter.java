@@ -22,7 +22,8 @@ public class DBAdapter extends SQLiteOpenHelper {
     }
     
     public void saveAlarm(Alarm alarm) {
-        SQLiteStatement s = mDb.compileStatement("INSERT INTO alarms VALUES(?,?,?,?,?,?,?,?,?)");
+        mDb.delete("alarms", "id = ?", new String[] {alarm.getId() + ""});
+        SQLiteStatement s = mDb.compileStatement("INSERT INTO alarms VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
         s.bindString(1, alarm.getId() + "");
         s.bindString(2, alarm.getHour() + "");
         s.bindString(3, alarm.getMinute() + "");
@@ -35,12 +36,26 @@ public class DBAdapter extends SQLiteOpenHelper {
         s.executeInsert();
     }
     
-    public List<String> listAlarms() {
-        List<String> result = new ArrayList<String>();
-        Cursor cursor = mDb.query("alarms", new String[] {"id"}, null, null, null, null, null);
+    public List<Alarm> listAlarms() {
+        List<Alarm> result = new ArrayList<Alarm>();
+        String query = "SELECT * FROM alarms";
+        Cursor cursor = mDb.rawQuery(query, null);
+        
         if (cursor.moveToFirst()) {
             do {
-                result.add(cursor.getString(0));
+                
+                /* Create and populate each alarm */
+                Alarm next = new Alarm(cursor.getInt(0));
+                next.setHour(cursor.getInt(1));
+                next.setMinute(cursor.getInt(2));
+                next.setThreshold(cursor.getInt(3));
+                next.setDaysOfWeek(cursor.getInt(4));
+                next.setFollowups(cursor.getInt(5));
+                next.setIntervalStart(cursor.getInt(6));
+                next.setIntervalEnd(cursor.getInt(7));
+                next.setEnabled(cursor.getInt(8) == 1);
+                result.add(next);
+                
             } while (cursor.moveToNext());
         }
         
@@ -57,14 +72,21 @@ public class DBAdapter extends SQLiteOpenHelper {
         Cursor cursor = mDb.rawQuery(query, new String[] { id + "" });
         
         if (cursor.moveToFirst()) {
-            result.setHour(cursor.getInt(2));
-            result.setMinute(cursor.getInt(3));
-            result.setThreshold(cursor.getInt(4));
-            result.setDaysOfWeek(cursor.getInt(5));
-            result.setFollowups(cursor.getInt(6));
-            result.setIntervalStart(cursor.getInt(7));
-            result.setIntervalEnd(cursor.getInt(8));
-            result.setEnabled(cursor.getInt(9) == 1);
+            
+            /* Populate alarm object */
+            result.setHour(cursor.getInt(1));
+            result.setMinute(cursor.getInt(2));
+            result.setThreshold(cursor.getInt(3));
+            result.setDaysOfWeek(cursor.getInt(4));
+            result.setFollowups(cursor.getInt(5));
+            result.setIntervalStart(cursor.getInt(6));
+            result.setIntervalEnd(cursor.getInt(7));
+            result.setEnabled(cursor.getInt(8) == 1);
+            
+        } else {
+            
+            /* We didn't find that one */
+            result = null;
         }
         
         if (cursor != null && !cursor.isClosed()) {
