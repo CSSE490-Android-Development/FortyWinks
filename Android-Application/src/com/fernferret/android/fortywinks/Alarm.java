@@ -57,8 +57,8 @@ public class Alarm implements Parcelable {
     }
     
     public boolean isDayEnabled(Day day) {
-        int daysOfWeek = getDaysOfWeek();
-        return (daysOfWeek & day.getValue()) == daysOfWeek;
+        int mask = day.getValue();
+        return (getDaysOfWeek() & mask) == mask;
     }
 
     @Override

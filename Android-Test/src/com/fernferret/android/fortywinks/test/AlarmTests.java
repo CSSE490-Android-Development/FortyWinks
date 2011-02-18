@@ -14,6 +14,12 @@ public class AlarmTests extends TestCase {
     public void testAlarmSetsInitialDaysOfWeek() {
         Alarm a = new Alarm(1);
         assertEquals(a.getDaysOfWeek(), 0);
+        assertFalse(a.isDayEnabled(Alarm.Day.MONDAY));
+        assertFalse(a.isDayEnabled(Alarm.Day.TUESDAY));
+        assertFalse(a.isDayEnabled(Alarm.Day.WEDNESDAY));
+        assertFalse(a.isDayEnabled(Alarm.Day.THURSDAY));
+        assertFalse(a.isDayEnabled(Alarm.Day.FRIDAY));
+        assertFalse(a.isDayEnabled(Alarm.Day.SATURDAY));
     }
     
     public void testAlarmSetDay() {
