@@ -12,6 +12,20 @@ public class Alarm implements Parcelable {
     private int mDaysOfWeek;
     private boolean mEnabled;
     
+    public enum Day {
+        SUNDAY    (1),
+        MONDAY    (2),
+        TUESDAY   (4),
+        WEDNESDAY (8),
+        THURSDAY (16),
+        FRIDAY   (32);
+        
+        private int mValue;
+        
+        Day (int val) { mValue = val; }
+        int getValue() { return mValue; }
+    }
+    
     public Alarm(int id) {
         mId = id;
     }
@@ -32,6 +46,19 @@ public class Alarm implements Parcelable {
     
     public boolean getEnabled() { return mEnabled; }
     public void setEnabled(boolean enabled) { mEnabled = enabled; }
+    
+    public void enableDay(Day day) {
+        setDaysOfWeek(getDaysOfWeek() & day.getValue());
+    }
+    
+    public void disableDay(Day day) {
+        setDaysOfWeek(getDaysOfWeek() & ~day.getValue());
+    }
+    
+    public boolean isDayEnabled(Day day) {
+        int daysOfWeek = getDaysOfWeek();
+        return (daysOfWeek & day.getValue()) == daysOfWeek;
+    }
 
     @Override
     public int describeContents() { return 0; }
