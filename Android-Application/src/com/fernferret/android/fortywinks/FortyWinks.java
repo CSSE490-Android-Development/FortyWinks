@@ -1,11 +1,14 @@
 package com.fernferret.android.fortywinks;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -33,6 +36,8 @@ public class FortyWinks extends Activity {
 	// Drawer
 	SlidingDrawer mDrawer;
 	
+	ArrayAdapter<PreferenceView> mQuickAlarmAdapter;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,11 +56,18 @@ public class FortyWinks extends Activity {
 		
 		mDrawer = (SlidingDrawer) findViewById(R.id.main_drawer);
 		
+		ArrayList<PreferenceView> listItems = new ArrayList<PreferenceView>();
+		for(int i = 0; i < 20; i++) {
+			listItems.add(new PreferenceView(this, "Left" + i, "Right"));
+		}
+		mQuickAlarmAdapter = new ArrayAdapter<PreferenceView>(this, R.layout.preference_view, R.id.preference_view_left_text, listItems);
+		
 		
 		// Set Listeners
 		mDrawer.setOnDrawerOpenListener(mDrawerOpenListener);
 		mDrawer.setOnDrawerCloseListener(mDrawerCloseListener);
 		mDoSleepButton.setOnClickListener(mOnButtonClickListener);
+		mQuickAlarmList.setOnItemClickListener(mListViewListener);
 		
 	}
 	private View.OnClickListener mOnButtonClickListener = new View.OnClickListener() {
