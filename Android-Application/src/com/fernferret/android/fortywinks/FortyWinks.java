@@ -1,18 +1,21 @@
 package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.TimeFormatException;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -40,7 +43,9 @@ public class FortyWinks extends Activity {
 	// Drawer
 	SlidingDrawer mDrawer;
 	
-	ArrayAdapter<PreferenceView> mQuickAlarmAdapter;
+	PreferenceViewAdapter mQuickAlarmAdapter;
+	
+	SharedPreferences mSettings;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,7 @@ public class FortyWinks extends Activity {
 		setContentView(R.layout.main);
 		// Load Resources
 		mResources = getResources();
+		mSettings = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		// Load UI Elements
 		mBigTime = (TextView) findViewById(R.id.main_big_time);
@@ -60,13 +66,8 @@ public class FortyWinks extends Activity {
 		
 		mDrawer = (SlidingDrawer) findViewById(R.id.main_drawer);
 		
-		ArrayList<PreferenceView> listItems = new ArrayList<PreferenceView>();
-		for(int i = 0; i < 20; i++) {
-			listItems.add(new PreferenceView(this, "Left" + i, "Right"));
-		}
-		mQuickAlarmAdapter = new ArrayAdapter<PreferenceView>(this, R.layout.preference_view, R.id.preference_view_left_text, listItems);
-		
-		
+		mQuickAlarmAdapter = new PreferenceViewAdapter(this, R.layout.preference_view, R.id.preference_view_left_text, generateAlarms(6));
+		mQuickAlarmList.setAdapter(mQuickAlarmAdapter);
 		// Set Listeners
 		mDrawer.setOnDrawerOpenListener(mDrawerOpenListener);
 		mDrawer.setOnDrawerCloseListener(mDrawerCloseListener);
@@ -74,6 +75,26 @@ public class FortyWinks extends Activity {
 		mQuickAlarmList.setOnItemClickListener(mListViewListener);
 		
 	}
+	
+	private ArrayList<ProposedAlarm> generateAlarms(int numberOfAlarms) {
+		ArrayList<ProposedAlarm> listItems = new ArrayList<ProposedAlarm>();
+		long currentTime = System.currentTimeMillis();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(currentTime);
+		int cycleTime;
+		try {
+			cycleTime = Integer.parseInt(mSettings.getString(getString(R.string.key_cycle_time), "90"));
+		} catch (NumberFormatException e) {
+			// Someone entered NaN for their default value of REM cycle, let's use 90, the industry standard!
+			cycleTime = 90;
+		}
+		for (int i = 1; i <= numberOfAlarms; i++) {
+			listItems.add(new ProposedAlarm(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), i, cycleTime));
+			calendar.add(Calendar.MINUTE, cycleTime);
+		}
+		return listItems;
+	}
+	
 	private View.OnClickListener mOnButtonClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -118,7 +139,7 @@ public class FortyWinks extends Activity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {
+		switch (item.getItemId()) {
 			case R.id.menu_options:
 				Intent options = new Intent(this, FortyPrefs.class);
 				startActivity(options);
