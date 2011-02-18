@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="pref_sleep_cycle_title">Enter Sleep Cycle Time</string>
+<string name="pref_sleep_cycle_summary">Please enter how long you need to complete one REM cycle on average</string>
+</resources>

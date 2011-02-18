@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<EditTextPreference
+		android:dialogTitle="@string/pref_sleep_cycle_title"
+		android:dialogMessage="@string/pref_sleep_cycle_summary"
+		android:positiveButtonText="OK"
+		android:negativeButtonText="Cancel"
+		android:key="key_cycle_time"
+		android:title="@string/pref_sleep_cycle_title"
+		android:summary="@string/pref_sleep_cycle_summary"
+		android:defaultValue="90"/>
+</PreferenceScreen>
