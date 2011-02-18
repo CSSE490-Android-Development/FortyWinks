@@ -26,6 +26,9 @@
 		<activity
 			android:name=".ListAlarms"
 			android:label="@string/activity_title_view_alarms"/>
+			<activity
+			android:name=".FortyPrefs"
+			android:label="@string/preferences"/>
 		<receiver
 			android:name=".SingleAlarm"
 			android:process=":remote"/>

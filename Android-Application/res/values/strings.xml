@@ -2,4 +2,5 @@
 <resources>
     <string name="hello">Hello World, FortyWinks!</string>
     <string name="app_name">FortyWinks</string>
+    <string name="preferences">Preferences</string>
 </resources>
