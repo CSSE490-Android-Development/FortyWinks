@@ -93,4 +93,17 @@ public class Alarm implements Parcelable {
         dest.writeInt(getEnabled() ? 1 : 0);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Alarm)) {
+            return super.equals(o);
+        }
+        Alarm a = (Alarm) o;
+        return getId() == a.getId() &&
+                getFollowups() == a.getFollowups() &&
+                getIntervalStart() == a.getIntervalStart() &&
+                getIntervalEnd() == a.getIntervalEnd() &&
+                getDaysOfWeek() == a.getDaysOfWeek() &&
+                getEnabled() == a.getEnabled();
+    }
 }
