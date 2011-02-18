@@ -1,6 +1,7 @@
 package com.fernferret.android.fortywinks.test;
 
 import junit.framework.TestCase;
+import android.os.Parcel;
 
 import com.fernferret.android.fortywinks.Alarm;
 
@@ -171,6 +172,31 @@ public class AlarmTests extends TestCase {
         assertFalse(a.isDayEnabled(Alarm.Day.THURSDAY));
         assertFalse(a.isDayEnabled(Alarm.Day.FRIDAY));
         assertFalse(a.isDayEnabled(Alarm.Day.SATURDAY));
+    }
+    
+    public void testParclablePackagingWorks() {
+        Alarm a = new Alarm(1);
+        a.enableDay(Alarm.Day.WEDNESDAY);
+        a.setHour(4);
+        a.setMinute(20);
+        a.setFollowups(2);
+        a.setIntervalStart(3);
+        a.setIntervalEnd(5);
+        
+        Parcel p = Parcel.obtain();
+        a.writeToParcel(p, 0);
+        p.setDataPosition(0);
+        
+        Alarm result = new Alarm(p);
+        //assertEquals(result.getId(), a.getId());
+        assertEquals(result.getHour(), a.getHour());
+        assertEquals(result.getId(), a.getId());
+        assertEquals(result.getId(), a.getId());
+    }
+    
+    public String toString() {
+        return super.toString();
+    }
     }
     
 }

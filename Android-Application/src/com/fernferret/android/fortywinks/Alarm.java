@@ -1,11 +1,17 @@
 package com.fernferret.android.fortywinks;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Alarm implements Parcelable {
     
     private int mId;
+    private int mHour;
+    private int mMinute;
+    private int mThreshold;
     private int mFollowups;
     private int mIntervalStart;
     private int mIntervalEnd;
@@ -13,25 +19,52 @@ public class Alarm implements Parcelable {
     private boolean mEnabled;
     
     public enum Day {
-        SUNDAY    (1),
-        MONDAY    (2),
-        TUESDAY   (4),
-        WEDNESDAY (8),
-        THURSDAY (16),
-        FRIDAY   (32),
-        SATURDAY (64);
+        SUNDAY    (1, Calendar.SUNDAY),
+        MONDAY    (2, Calendar.MONDAY),
+        TUESDAY   (4, Calendar.TUESDAY),
+        WEDNESDAY (8, Calendar.WEDNESDAY),
+        THURSDAY (16, Calendar.THURSDAY),
+        FRIDAY   (32, Calendar.FRIDAY),
+        SATURDAY (64, Calendar.SATURDAY);
         
         private int mValue;
+        private int mCalendarDay;
         
-        Day (int val) { mValue = val; }
+        Day (int val, int day) { 
+            mValue = val; 
+            mCalendarDay = day;
+        }
+        
         int getValue() { return mValue; }
+        int getDay() { return mCalendarDay; }
     }
     
     public Alarm(int id) {
         mId = id;
     }
     
+    public Alarm(Parcel in) {
+        this(in.readInt());
+        setHour(in.readInt());
+        setMinute(in.readInt());
+        setThreshold(in.readInt());
+        setFollowups(in.readInt());
+        setIntervalStart(in.readInt());
+        setIntervalEnd(in.readInt());
+        setDaysOfWeek(in.readInt());
+        setEnabled(in.readInt() == 1);
+    }
+    
     public int getId() { return mId; }
+    
+    public int getHour() { return mHour; }
+    public void setHour(int hour){ mHour = hour; }
+    
+    public int getMinute() { return mMinute; }
+    public void setMinute(int minute) { mMinute = minute; }
+    
+    public int getThreshold() { return mThreshold; }
+    public void setThreshold(int threshold) { mThreshold = threshold; }
     
     public int getFollowups() { return mFollowups; }
     public void setFollowups(int followups) { mFollowups = followups; }
@@ -60,6 +93,37 @@ public class Alarm implements Parcelable {
         int mask = day.getValue();
         return (getDaysOfWeek() & mask) == mask;
     }
+    
+    public boolean isOneTimeAlarm() {
+        return getDaysOfWeek() == 0;
+    }
+    
+    public long getNextAlarmTime() {
+        GregorianCalendar now = new GregorianCalendar(); // now
+        GregorianCalendar t = new GregorianCalendar(); // time to check against
+        t.set(Calendar.HOUR_OF_DAY, mHour);
+        t.set(Calendar.MINUTE, mMinute);
+        
+        /* First we look at one-time instances */
+        if (isOneTimeAlarm()) {
+            
+            if (now.before(t)) {
+                
+                /* We haven't reached that time today */
+                return t.getTimeInMillis();
+                
+            } else {
+                
+                /* Alarm will go off tomorrow at said time */
+                t.add(Calendar.DAY_OF_YEAR, 1);
+                return t.getTimeInMillis();
+            }
+            
+        } else {
+            // TODO: Make this actually work
+            return t.getTimeInMillis();
+        }
+    }
 
     @Override
     public int describeContents() { return 0; }
@@ -67,13 +131,7 @@ public class Alarm implements Parcelable {
     public static final Parcelable.Creator<Alarm> CREATOR = new Parcelable.Creator<Alarm>() {
         
         public Alarm createFromParcel(Parcel in) {
-            Alarm result = new Alarm(in.readInt());
-            result.setFollowups(in.readInt());
-            result.setIntervalStart(in.readInt());
-            result.setIntervalEnd(in.readInt());
-            result.setDaysOfWeek(in.readInt());
-            result.setEnabled(in.readInt() == 1);
-            return result;
+            return new Alarm(in);
         }
 
         @Override
@@ -86,6 +144,9 @@ public class Alarm implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(getId());
+        dest.writeInt(getHour());
+        dest.writeInt(getMinute());
+        dest.writeInt(getThreshold());
         dest.writeInt(getFollowups());
         dest.writeInt(getIntervalStart());
         dest.writeInt(getIntervalEnd());
@@ -100,6 +161,8 @@ public class Alarm implements Parcelable {
         }
         Alarm a = (Alarm) o;
         return getId() == a.getId() &&
+                getHour() == a.getHour() &&
+                getMinute() == a.getMinute() &&
                 getFollowups() == a.getFollowups() &&
                 getIntervalStart() == a.getIntervalStart() &&
                 getIntervalEnd() == a.getIntervalEnd() &&
