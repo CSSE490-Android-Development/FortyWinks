@@ -8,7 +8,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
-
+/**
+ * Database adapter that allows easy communication with the SQLite DB with handeling of injection attacks.
+ * @author ericstokes
+ *
+ */
 public class DBAdapter extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 2;
@@ -20,7 +24,10 @@ public class DBAdapter extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mDb = getWritableDatabase();
     }
-    
+    /**
+     * Save the given alarm to the Database.  If it does not have an ID, it will be given one, otherwise, its values will override the previous values, effectively giving this query add/edit privilages.
+     * @param alarm The alarm to add to the database.
+     */
     public void saveAlarm(Alarm alarm) {
         mDb.delete("alarms", "id = ?", new String[] {alarm.getId() + ""});
         SQLiteStatement s = mDb.compileStatement("INSERT INTO alarms (hour, minute, threshold, days_of_week, followups, interval_start, interval_end, enabled) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
@@ -35,6 +42,10 @@ public class DBAdapter extends SQLiteOpenHelper {
         s.executeInsert();
     }
 
+    /**
+     * Get a List of all the Alarms in the database.
+     * @return a List of all the Alarms in ArrayList form.
+     */
     public List<Alarm> listAlarms() {
         List<Alarm> result = new ArrayList<Alarm>();
         String query = "SELECT * FROM alarms";
@@ -65,7 +76,10 @@ public class DBAdapter extends SQLiteOpenHelper {
         return result;
     }
     
-    
+    /**
+     * Returns the most recently set QuickAlarm.
+     * @return the most recent QuickAlarm.
+     */
     public Alarm getQuickAlarm() {
         Alarm result;
         String query = "SELECT * FROM alarms WHERE days_of_week = 0 ORDER BY id DESC";
@@ -97,7 +111,11 @@ public class DBAdapter extends SQLiteOpenHelper {
         return result;
     }
     
-    
+    /**
+     * Retrieves an alarm from the database with the given ID.
+     * @param id The ID of the alarm to retrieve
+     * @return An alarm with all quantities specified
+     */
     public Alarm getAlarm(int id) {
         Alarm result = new Alarm(id);
         String query = "SELECT * FROM alarms WHERE id = ?";
