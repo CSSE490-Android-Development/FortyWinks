@@ -94,6 +94,10 @@ public class Alarm implements Parcelable {
         return (getDaysOfWeek() & mask) == mask;
     }
     
+    public void makeOneTimeAlarm() {
+        setDaysOfWeek(0);
+    }
+    
     public boolean isOneTimeAlarm() {
         return getDaysOfWeek() == 0;
     }
