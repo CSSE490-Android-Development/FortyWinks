@@ -8,23 +8,17 @@
 		android:layout_height="fill_parent"
 		android:orientation="vertical">
 		<TimePicker
-			android:id="@+id/alarm_time"
+			android:id="@+id/edit_alarm_time"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"/>
-		<com.fernferret.android.fortywinks.PreferenceView
-			android:id="@+id/threshold"
+		<LinearLayout
+			android:id="@+id/edit_alarm_preferences_list"
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"/>
-		<com.fernferret.android.fortywinks.PreferenceView
-			android:id="@+id/followups"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"/>
-		<com.fernferret.android.fortywinks.PreferenceView
-			android:id="@+id/interval"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"/>
+			android:layout_height="wrap_content"
+			android:orientation="vertical"/>
 		<Button
+			android:id="@+id/edit_alarm_save"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="20dip"
