@@ -104,14 +104,10 @@
 			android:layout_width="fill_parent"
 			android:layout_height="250dip"
 			android:background="@color/drawer_bg">
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_alignParentTop="true"
-				android:layout_centerHorizontal="true"
-				android:textSize="30dip"
-				android:paddingTop="20dip"
-				android:text="2:01 AM"/>
+			<ListView
+				android:id="@+id/main_quick_alarms_list"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"/>
 		</LinearLayout>
 	</SlidingDrawer>
 </RelativeLayout>
