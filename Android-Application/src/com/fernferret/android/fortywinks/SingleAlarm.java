@@ -1,14 +1,9 @@
 package com.fernferret.android.fortywinks;
 
-import android.app.KeyguardManager;
-import android.app.KeyguardManager.KeyguardLock;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.os.PowerManager;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * An alarm that fires off only once.

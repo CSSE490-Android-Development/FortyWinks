@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import com.fernferret.android.fortywinks.ProposedAlarm.ProposedAlarmType;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.format.DateFormat;
+
+import com.fernferret.android.fortywinks.ProposedAlarm.ProposedAlarmType;
 
 /**
  * An implementation of a very versatile Alarm.  This alarm will support single runs, 

@@ -228,6 +228,47 @@ public class DBAdapter extends SQLiteOpenHelper {
         Log.w("40W", "40W: Alarm Loaded - ID:" + result.getId() + ", Time:" + result);
         return result;
     }
+    
+    public List<Alarm> getQuickAlarmsAndAlarms() {
+        List<Alarm> result = new ArrayList<Alarm>();
+        
+        String query = "SELECT * FROM alarms, quikalarms";
+        Cursor cursor = mDb.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+
+                /* Create and populate each alarm */
+                Alarm next = new Alarm(cursor.getInt(0));
+                next.setHour(cursor.getInt(1));
+                next.setMinute(cursor.getInt(2));
+                next.setThreshold(cursor.getInt(3));
+                next.setDaysOfWeek(cursor.getInt(4));
+                next.setNumFollowups(cursor.getInt(5));
+                next.setIntervalStart(cursor.getInt(6));
+                next.setIntervalEnd(cursor.getInt(7));
+                next.setEnabled(cursor.getInt(8) == 1);
+                result.add(next);
+
+            } while (cursor.moveToNext());
+        }
+
+        if (cursor != null && !cursor.isClosed()) {
+            cursor.close();
+        }
+        
+        return result;
+    }
+    
+    public List<Alarm> getFullAlarmList(int numEntries) {
+        List<Alarm> result = new ArrayList<Alarm>();
+        Alarm powerNap = getPowerNap();
+        if (powerNap != null) {
+            result.add(powerNap);
+        }
+        result.addAll(getQuickAlarmsAndAlarms());
+        return result.subList(0, numEntries);
+    }
 
     /**
      * Retrieves an alarm from the database with the given ID.

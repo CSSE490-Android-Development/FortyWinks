@@ -1,5 +1,7 @@
 package com.fernferret.android.fortywinks.test;
 
+import java.util.List;
+
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.fernferret.android.fortywinks.Alarm;
@@ -97,5 +99,34 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         Alarm result = mDba.getPowerNap();
         assertNotNull(result);
         testBasicEquality(b, result);
+    }
+    
+    public void testSetQuikAlarms() {
+        Alarm a = new Alarm(-1);
+        
+        a.setDaysOfWeek(1);
+        a.setEnabled(false);
+        a.setHour(4);
+        a.setMinute(6);
+        a.setIsQuikAlarm(true);
+        
+        Alarm b = new Alarm(-1);
+        
+        b.setDaysOfWeek(2);
+        b.setEnabled(false);
+        b.setHour(5);
+        b.setMinute(7);
+        b.setIsQuikAlarm(true);
+        
+        mDba.saveAlarm(a);
+        assertFalse(a.getId() == -1);
+        
+        mDba.saveAlarm(b);
+        assertFalse(b.getId() == -1);
+        
+        List<Alarm> quikAlarms = mDba.getQuickAlarmsAndAlarms();
+        testBasicEquality(quikAlarms.get(1), a);
+        testBasicEquality(quikAlarms.get(2), b);
+        
     }
 }
