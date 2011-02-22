@@ -142,6 +142,7 @@ public class FortyWinks extends Activity {
 	private void setPowerNap() {
 		Intent singleAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 		Alarm a = mDatabaseAdapter.getPowerNap();
+		Log.w("40W", "Found PowerNap: " + a + ", ID: " + a.getId());
 		Calendar calendar = Calendar.getInstance();
 		long futureTime = a.getNextAlarmTime();
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -198,12 +199,12 @@ public class FortyWinks extends Activity {
 	}
 	
 	private void refreshPowerNaps() {
-		Log.w("40W", "40W - Refreshing Alarms");
+		// Log.w("40W", "40W - Refreshing Alarms");
 		Calendar calendar = Calendar.getInstance();
 		for (ProposedAlarm a : mQuickProposedAlarms) {
 			calendar.add(Calendar.MINUTE, mCycleTime);
-			Log.w("40W", "Current time: " + DateFormat.format("h:mm aa", Calendar.getInstance()));
-			Log.w("40W", "Alarm time:   " + DateFormat.format("h:mm aa", calendar));
+			// Log.w("40W", "Current time: " + DateFormat.format("h:mm aa", Calendar.getInstance()));
+			// Log.w("40W", "Alarm time:   " + DateFormat.format("h:mm aa", calendar));
 			a.setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 		}
 		mQuickAlarmAdapter.notifyDataSetChanged();
@@ -219,7 +220,7 @@ public class FortyWinks extends Activity {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			ProposedAlarm a = mQuickProposedAlarms.get(position);
-			
+			Log.w("40W", "40W" + a.getPrettyTime());
 			mDatabaseAdapter.saveAlarm(new Alarm(a));
 			setPowerNap();
 			mDrawer.animateClose();

@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
 /**
  * Database adapter that allows easy communication with the SQLite DB with handling of injection attacks.
@@ -133,6 +134,7 @@ public class DBAdapter extends SQLiteOpenHelper {
         s.bindString(7, alarm.getIntervalEnd() + "");
         s.bindString(8, (alarm.getEnabled() ? 1 : 0) + "");
         s.executeInsert();
+        Log.w("40W", "40W: Alarm Saved - ID: " + alarm.getId() + ", Time:" + alarm);
     }
     
     public boolean alarmExists(int id) {
@@ -206,7 +208,7 @@ public class DBAdapter extends SQLiteOpenHelper {
         if (cursor != null && !cursor.isClosed()) {
             cursor.close();
         }
-        
+        Log.w("40W", "40W: Alarm Loaded - ID:" + result.getId() + ", Time:" + result);
         return result;
     }
     
