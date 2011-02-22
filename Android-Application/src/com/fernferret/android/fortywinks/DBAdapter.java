@@ -251,7 +251,6 @@ public class DBAdapter extends SQLiteOpenHelper {
         return result;
     }
     
-    @SuppressWarnings("unchecked")
     public List<Alarm> getQuickAlarmsAndAlarms() {
         List<Alarm> result = new ArrayList<Alarm>();
         

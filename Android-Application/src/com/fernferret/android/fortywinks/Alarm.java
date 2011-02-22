@@ -20,7 +20,7 @@ import com.fernferret.android.fortywinks.ProposedAlarm.ProposedAlarmType;
  * @author Jimmy Theis
  */
 
-public class Alarm implements Parcelable, Comparable {
+public class Alarm implements Parcelable, Comparable<Alarm> {
     
     private int mId;
     private int mHour;
@@ -393,10 +393,7 @@ public class Alarm implements Parcelable, Comparable {
     }
 
     @Override
-    public int compareTo(Object another) {
-        if (!(another instanceof Alarm)) {
-            return -1;
-        }
-        return (int) ((int) getNextAlarmTime() - ((Alarm)another).getNextAlarmTime());
+    public int compareTo(Alarm another) {
+        return (int) ((int) getNextAlarmTime() - another.getNextAlarmTime());
     }
 }
