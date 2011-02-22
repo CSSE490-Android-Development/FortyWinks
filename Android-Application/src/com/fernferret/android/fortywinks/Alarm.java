@@ -1,16 +1,19 @@
 package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 /**
- * An incredible implementation of a very versitile Alarm.  This alarm will support single runs, and indefinetly scheduled runs, in addition to thresholds, followups and advanced intervals.
+ * An incredible implementation of a very versatile Alarm.  This alarm will support single runs, 
+ * and indefinitely scheduled runs, in addition to thresholds, followups and advanced intervals.
  * @author Jimmy Theis
- *
  */
+
 public class Alarm implements Parcelable {
     
     private int mId;
@@ -22,10 +25,10 @@ public class Alarm implements Parcelable {
     private int mIntervalEnd;
     private int mDaysOfWeek = 0;
     private boolean mEnabled;
+    
     /**
      * The Day Enum allows very easy access from any class to the concept of a named day
      * @author Jimmy Theis
-     *
      */
     public enum Day {
         SUNDAY    (1, Calendar.SUNDAY),
@@ -38,6 +41,7 @@ public class Alarm implements Parcelable {
         
         private int mValue;
         private int mCalendarDay;
+        
         /**
          * Constructs a new Day Enum
          * @param val A value given to the day to represent enabled or disabled.
@@ -70,12 +74,14 @@ public class Alarm implements Parcelable {
         int getValue() { return mValue; }
         int getDay() { return mCalendarDay; }
     }
+    
     /**
      * Constructs a new Alarm
      */
     public Alarm() {
         this(-1);
     }
+    
     /**
      * Constructs an alarm with the given id
      * @param id The id to construct the point with.
@@ -83,6 +89,7 @@ public class Alarm implements Parcelable {
     public Alarm(int id) {
         mId = id;
     }
+    
     /**
      * Creates an alarm from a Proposed alarm.  This will be a one time quick alarm with no repeating.
      * @param a The Proposed alarm to scrape and create a real alarm from.
@@ -92,6 +99,7 @@ public class Alarm implements Parcelable {
     	setHour(a.getHour());
     	setMinute(a.getMinute());
     }
+    
     /**
      * Constructs a new Alarm with a Parcel. This is required due to alarms being Parcelable so they can be transported.
      * @param in The Parcel that is to be unpacked to an alarm.
@@ -142,6 +150,7 @@ public class Alarm implements Parcelable {
     public void enableDay(Day day) {
         setDaysOfWeek(getDaysOfWeek() | day.getValue());
     }
+    
     /**
      * Disables the given day for this alarm.
      * @param day The day to disable the alarm for
