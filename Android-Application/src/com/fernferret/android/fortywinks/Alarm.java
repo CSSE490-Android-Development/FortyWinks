@@ -235,7 +235,7 @@ public class Alarm implements Parcelable {
      * Populate the actual times for this alarm's followups
      * @param ids A list of unique IDs from the database to assign to followups, whose length matches numFollowups
      */
-    public void populateFollowups(List<Integer> ids) {
+    public void populateFollowups(int[] ids) {
         HashMap<Integer, Long> followups = getFollowups();
         Random r = new Random();
         
@@ -245,7 +245,7 @@ public class Alarm implements Parcelable {
         int offsetRange = getIntervalEnd() - getIntervalStart();
         
         for (int id : ids) {
-            nextAlarmTime.add(Calendar.MINUTE, r.nextInt(offsetRange) + getIntervalStart());
+            nextAlarmTime.add(Calendar.MINUTE, offsetRange <= 0 ? getIntervalStart() : r.nextInt(offsetRange) + getIntervalStart());
             followups.put(id, nextAlarmTime.getTimeInMillis());
         }
         
