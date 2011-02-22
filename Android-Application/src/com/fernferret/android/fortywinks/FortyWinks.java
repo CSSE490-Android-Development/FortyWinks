@@ -150,13 +150,14 @@ public class FortyWinks extends Activity {
 		// Iterate through all followups with the following
 		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, a.getId(), singleAlarmIntent, NO_FLAGS);
 		calendar.setTimeInMillis(futureTime);
-		Log.w("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
+		Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
+		Log.d("40W", "Number of followups: " + a.getFollowups().size());
 		alarmManager.set(AlarmManager.RTC_WAKEUP, futureTime, singleAlarmPendingIntent);
 		for (Map.Entry<Integer, Long> entry : a.getFollowups().entrySet()) {
 			singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, entry.getKey(), singleAlarmIntent, NO_FLAGS);
 			calendar.setTimeInMillis(entry.getValue());
 			alarmManager.set(AlarmManager.RTC_WAKEUP, entry.getValue(), singleAlarmPendingIntent);
-			Log.w("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
+			Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
 		}
 		// End iteration
 		mNextAlarmContainer.removeAllViews();
