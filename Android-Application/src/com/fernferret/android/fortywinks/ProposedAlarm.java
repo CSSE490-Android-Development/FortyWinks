@@ -113,7 +113,7 @@ public class ProposedAlarm {
 	public void setNumberOfIntervals(int numInterval) {
 		mIntervalNumber = numInterval;
 	}
-	public int setNumberOfIntervals() {
+	public int getNumberOfIntervals() {
 		return mIntervalNumber;
 	}
 	

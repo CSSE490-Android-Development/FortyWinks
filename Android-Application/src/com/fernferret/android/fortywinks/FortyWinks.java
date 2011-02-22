@@ -150,11 +150,13 @@ public class FortyWinks extends Activity {
 		// Iterate through all followups with the following
 		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, a.getId(), singleAlarmIntent, NO_FLAGS);
 		calendar.setTimeInMillis(futureTime);
+		Log.w("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
 		alarmManager.set(AlarmManager.RTC_WAKEUP, futureTime, singleAlarmPendingIntent);
 		for (Map.Entry<Integer, Long> entry : a.getFollowups().entrySet()) {
 			singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, entry.getKey(), singleAlarmIntent, NO_FLAGS);
 			calendar.setTimeInMillis(entry.getValue());
 			alarmManager.set(AlarmManager.RTC_WAKEUP, entry.getValue(), singleAlarmPendingIntent);
+			Log.w("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
 		}
 		// End iteration
 		mNextAlarmContainer.removeAllViews();
@@ -226,8 +228,16 @@ public class FortyWinks extends Activity {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			ProposedAlarm a = mQuickProposedAlarms.get(position);
-			a.setIntervalLength(mSettings.getInt(getString(R.string.key_followup_interval), 5));
-			a.setNumberOfIntervals(mSettings.getInt(getString(R.string.key_followup_alarms), 4));
+			try {
+				a.setIntervalLength(Integer.parseInt(mSettings.getString(getString(R.string.key_followup_interval), "5")));
+			} catch (NumberFormatException e) {
+				a.setIntervalLength(5);
+			}
+			try {
+				a.setNumberOfIntervals(Integer.parseInt(mSettings.getString(getString(R.string.key_followup_alarms), "4")));
+			} catch (NumberFormatException e) {
+				a.setNumberOfIntervals(4);
+			}
 			Log.w("40W", "40W" + a.getPrettyTime());
 			mDatabaseAdapter.saveAlarm(new Alarm(a));
 			setPowerNap();
