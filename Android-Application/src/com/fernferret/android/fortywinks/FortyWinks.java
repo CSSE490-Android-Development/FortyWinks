@@ -202,12 +202,10 @@ public class FortyWinks extends Activity {
 	
 	private void refreshQuickAlarms() {
 		Log.w("40W", "40W - Refreshing Alarms");
-		long currentTime = System.currentTimeMillis();
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(currentTime);
 		for (ProposedAlarm a : mQuickProposedAlarms) {
 			calendar.add(Calendar.MINUTE, mCycleTime);
-			a.updateCurrentTime(calendar);
+			a.setTimeTill(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 		}
 		mQuickAlarmAdapter.notifyDataSetChanged();
 	}

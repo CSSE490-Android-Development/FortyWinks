@@ -18,7 +18,8 @@ public class ProposedAlarm {
 	
 	public enum ProposedAlarmType {PowerNap, QuickAlarm};
 	
-	private Calendar mTime;
+	private int mHour;
+	private int mMinute;
 	private int mIntervalNumber;
 	private int mIntervalLength;
 	private ProposedAlarmType mAlarmType;
@@ -30,9 +31,8 @@ public class ProposedAlarm {
 	 * @param intervalLength The length of one interval
 	 */
 	public ProposedAlarm(int hour, int minute, int intervalNumber, int intervalLength, ProposedAlarmType type) {
-		mTime = Calendar.getInstance();
-		mTime.set(Calendar.HOUR, hour);
-		mTime.set(Calendar.MINUTE, minute);
+		mHour = hour;
+		mMinute = minute;
 		mIntervalNumber = intervalNumber;
 		mIntervalLength = intervalLength;
 		mAlarmType = type;
@@ -45,9 +45,12 @@ public class ProposedAlarm {
 	 * @param intervalLength The length of one interval
 	 */
 	public ProposedAlarm(int hours, int minutes, int intervalNumber, int intervalLength) {
-		mTime = Calendar.getInstance();
-		mTime.add(Calendar.HOUR, hours);
-		mTime.add(Calendar.MINUTE, minutes);
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.HOUR, hours);
+		c.add(Calendar.MINUTE, minutes);
+		
+		mHour = c.get(Calendar.HOUR_OF_DAY);
+		mMinute = c.get(Calendar.MINUTE);
 		
 		mIntervalNumber = intervalNumber;
 		mIntervalLength = intervalLength;
@@ -58,7 +61,10 @@ public class ProposedAlarm {
 	 * @return A human readable time
 	 */
 	public String getPrettyTime() {
-		return DateFormat.format("h:mm aa", mTime).toString();
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.HOUR_OF_DAY, mHour);
+		c.set(Calendar.MINUTE, mMinute);
+		return DateFormat.format("h:mm aa", c).toString();
 	}
 	
 	/**
@@ -79,29 +85,30 @@ public class ProposedAlarm {
 	}
 	
 	public int getHour() {
-		return mTime.get(Calendar.HOUR);
+		return mHour;
 	}
 	
 	public int getMinute() {
-		return mTime.get(Calendar.MINUTE);
+		return mMinute;
 	}
 	
 	public void setHour(int hour) {
-		mTime.set(Calendar.HOUR, hour);
+		mHour = hour;
 	}
 	
 	public void setMinute(int minute) {
-		mTime.set(Calendar.MINUTE, minute);
+		mMinute = minute;
 	}
 	
 	public ProposedAlarmType getProposedAlarmType() {
 		return mAlarmType;
 	}
-	/**
-	 * Allows this Proposed alarm to be updated on the fly.  This is useful if users sit on pages too long and these values get out of sync.
-	 * @param c The Calendar object that contains the new time.  This object's values will be overridden.
-	 */
-	public void updateCurrentTime(Calendar c) {
-		mTime = c;
+	
+	public void setTimeTill(int hours, int minutes) {
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.HOUR, hours);
+		c.add(Calendar.MINUTE, minutes);
+		mHour = c.get(Calendar.HOUR_OF_DAY);
+		mMinute = c.get(Calendar.MINUTE);
 	}
 }

@@ -62,4 +62,14 @@ public class ProposedAlarmTests extends TestCase {
 		pa = new ProposedAlarm(12, 11, 1, 0);
 		assertEquals("0 Hours", pa.getPrettyCyclesTillAlarm());
 	}
+	
+	public void testAddingTimesWorks() {
+		ProposedAlarm pa = new ProposedAlarm(1, 11, 1, 90);
+		assertEquals("1.5 Hours", pa.getPrettyCyclesTillAlarm());
+		pa.setTimeTill(1, 15);
+		Calendar time = Calendar.getInstance();
+		time.add(Calendar.HOUR, 1);
+		time.add(Calendar.MINUTE, 15);
+		assertEquals(DateFormat.format("h:mm aa", time).toString(), pa.getPrettyTime());
+	}
 }
