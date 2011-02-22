@@ -227,8 +227,16 @@ public class FortyWinks extends Activity {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			ProposedAlarm a = mQuickProposedAlarms.get(position);
-			a.setIntervalLength(mSettings.getInt(getString(R.string.key_followup_interval), 5));
-			a.setNumberOfIntervals(mSettings.getInt(getString(R.string.key_followup_alarms), 4));
+			try {
+				a.setIntervalLength(Integer.parseInt(mSettings.getString(getString(R.string.key_followup_interval), "5")));
+			} catch (NumberFormatException e) {
+				a.setIntervalLength(5);
+			}
+			try {
+				a.setNumberOfIntervals(Integer.parseInt(mSettings.getString(getString(R.string.key_followup_alarms), "4")));
+			} catch (NumberFormatException e) {
+				a.setNumberOfIntervals(4);
+			}
 			Log.w("40W", "40W" + a.getPrettyTime());
 			mDatabaseAdapter.saveAlarm(new Alarm(a));
 			setPowerNap();

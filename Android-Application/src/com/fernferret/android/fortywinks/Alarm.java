@@ -106,6 +106,9 @@ public class Alarm implements Parcelable {
     	this();
     	setHour(a.getHour());
     	setMinute(a.getMinute());
+    	setIntervalStart(a.getIntervalLength());
+    	setIntervalEnd(a.getIntervalLength());
+    	setNumFollowups(a.getNumberOfIntervals());
     	if(a.getProposedAlarmType() == ProposedAlarmType.PowerNap) {
     		setIsPowerNap(true);
     	} else if(a.getProposedAlarmType() == ProposedAlarmType.QuickAlarm) {
