@@ -114,7 +114,7 @@ public class FortyWinks extends Activity {
 				
 				mDatabaseAdapter.saveAlarm(new Alarm(a));
 				setPowerNap();
-				mDrawer.close();
+				mDrawer.animateClose();
 			}
 		});
 		
@@ -205,7 +205,9 @@ public class FortyWinks extends Activity {
 		Calendar calendar = Calendar.getInstance();
 		for (ProposedAlarm a : mQuickProposedAlarms) {
 			calendar.add(Calendar.MINUTE, mCycleTime);
-			a.setTimeTill(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+			Log.w("40W", "Current time: " + DateFormat.format("h:mm aa",Calendar.getInstance()));
+			Log.w("40W", "Alarm time:   " + DateFormat.format("h:mm aa", calendar));
+			a.setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 		}
 		mQuickAlarmAdapter.notifyDataSetChanged();
 	}

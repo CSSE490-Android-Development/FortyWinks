@@ -111,4 +111,8 @@ public class ProposedAlarm {
 		mHour = c.get(Calendar.HOUR_OF_DAY);
 		mMinute = c.get(Calendar.MINUTE);
 	}
+	public void setTime(int hour, int minute) {
+		mHour = hour;
+		mMinute = minute;
+	}
 }
