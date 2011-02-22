@@ -104,7 +104,7 @@ public class DBAdapter extends SQLiteOpenHelper {
 
             /* Insert all of our new followups */
             for (int id : followups.keySet()) {
-                Log.d("40W", "Inserting Followup: ID: " + id + " ALARM: " + alarm.getId() + " TIME: " + followups.get(id));
+                Log.i("40W", "Inserting Followup: ID: " + id + " ALARM: " + alarm.getId() + " TIME: " + followups.get(id));
                 fs.bindString(1, id + "");
                 fs.bindLong(3, followups.get(id));
                 fs.executeInsert();
@@ -218,6 +218,22 @@ public class DBAdapter extends SQLiteOpenHelper {
             result.setIntervalStart(cursor.getInt(6));
             result.setIntervalEnd(cursor.getInt(7));
             result.setEnabled(cursor.getInt(8) == 1);
+            
+            /* Populate followups */
+            
+            String followupQuery = "SELECT id, time FROM followups WHERE alarm = ?";
+            Cursor followupCursor = mDb.rawQuery(followupQuery, new String[] {cursor.getInt(0) + "" });
+            
+            HashMap<Integer, Long> followups = new HashMap<Integer, Long>();
+            
+            if (followupCursor.moveToFirst()) {
+                do {
+                    followups.put(followupCursor.getInt(0), followupCursor.getLong(1));
+                } while (followupCursor.moveToNext());
+            }
+            
+            result.setFollowups(followups);
+            
         } else {
 
             /* We didn't find that one */
