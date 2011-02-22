@@ -79,7 +79,7 @@ public class Alarm implements Parcelable {
     }
     
     /**
-     * Constructs a new Alarm
+     * Constructs a new (unsaved) Alarm
      */
     public Alarm() {
         this(-1);
@@ -145,6 +145,12 @@ public class Alarm implements Parcelable {
     
     public boolean getEnabled() { return mEnabled; }
     public void setEnabled(boolean enabled) { mEnabled = enabled; }
+    
+    public boolean isPowerNap() { return mIsPowerNap; }
+    public void setIsPowerNap(boolean isPowerNap) { mIsPowerNap = isPowerNap; }
+    
+    public boolean isQuikAlarm() { return mIsQuikAlarm; }
+    public void setIsQuikAlarm(boolean isQuikAlarm) { mIsQuikAlarm = isQuikAlarm; }
     
     /**
      * Enables the given day for this alarm.
@@ -216,6 +222,8 @@ public class Alarm implements Parcelable {
      */
     public long getNextAlarmTime() {
         GregorianCalendar now = new GregorianCalendar(); // now
+        now.set(Calendar.SECOND, 0); // ...except truncate truncate to whole minutes
+        
         GregorianCalendar t = new GregorianCalendar(); // time to check against
         t.set(Calendar.HOUR_OF_DAY, mHour);
         t.set(Calendar.MINUTE, mMinute);

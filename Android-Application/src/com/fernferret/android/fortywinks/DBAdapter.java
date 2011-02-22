@@ -8,8 +8,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+
 /**
- * Database adapter that allows easy communication with the SQLite DB with handeling of injection attacks.
+ * Database adapter that allows easy communication with the SQLite DB with handling of injection attacks.
  * @author Jimmy Theis
  *
  */
