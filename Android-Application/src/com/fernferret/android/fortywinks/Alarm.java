@@ -278,6 +278,7 @@ public class Alarm implements Parcelable {
         GregorianCalendar t = new GregorianCalendar(); // time to check against
         t.set(Calendar.HOUR_OF_DAY, mHour);
         t.set(Calendar.MINUTE, mMinute);
+        t.set(Calendar.SECOND, 0);
         
         /* First we look at one-time instances */
         if (isOneTimeAlarm()) {
