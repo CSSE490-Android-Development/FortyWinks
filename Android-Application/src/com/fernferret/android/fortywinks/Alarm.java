@@ -150,7 +150,7 @@ public class Alarm implements Parcelable {
     public void setIsPowerNap(boolean isPowerNap) { mIsPowerNap = isPowerNap; }
     
     public boolean isQuikAlarm() { return mIsQuikAlarm; }
-    public void setIsQuikAlarm(boolean isQuickAlarm) { mIsQuikAlarm = isQuikAlarm; }
+    public void setIsQuikAlarm(boolean isQuikAlarm) { mIsQuikAlarm = isQuikAlarm; }
     
     /**
      * Enables the given day for this alarm.
