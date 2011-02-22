@@ -62,7 +62,8 @@
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:text="Add Quick Alarm"
-		android:layout_toRightOf="@id/main_next_alarm_scroller"/>
+		android:layout_toRightOf="@id/main_next_alarm_scroller"
+		android:layout_alignBottom="@id/main_next_alarm_scroller"/>
 	<Button
 		android:id="@+id/main_do_sleep_button"
 		android:layout_height="wrap_content"
@@ -97,7 +98,8 @@
 				android:id="@+id/main_quick_alarms_list"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:choiceMode="singleChoice"/>
+				android:choiceMode="singleChoice"
+				android:cacheColorHint="#00000000"/>
 		</LinearLayout>
 	</SlidingDrawer>
 </RelativeLayout>

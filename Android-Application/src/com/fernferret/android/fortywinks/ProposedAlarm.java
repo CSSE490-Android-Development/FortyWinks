@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Calendar;
 
-import android.text.format.Time;
+import android.text.format.DateFormat;
 
 
 
@@ -20,7 +20,6 @@ public class ProposedAlarm {
 	
 	private int mHour;
 	private int mMinute;
-	private Time mTime;
 	private int mIntervalNumber;
 	private int mIntervalLength;
 	private ProposedAlarmType mAlarmType;
@@ -32,9 +31,6 @@ public class ProposedAlarm {
 	 * @param intervalLength The length of one interval
 	 */
 	public ProposedAlarm(int hour, int minute, int intervalNumber, int intervalLength, ProposedAlarmType type) {
-		mTime = new Time();
-		mTime.setToNow();
-		mTime.set(mTime.second, minute, hour, mTime.monthDay, mTime.month, mTime.year);
 		mHour = hour;
 		mMinute = minute;
 		mIntervalNumber = intervalNumber;
@@ -49,12 +45,13 @@ public class ProposedAlarm {
 	 * @param intervalLength The length of one interval
 	 */
 	public ProposedAlarm(int hours, int minutes, int intervalNumber, int intervalLength) {
-		mTime = new Time();
-		mTime.setToNow();
-		mHour = mTime.hour + hours;
-		mMinute = mTime.minute + minutes;
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.HOUR, hours);
+		c.add(Calendar.MINUTE, minutes);
 		
-		mTime.set(mTime.second, mMinute, mHour, mTime.monthDay, mTime.month, mTime.year);
+		mHour = c.get(Calendar.HOUR_OF_DAY);
+		mMinute = c.get(Calendar.MINUTE);
+		
 		mIntervalNumber = intervalNumber;
 		mIntervalLength = intervalLength;
 		mAlarmType = ProposedAlarmType.QuickAlarm;
@@ -64,8 +61,10 @@ public class ProposedAlarm {
 	 * @return A human readable time
 	 */
 	public String getPrettyTime() {
-		String format = "%l:%M %p";
-		return mTime.format(format).toUpperCase();
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.HOUR_OF_DAY, mHour);
+		c.set(Calendar.MINUTE, mMinute);
+		return DateFormat.format("h:mm aa", c).toString();
 	}
 	
 	/**
@@ -95,28 +94,25 @@ public class ProposedAlarm {
 	
 	public void setHour(int hour) {
 		mHour = hour;
-		setTimeObject();
 	}
 	
 	public void setMinute(int minute) {
 		mMinute = minute;
-		setTimeObject();
 	}
 	
 	public ProposedAlarmType getProposedAlarmType() {
 		return mAlarmType;
 	}
 	
-	private void setTimeObject() {
-		mTime.set(mTime.second, mMinute, mHour, mTime.monthDay, mTime.month, mTime.year);
-	}
-	/**
-	 * Allows this Proposed alarm to be updated on the fly.  This is useful if users sit on pages too long and these values get out of sync.
-	 * @param c The Calendar object that contains the new time.  This object's values will be overridden.
-	 */
-	public void updateCurrentTime(Calendar c) {
-		mMinute = c.get(Calendar.MINUTE);
+	public void setTimeTill(int hours, int minutes) {
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.HOUR, hours);
+		c.add(Calendar.MINUTE, minutes);
 		mHour = c.get(Calendar.HOUR_OF_DAY);
-		setTimeObject();
+		mMinute = c.get(Calendar.MINUTE);
+	}
+	public void setTime(int hour, int minute) {
+		mHour = hour;
+		mMinute = minute;
 	}
 }
