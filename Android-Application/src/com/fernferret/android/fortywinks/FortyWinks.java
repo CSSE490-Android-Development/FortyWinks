@@ -2,6 +2,7 @@ package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Formatter;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -11,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,12 +30,16 @@ import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
+
 /**
  * The primary application class that is allowed to be launched from the homescreen.
+ * 
  * @author Eric Stokes
- *
+ * 
  */
 public class FortyWinks extends Activity {
+	
+	private static final int NEXT_ALARM_TEXT_SIZE = 20;
 	
 	// General Class Variables
 	Resources mResources;
@@ -153,18 +159,43 @@ public class FortyWinks extends Activity {
 		TextView newAlarm = new TextView(this);
 		
 		int calHour = calendar.get(Calendar.HOUR);
-		// This is so disgusting.  I am a terrible person.  This is due next hour.
-		if(calHour == 0) {
+		// This is so disgusting. I am a terrible person. This is due next hour.
+		if (calHour == 0) {
 			calHour = 12;
 		}
-		newAlarm.setText(
-				calHour + ":" + 
-				(calendar.get(Calendar.MINUTE) > 9 ? calendar.get(Calendar.MINUTE) : "0" + calendar.get(Calendar.MINUTE)) + " " + 
-				(calendar.get(Calendar.AM_PM) == 1 ? "PM" : "AM"));
-		newAlarm.setTextSize(20);
+		// newAlarm.setText(
+		// calHour + ":" +
+		// (calendar.get(Calendar.MINUTE) > 9 ? calendar.get(Calendar.MINUTE) : "0" + calendar.get(Calendar.MINUTE)) + " " +
+		// (calendar.get(Calendar.AM_PM) == 1 ? "PM" : "AM"));
+		newAlarm.setText(getFriendlyCalendarString(calendar));
+		newAlarm.setTextSize(NEXT_ALARM_TEXT_SIZE);
 		mNextAlarmContainer.addView(newAlarm);
-		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + " - " + calendar.get(Calendar.AM_PM), Toast.LENGTH_SHORT).show();
+		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar), Toast.LENGTH_SHORT).show();
 		// END me being a terrible person
+	}
+	
+	private String getFriendlyCalendarString(Calendar c) {
+		c.getTime();
+		Time t = new Time();
+		t.set(c.getTimeInMillis());
+		String format = "%l:%M %p";
+		return t.format(format).toUpperCase();
+	}
+	
+	private String getFriendlyTimeTillAlarm(Calendar c) {
+		Calendar current = Calendar.getInstance();
+		int days = c.get(Calendar.DAY_OF_YEAR) - current.get(Calendar.DAY_OF_YEAR);
+		int hours = c.get(Calendar.HOUR_OF_DAY) - current.get(Calendar.HOUR_OF_DAY);
+		int minutes = c.get(Calendar.MINUTE) - current.get(Calendar.MINUTE);
+		if (hours < 0) {
+			hours += 24;
+			days--;
+		}
+		if (minutes < 0) {
+			minutes += 60;
+			hours--;
+		}
+		return days + "days, " + hours + "hours, " + minutes + "minutes";
 	}
 	
 	private void generateAlarms() {
