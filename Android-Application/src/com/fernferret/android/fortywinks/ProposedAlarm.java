@@ -103,6 +103,20 @@ public class ProposedAlarm {
 		return mAlarmType;
 	}
 	
+	public void setIntervalLength(int interval) {
+		mIntervalLength = interval;
+	}
+	public int getIntervalLength() {
+		return mIntervalLength;
+	}
+	
+	public void setNumberOfIntervals(int numInterval) {
+		mIntervalNumber = numInterval;
+	}
+	public int setNumberOfIntervals() {
+		return mIntervalNumber;
+	}
+	
 	public void setTimeTill(int hours, int minutes) {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.HOUR, hours);
