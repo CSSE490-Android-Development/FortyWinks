@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -172,7 +172,7 @@ public class Alarm implements Parcelable {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public HashMap<Integer, Long> getFollowups() { return (HashMap<Integer, Long>) mFollowups.clone(); }
+    public HashMap<Integer, Long> getFollowups() { return mFollowups == null ? new HashMap<Integer, Long>() : (HashMap<Integer, Long>) mFollowups.clone(); }
     
     /**
      * Set the current followups map. This method handles the cloning.
@@ -212,7 +212,7 @@ public class Alarm implements Parcelable {
      * Gets an ArrayList of Days that are enabled. The max will obviously be 7 for the size of this list.
      * @return ArrayList of Days that are enabled.
      */
-    public ArrayList<Day> getEnabledDays() {
+    public List<Day> getEnabledDays() {
     	ArrayList<Alarm.Day> days = new ArrayList<Alarm.Day>();
     	for(Day d : Day.values()) {
     		if(isDayEnabled(d)) {
@@ -235,8 +235,8 @@ public class Alarm implements Parcelable {
      * Populate the actual times for this alarm's followups
      * @param ids A list of unique IDs from the database to assign to followups, whose length matches numFollowups
      */
-    public void populateFollowups(ArrayList<Integer> ids) {
-        mFollowups = null;
+    public void populateFollowups(List<Integer> ids) {
+        HashMap<Integer, Long> followups = getFollowups();
         Random r = new Random();
         
         Calendar nextAlarmTime = new GregorianCalendar();
@@ -246,8 +246,10 @@ public class Alarm implements Parcelable {
         
         for (int id : ids) {
             nextAlarmTime.add(Calendar.MINUTE, r.nextInt(offsetRange) + getIntervalStart());
-            mFollowups.put(id, nextAlarmTime.getTimeInMillis());
+            followups.put(id, nextAlarmTime.getTimeInMillis());
         }
+        
+        setFollowups(followups);
     }
     
     /**

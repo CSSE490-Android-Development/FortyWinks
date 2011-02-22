@@ -1,5 +1,9 @@
 package com.fernferret.android.fortywinks.test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import junit.framework.TestCase;
 import android.os.Parcel;
 
@@ -183,11 +187,36 @@ public class AlarmTests extends TestCase {
         a.setIntervalStart(3);
         a.setIntervalEnd(5);
         
+        /* Fake list of ids from the database */
+        List<Integer> ids = new ArrayList<Integer>();
+        ids.add(1);
+        ids.add(2);
+        ids.add(3);
+        
+        a.populateFollowups(ids);
+        
         Parcel p = Parcel.obtain();
         a.writeToParcel(p, 0);
         p.setDataPosition(0);
         
         Alarm result = new Alarm(p);
+        assertEquals(a.getId(), result.getId());
+        assertEquals(a.getHour(), result.getHour());
+        assertEquals(a.getMinute(), result.getMinute());
+        assertEquals(a.getThreshold(), result.getThreshold());
+        assertEquals(a.getIntervalStart(), result.getIntervalStart());
+        assertEquals(a.getIntervalEnd(), result.getIntervalEnd());
+        assertEquals(a.getDaysOfWeek(), result.getDaysOfWeek());
+        assertEquals(a.getEnabled(), result.getEnabled());
+        assertEquals(a.isPowerNap(), result.isPowerNap());
+        assertEquals(a.isQuikAlarm(), result.isQuikAlarm());
         assertEquals(a, result);
+        
+        /* Make sure all of the followups actually got mapped right */
+        HashMap<Integer, Long> originalFollowups = a.getFollowups();
+        HashMap<Integer, Long> resultFollowups = result.getFollowups();
+        for (int id : originalFollowups.keySet()) {
+            assertEquals(originalFollowups.get(id), resultFollowups.get(id));
+        }
     }
 }
