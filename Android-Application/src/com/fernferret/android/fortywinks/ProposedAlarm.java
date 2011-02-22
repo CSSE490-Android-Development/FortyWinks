@@ -25,10 +25,10 @@ public class ProposedAlarm {
 	private int mIntervalLength;
 	private ProposedAlarmType mAlarmType;
 	/**
-	 * Creates a new proposed alarm that the user can turn into a quick alarm.
-	 * @param hour Hour in 24 hour time format (0 - 23)
-	 * @param minute Minute from 0 - 59
-	 * @param intervalFromNow How many intervals is this from now
+	 * Creates a new proposed alarm that the user can turn into a PowerNap alarm.
+	 * @param hour Hour in 24 hour time format (0 - 23) that this alarm will go off
+	 * @param minute Minute from 0 - 59 that this alarm will go off 
+	 * @param intervalNumber How many intervals is this from now
 	 * @param intervalLength The length of one interval
 	 */
 	public ProposedAlarm(int hour, int minute, int intervalNumber, int intervalLength, ProposedAlarmType type) {
@@ -40,6 +40,24 @@ public class ProposedAlarm {
 		mIntervalNumber = intervalNumber;
 		mIntervalLength = intervalLength;
 		mAlarmType = type;
+	}
+	/**
+	 * Creates a new proposed alarm that is set from a given number of hours and mins
+	 * @param hours Number of hours until this alarm goes off (in addition to the minutes)
+	 * @param minutes Number of minutes until this alarm goes off (in addition to the hours)
+	 * @param intervalNumber How many intervals is this from now
+	 * @param intervalLength The length of one interval
+	 */
+	public ProposedAlarm(int hours, int minutes, int intervalNumber, int intervalLength) {
+		mTime = new Time();
+		mTime.setToNow();
+		mHour = mTime.hour + hours;
+		mMinute = mTime.minute + minutes;
+		
+		mTime.set(mTime.second, mMinute, mHour, mTime.monthDay, mTime.month, mTime.year);
+		mIntervalNumber = intervalNumber;
+		mIntervalLength = intervalLength;
+		mAlarmType = ProposedAlarmType.QuickAlarm;
 	}
 	/**
 	 * Returns the time in a very pretty manner: 12:56 PM or 1:28 AM
