@@ -271,7 +271,7 @@ public class FortyWinks extends Activity {
 		@Override
 		public void run() {
 			long millis = SystemClock.uptimeMillis() + 1000;
-			
+			// TODO: Check efficiencies.
 			refreshPowerNaps();
 			mSingleHandler.postAtTime(this, millis);
 		}
