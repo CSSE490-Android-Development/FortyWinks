@@ -287,7 +287,6 @@ public class Alarm implements Parcelable, Comparable {
     public long getNextAlarmTime() {
         GregorianCalendar now = new GregorianCalendar(); // now
         now.set(Calendar.SECOND, 0); // ...except truncate to whole minutes
-        //now.add(Calendar.MINUTE, 1); // and set our current time to the next minute
         
         GregorianCalendar t = new GregorianCalendar(); // time to check against
         t.set(Calendar.HOUR_OF_DAY, mHour);
