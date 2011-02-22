@@ -6,7 +6,9 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -20,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -165,6 +168,7 @@ public class FortyWinks extends Activity {
 		
 		newAlarm.setText(getFriendlyCalendarString(calendar));
 		newAlarm.setTextSize(NEXT_ALARM_TEXT_SIZE);
+		newAlarm.setOnLongClickListener(mAlarmClickListener);
 		mNextAlarmContainer.addView(newAlarm);
 		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar), Toast.LENGTH_SHORT).show();
 	}
@@ -258,6 +262,20 @@ public class FortyWinks extends Activity {
 		public void onDrawerClosed() {
 			ImageView button = (ImageView) findViewById(R.id.main_drawer_button);
 			button.setImageDrawable(mResources.getDrawable(R.drawable.drawer_closed));
+		}
+	};
+	private OnLongClickListener mAlarmClickListener = new OnLongClickListener() {
+		@Override
+		public boolean onLongClick(View v) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(FortyWinks.this);
+			builder.setTitle("STuff").setMessage("").setPositiveButton("Delete", mOnDeleteAlarmClickListener).show();
+			return true;
+		}
+	};
+	private DialogInterface.OnClickListener mOnDeleteAlarmClickListener = new DialogInterface.OnClickListener() {
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			// TODO Auto-generated method stub
 		}
 	};
 	
