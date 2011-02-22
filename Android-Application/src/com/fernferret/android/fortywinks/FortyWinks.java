@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.text.format.Time;
@@ -73,6 +75,9 @@ public class FortyWinks extends Activity {
 	int mCycleTime;
 	SharedPreferences mSettings;
 	
+	// Handler for runnable to update the listView once a minute
+	private Handler mSingleHandler = new Handler();
+	
 	private static final int SINGLE_ALARM_RC = 0;
 	private static final int MULTI_ALARM_RC = 1;
 	private static final int NO_FLAGS = 0;
@@ -107,16 +112,8 @@ public class FortyWinks extends Activity {
 		mDrawer.setOnDrawerCloseListener(mDrawerCloseListener);
 		mDoSleepButton.setOnClickListener(mOnButtonClickListener);
 		mQuickAlarmList.setOnItemClickListener(mListViewListener);
-		mQuickAlarmList.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				ProposedAlarm a = mQuickProposedAlarms.get(position);
-				
-				mDatabaseAdapter.saveAlarm(new Alarm(a));
-				setPowerNap();
-				mDrawer.animateClose();
-			}
-		});
+		
+		mSingleHandler.postDelayed(mUpdateSingleTimerTask, 1000);
 		
 	}
 	
@@ -200,12 +197,12 @@ public class FortyWinks extends Activity {
 		
 	}
 	
-	private void refreshQuickAlarms() {
+	private void refreshPowerNaps() {
 		Log.w("40W", "40W - Refreshing Alarms");
 		Calendar calendar = Calendar.getInstance();
 		for (ProposedAlarm a : mQuickProposedAlarms) {
 			calendar.add(Calendar.MINUTE, mCycleTime);
-			Log.w("40W", "Current time: " + DateFormat.format("h:mm aa",Calendar.getInstance()));
+			Log.w("40W", "Current time: " + DateFormat.format("h:mm aa", Calendar.getInstance()));
 			Log.w("40W", "Alarm time:   " + DateFormat.format("h:mm aa", calendar));
 			a.setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 		}
@@ -221,12 +218,16 @@ public class FortyWinks extends Activity {
 	private OnItemClickListener mListViewListener = new OnItemClickListener() {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			ProposedAlarm a = mQuickProposedAlarms.get(position);
+			
+			mDatabaseAdapter.saveAlarm(new Alarm(a));
+			setPowerNap();
+			mDrawer.animateClose();
 		}
 	};
 	private OnDrawerOpenListener mDrawerOpenListener = new OnDrawerOpenListener() {
 		@Override
 		public void onDrawerOpened() {
-			refreshQuickAlarms();
 			ImageView button = (ImageView) findViewById(R.id.main_drawer_button);
 			button.setImageDrawable(mResources.getDrawable(R.drawable.drawer_open));
 		}
@@ -265,5 +266,15 @@ public class FortyWinks extends Activity {
 		}
 		return true;
 	}
+	
+	private Runnable mUpdateSingleTimerTask = new Runnable() {
+		@Override
+		public void run() {
+			long millis = SystemClock.uptimeMillis() + 1000;
+			
+			refreshPowerNaps();
+			mSingleHandler.postAtTime(this, millis);
+		}
+	};
 	
 }
