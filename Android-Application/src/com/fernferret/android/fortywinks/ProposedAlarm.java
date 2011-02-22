@@ -1,10 +1,14 @@
 package com.fernferret.android.fortywinks;
 
 import java.text.DecimalFormat;
+
 import java.text.NumberFormat;
 import java.util.Calendar;
 
 import android.text.format.Time;
+
+
+
 /**
  * Provides the means for creating potential alarms. These never get saved to the database, nor do they get created into alarms, unless they are selected. They are a very inexpensive way of showing the user potential alarm possibilities.
  * @author Eric Stokes
@@ -12,19 +16,22 @@ import android.text.format.Time;
  */
 public class ProposedAlarm {
 	
+	public enum ProposedAlarmType {PowerNap, QuickAlarm};
+	
 	private int mHour;
 	private int mMinute;
 	private Time mTime;
 	private int mIntervalNumber;
 	private int mIntervalLength;
+	private ProposedAlarmType mAlarmType;
 	/**
-	 * Creates a new proposed alarm that the user can turn into a quick alarm.
-	 * @param hour Hour in 24 hour time format (0 - 23)
-	 * @param minute Minute from 0 - 59
-	 * @param intervalFromNow How many intervals is this from now
+	 * Creates a new proposed alarm that the user can turn into a PowerNap alarm.
+	 * @param hour Hour in 24 hour time format (0 - 23) that this alarm will go off
+	 * @param minute Minute from 0 - 59 that this alarm will go off 
+	 * @param intervalNumber How many intervals is this from now
 	 * @param intervalLength The length of one interval
 	 */
-	public ProposedAlarm(int hour, int minute, int intervalNumber, int intervalLength) {
+	public ProposedAlarm(int hour, int minute, int intervalNumber, int intervalLength, ProposedAlarmType type) {
 		mTime = new Time();
 		mTime.setToNow();
 		mTime.set(mTime.second, minute, hour, mTime.monthDay, mTime.month, mTime.year);
@@ -32,6 +39,25 @@ public class ProposedAlarm {
 		mMinute = minute;
 		mIntervalNumber = intervalNumber;
 		mIntervalLength = intervalLength;
+		mAlarmType = type;
+	}
+	/**
+	 * Creates a new proposed alarm that is set from a given number of hours and mins
+	 * @param hours Number of hours until this alarm goes off (in addition to the minutes)
+	 * @param minutes Number of minutes until this alarm goes off (in addition to the hours)
+	 * @param intervalNumber How many intervals is this from now
+	 * @param intervalLength The length of one interval
+	 */
+	public ProposedAlarm(int hours, int minutes, int intervalNumber, int intervalLength) {
+		mTime = new Time();
+		mTime.setToNow();
+		mHour = mTime.hour + hours;
+		mMinute = mTime.minute + minutes;
+		
+		mTime.set(mTime.second, mMinute, mHour, mTime.monthDay, mTime.month, mTime.year);
+		mIntervalNumber = intervalNumber;
+		mIntervalLength = intervalLength;
+		mAlarmType = ProposedAlarmType.QuickAlarm;
 	}
 	/**
 	 * Returns the time in a very pretty manner: 12:56 PM or 1:28 AM
@@ -75,6 +101,10 @@ public class ProposedAlarm {
 	public void setMinute(int minute) {
 		mMinute = minute;
 		setTimeObject();
+	}
+	
+	public ProposedAlarmType getProposedAlarmType() {
+		return mAlarmType;
 	}
 	
 	private void setTimeObject() {

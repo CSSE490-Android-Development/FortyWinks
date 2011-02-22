@@ -95,7 +95,7 @@ public class Alarm implements Parcelable {
     }
     
     /**
-     * Creates an alarm from a Proposed alarm.  This will be a one time quick alarm with no repeating.
+     * Creates an alarm from a Proposed alarm.  This will be a one time power nap with no repeating.
      * @param a The Proposed alarm to scrape and create a real alarm from.
      */
     public Alarm(ProposedAlarm a) {
