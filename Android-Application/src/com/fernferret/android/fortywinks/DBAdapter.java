@@ -97,7 +97,7 @@ public class DBAdapter extends SQLiteOpenHelper {
     public void saveAlarm(Alarm alarm) {
         if (populateAlarm(alarm)) {
             SQLiteStatement fs = mDb.compileStatement("INSERT INTO followups VALUES(?, ?, ?)");
-            fs.bindLong(2, alarm.getId()); // our alarm object id will remain
+            fs.bindString(2, alarm.getId() + ""); // our alarm object id will remain
                                            // constant
 
             HashMap<Integer, Long> followups = alarm.getFollowups();
