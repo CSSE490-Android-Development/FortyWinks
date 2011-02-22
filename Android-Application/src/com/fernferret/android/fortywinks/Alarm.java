@@ -1,15 +1,15 @@
 package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
-
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * An incredible implementation of a very versatile Alarm.  This alarm will support single runs, 
+ * An implementation of a very versatile Alarm.  This alarm will support single runs, 
  * and indefinitely scheduled runs, in addition to thresholds, followups and advanced intervals.
  * @author Jimmy Theis
  */
@@ -20,11 +20,14 @@ public class Alarm implements Parcelable {
     private int mHour;
     private int mMinute;
     private int mThreshold;
-    private int mFollowups;
+    private int mNumFollowups;
     private int mIntervalStart;
     private int mIntervalEnd;
     private int mDaysOfWeek = 0;
     private boolean mEnabled;
+    private boolean mIsPowerNap;
+    private boolean mIsQuikAlarm;
+    private HashMap<Integer, Long> mFollowups;
     
     /**
      * The Day Enum allows very easy access from any class to the concept of a named day
@@ -128,8 +131,8 @@ public class Alarm implements Parcelable {
     public int getThreshold() { return mThreshold; }
     public void setThreshold(int threshold) { mThreshold = threshold; }
     
-    public int getFollowups() { return mFollowups; }
-    public void setFollowups(int followups) { mFollowups = followups; }
+    public int getFollowups() { return mNumFollowups; }
+    public void setFollowups(int followups) { mNumFollowups = followups; }
     
     public int getIntervalStart() { return mIntervalStart; }
     public void setIntervalStart(int intervalStart) { mIntervalStart = intervalStart; }

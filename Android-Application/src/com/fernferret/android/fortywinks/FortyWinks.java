@@ -144,7 +144,7 @@ public class FortyWinks extends Activity {
 	
 	private void setPowerNap() {
 		Intent singleAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
-		Alarm a = mDatabaseAdapter.getQuickAlarm();
+		Alarm a = mDatabaseAdapter.getPowerNap();
 		Calendar calendar = Calendar.getInstance();
 		long futureTime = a.getNextAlarmTime();
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);

@@ -77,10 +77,10 @@ public class DBAdapter extends SQLiteOpenHelper {
     }
     
     /**
-     * Returns the most recently set QuickAlarm.
-     * @return the most recent QuickAlarm.
+     * Returns the most recently set PowerNap.
+     * @return the most recent PowerNap.
      */
-    public Alarm getQuickAlarm() {
+    public Alarm getPowerNap() {
         Alarm result;
         String query = "SELECT * FROM alarms WHERE days_of_week = 0 ORDER BY id DESC";
         Cursor cursor = mDb.rawQuery(query, null);
