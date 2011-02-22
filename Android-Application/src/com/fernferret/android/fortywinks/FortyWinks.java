@@ -159,19 +159,10 @@ public class FortyWinks extends Activity {
 		TextView newAlarm = new TextView(this);
 		
 		int calHour = calendar.get(Calendar.HOUR);
-		// This is so disgusting. I am a terrible person. This is due next hour.
-		if (calHour == 0) {
-			calHour = 12;
-		}
-		// newAlarm.setText(
-		// calHour + ":" +
-		// (calendar.get(Calendar.MINUTE) > 9 ? calendar.get(Calendar.MINUTE) : "0" + calendar.get(Calendar.MINUTE)) + " " +
-		// (calendar.get(Calendar.AM_PM) == 1 ? "PM" : "AM"));
 		newAlarm.setText(getFriendlyCalendarString(calendar));
 		newAlarm.setTextSize(NEXT_ALARM_TEXT_SIZE);
 		mNextAlarmContainer.addView(newAlarm);
 		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar), Toast.LENGTH_SHORT).show();
-		// END me being a terrible person
 	}
 	
 	private String getFriendlyCalendarString(Calendar c) {
