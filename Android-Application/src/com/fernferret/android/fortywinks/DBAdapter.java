@@ -61,7 +61,7 @@ public class DBAdapter extends SQLiteOpenHelper {
         }
 
         for (int i = 0; i < n; i++) {
-            result[i] = seed++;
+            result[i] = ++seed;
         }
 
         if (cursor != null && !cursor.isClosed()) {
@@ -104,6 +104,7 @@ public class DBAdapter extends SQLiteOpenHelper {
 
             /* Insert all of our new followups */
             for (int id : followups.keySet()) {
+                Log.d("40W", "Inserting Followup: ID: " + id + " ALARM: " + alarm.getId() + " TIME: " + followups.get(id));
                 fs.bindString(1, id + "");
                 fs.bindLong(3, followups.get(id));
                 fs.executeInsert();
