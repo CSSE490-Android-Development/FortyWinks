@@ -117,6 +117,8 @@ public class Alarm implements Parcelable {
         setIntervalEnd(in.readInt());
         setDaysOfWeek(in.readInt());
         setEnabled(in.readInt() == 1);
+        setIsPowerNap(in.readInt() == 1);
+        setIsQuikAlarm(in.readInt() == 1);
     }
     
     public int getId() { return mId; }
@@ -222,7 +224,7 @@ public class Alarm implements Parcelable {
      */
     public long getNextAlarmTime() {
         GregorianCalendar now = new GregorianCalendar(); // now
-        now.set(Calendar.SECOND, 0); // ...except truncate truncate to whole minutes
+        now.set(Calendar.SECOND, 0); // ...except truncate to whole minutes
         
         GregorianCalendar t = new GregorianCalendar(); // time to check against
         t.set(Calendar.HOUR_OF_DAY, mHour);
@@ -289,6 +291,8 @@ public class Alarm implements Parcelable {
         dest.writeInt(getIntervalEnd());
         dest.writeInt(getDaysOfWeek());
         dest.writeInt(getEnabled() ? 1 : 0);
+        dest.writeInt(isPowerNap() ? 1 : 0);
+        dest.writeInt(isQuikAlarm() ? 1 : 0);
     }
 
     @Override
@@ -304,7 +308,9 @@ public class Alarm implements Parcelable {
                 getIntervalStart() == a.getIntervalStart() &&
                 getIntervalEnd() == a.getIntervalEnd() &&
                 getDaysOfWeek() == a.getDaysOfWeek() &&
-                getEnabled() == a.getEnabled();
+                getEnabled() == a.getEnabled() &&
+                isQuikAlarm() == a.isQuikAlarm() &&
+                isPowerNap() == a.isPowerNap();
     }
     
     public String toString() {
