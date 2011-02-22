@@ -36,7 +36,7 @@ public class DBAdapter extends SQLiteOpenHelper {
         s.bindString(2, alarm.getMinute() + "");
         s.bindString(3, alarm.getThreshold() + "");
         s.bindString(4, alarm.getDaysOfWeek() + "");
-        s.bindString(5, alarm.getFollowups() + "");
+        s.bindString(5, alarm.getNumFollowups() + "");
         s.bindString(6, alarm.getIntervalStart() + "");
         s.bindString(7, alarm.getIntervalEnd() + "");
         s.bindString(8, (alarm.getEnabled() ? 1 : 0) + "");
@@ -61,7 +61,7 @@ public class DBAdapter extends SQLiteOpenHelper {
                 next.setMinute(cursor.getInt(2));
                 next.setThreshold(cursor.getInt(3));
                 next.setDaysOfWeek(cursor.getInt(4));
-                next.setFollowups(cursor.getInt(5));
+                next.setNumFollowups(cursor.getInt(5));
                 next.setIntervalStart(cursor.getInt(6));
                 next.setIntervalEnd(cursor.getInt(7));
                 next.setEnabled(cursor.getInt(8) == 1);
@@ -94,7 +94,7 @@ public class DBAdapter extends SQLiteOpenHelper {
             result.setMinute(cursor.getInt(2));
             result.setThreshold(cursor.getInt(3));
             result.setDaysOfWeek(cursor.getInt(4));
-            result.setFollowups(cursor.getInt(5));
+            result.setNumFollowups(cursor.getInt(5));
             result.setIntervalStart(cursor.getInt(6));
             result.setIntervalEnd(cursor.getInt(7));
             result.setEnabled(cursor.getInt(8) == 1);
@@ -129,7 +129,7 @@ public class DBAdapter extends SQLiteOpenHelper {
             result.setMinute(cursor.getInt(2));
             result.setThreshold(cursor.getInt(3));
             result.setDaysOfWeek(cursor.getInt(4));
-            result.setFollowups(cursor.getInt(5));
+            result.setNumFollowups(cursor.getInt(5));
             result.setIntervalStart(cursor.getInt(6));
             result.setIntervalEnd(cursor.getInt(7));
             result.setEnabled(cursor.getInt(8) == 1);
