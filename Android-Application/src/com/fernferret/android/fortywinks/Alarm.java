@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import com.fernferret.android.fortywinks.ProposedAlarm.ProposedAlarmType;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.format.DateFormat;
+
+import com.fernferret.android.fortywinks.ProposedAlarm.ProposedAlarmType;
 
 /**
  * An implementation of a very versatile Alarm.  This alarm will support single runs, 
@@ -19,7 +19,7 @@ import android.text.format.DateFormat;
  * @author Jimmy Theis
  */
 
-public class Alarm implements Parcelable {
+public class Alarm implements Parcelable, Comparable {
     
     private int mId;
     private int mHour;
@@ -285,6 +285,7 @@ public class Alarm implements Parcelable {
     public long getNextAlarmTime() {
         GregorianCalendar now = new GregorianCalendar(); // now
         now.set(Calendar.SECOND, 0); // ...except truncate to whole minutes
+        now.add(Calendar.MINUTE, 1); // and set our current time to the next minute
         
         GregorianCalendar t = new GregorianCalendar(); // time to check against
         t.set(Calendar.HOUR_OF_DAY, mHour);
@@ -388,5 +389,13 @@ public class Alarm implements Parcelable {
 		c.set(Calendar.HOUR_OF_DAY, mHour);
 		c.set(Calendar.MINUTE, mMinute);
 		return DateFormat.format("h:mm aa", c).toString();
+    }
+
+    @Override
+    public int compareTo(Object another) {
+        if (!(another instanceof Alarm)) {
+            return -1;
+        }
+        return (int) ((int) getNextAlarmTime() - ((Alarm)another).getNextAlarmTime());
     }
 }
