@@ -105,7 +105,6 @@ public class FortyWinks extends Activity {
 		// Set Listeners
 		mDrawer.setOnDrawerOpenListener(mDrawerOpenListener);
 		mDrawer.setOnDrawerCloseListener(mDrawerCloseListener);
-		mDrawer.setOnClickListener(mOnDrawerClickListener);
 		mDoSleepButton.setOnClickListener(mOnButtonClickListener);
 		mQuickAlarmList.setOnItemClickListener(mListViewListener);
 		mQuickAlarmList.setOnItemClickListener(new OnItemClickListener() {
@@ -217,13 +216,6 @@ public class FortyWinks extends Activity {
 		@Override
 		public void onClick(View v) {
 			
-		}
-	};
-	
-	private View.OnClickListener mOnDrawerClickListener = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			refreshQuickAlarms();
 		}
 	};
 	private OnItemClickListener mListViewListener = new OnItemClickListener() {
