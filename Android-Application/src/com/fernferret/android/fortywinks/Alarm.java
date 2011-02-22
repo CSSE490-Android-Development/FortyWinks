@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Random;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -112,7 +113,7 @@ public class Alarm implements Parcelable {
         setHour(in.readInt());
         setMinute(in.readInt());
         setThreshold(in.readInt());
-        setFollowups(in.readInt());
+        setNumFollowups(in.readInt());
         setIntervalStart(in.readInt());
         setIntervalEnd(in.readInt());
         setDaysOfWeek(in.readInt());
@@ -133,8 +134,8 @@ public class Alarm implements Parcelable {
     public int getThreshold() { return mThreshold; }
     public void setThreshold(int threshold) { mThreshold = threshold; }
     
-    public int getFollowups() { return mNumFollowups; }
-    public void setFollowups(int followups) { mNumFollowups = followups; }
+    public int getNumFollowups() { return mNumFollowups; }
+    public void setNumFollowups(int followups) { mNumFollowups = followups; }
     
     public int getIntervalStart() { return mIntervalStart; }
     public void setIntervalStart(int intervalStart) { mIntervalStart = intervalStart; }
@@ -153,6 +154,13 @@ public class Alarm implements Parcelable {
     
     public boolean isQuikAlarm() { return mIsQuikAlarm; }
     public void setIsQuikAlarm(boolean isQuikAlarm) { mIsQuikAlarm = isQuikAlarm; }
+    
+    @SuppressWarnings("unchecked")
+    public HashMap<Integer, Long> getFollowups() { return (HashMap<Integer, Long>) mFollowups.clone(); }
+    
+    @SuppressWarnings("unchecked")
+    public void setFollowups(HashMap<Integer, Long> followups) { mFollowups = (HashMap<Integer, Long>) followups.clone(); }
+    
     
     /**
      * Enables the given day for this alarm.
@@ -201,6 +209,25 @@ public class Alarm implements Parcelable {
      */
     private boolean isCalendarDayEnabled(int day) {
         return isDayEnabled(Day.fromCalendarDay(day));
+    }
+    
+    /**
+     * Populate the actual times for this alarm's followups
+     * @param ids A list of unique IDs from the database to assign to followups, whose length matches numFollowups
+     */
+    public void populateFollowups(ArrayList<Integer> ids) {
+        mFollowups = null;
+        Random r = new Random();
+        
+        Calendar nextAlarmTime = new GregorianCalendar();
+        nextAlarmTime.setTimeInMillis(getNextAlarmTime());
+        
+        int offsetRange = getIntervalEnd() - getIntervalStart();
+        
+        for (int id : ids) {
+            nextAlarmTime.add(Calendar.MINUTE, r.nextInt(offsetRange) + getIntervalStart());
+            mFollowups.put(id, nextAlarmTime.getTimeInMillis());
+        }
     }
     
     /**
@@ -286,7 +313,7 @@ public class Alarm implements Parcelable {
         dest.writeInt(getHour());
         dest.writeInt(getMinute());
         dest.writeInt(getThreshold());
-        dest.writeInt(getFollowups());
+        dest.writeInt(getNumFollowups());
         dest.writeInt(getIntervalStart());
         dest.writeInt(getIntervalEnd());
         dest.writeInt(getDaysOfWeek());
@@ -304,7 +331,7 @@ public class Alarm implements Parcelable {
         return getId() == a.getId() &&
                 getHour() == a.getHour() &&
                 getMinute() == a.getMinute() &&
-                getFollowups() == a.getFollowups() &&
+                getNumFollowups() == a.getNumFollowups() &&
                 getIntervalStart() == a.getIntervalStart() &&
                 getIntervalEnd() == a.getIntervalEnd() &&
                 getDaysOfWeek() == a.getDaysOfWeek() &&

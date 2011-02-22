@@ -179,7 +179,7 @@ public class AlarmTests extends TestCase {
         a.enableDay(Alarm.Day.WEDNESDAY);
         a.setHour(4);
         a.setMinute(20);
-        a.setFollowups(2);
+        a.setNumFollowups(2);
         a.setIntervalStart(3);
         a.setIntervalEnd(5);
         
