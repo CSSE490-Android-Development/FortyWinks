@@ -1,10 +1,14 @@
 package com.fernferret.android.fortywinks;
 
 import java.text.DecimalFormat;
+
 import java.text.NumberFormat;
 import java.util.Calendar;
 
 import android.text.format.Time;
+
+
+
 /**
  * Provides the means for creating potential alarms. These never get saved to the database, nor do they get created into alarms, unless they are selected. They are a very inexpensive way of showing the user potential alarm possibilities.
  * @author Eric Stokes
@@ -12,11 +16,14 @@ import android.text.format.Time;
  */
 public class ProposedAlarm {
 	
+	public enum ProposedAlarmType {PowerNap, QuickAlarm};
+	
 	private int mHour;
 	private int mMinute;
 	private Time mTime;
 	private int mIntervalNumber;
 	private int mIntervalLength;
+	private ProposedAlarmType mAlarmType;
 	/**
 	 * Creates a new proposed alarm that the user can turn into a quick alarm.
 	 * @param hour Hour in 24 hour time format (0 - 23)
@@ -24,7 +31,7 @@ public class ProposedAlarm {
 	 * @param intervalFromNow How many intervals is this from now
 	 * @param intervalLength The length of one interval
 	 */
-	public ProposedAlarm(int hour, int minute, int intervalNumber, int intervalLength) {
+	public ProposedAlarm(int hour, int minute, int intervalNumber, int intervalLength, ProposedAlarmType type) {
 		mTime = new Time();
 		mTime.setToNow();
 		mTime.set(mTime.second, minute, hour, mTime.monthDay, mTime.month, mTime.year);
@@ -32,6 +39,7 @@ public class ProposedAlarm {
 		mMinute = minute;
 		mIntervalNumber = intervalNumber;
 		mIntervalLength = intervalLength;
+		mAlarmType = type;
 	}
 	/**
 	 * Returns the time in a very pretty manner: 12:56 PM or 1:28 AM
@@ -75,6 +83,10 @@ public class ProposedAlarm {
 	public void setMinute(int minute) {
 		mMinute = minute;
 		setTimeObject();
+	}
+	
+	public ProposedAlarmType getProposedAlarmType() {
+		return mAlarmType;
 	}
 	
 	private void setTimeObject() {

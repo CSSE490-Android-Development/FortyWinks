@@ -112,6 +112,7 @@ public class FortyWinks extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				ProposedAlarm a = mQuickProposedAlarms.get(position);
+				
 				mDatabaseAdapter.saveAlarm(new Alarm(a));
 				setPowerNap();
 				mDrawer.close();
@@ -194,7 +195,7 @@ public class FortyWinks extends Activity {
 		
 		for (int i = 1; i <= mNumberOfAlarms; i++) {
 			calendar.add(Calendar.MINUTE, mCycleTime);
-			listItems.add(new ProposedAlarm(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), i, mCycleTime));
+			listItems.add(new ProposedAlarm(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), i, mCycleTime, ProposedAlarm.ProposedAlarmType.PowerNap));
 		}
 		mQuickProposedAlarms = listItems;
 		
