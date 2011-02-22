@@ -133,15 +133,16 @@ public class DBAdapter extends SQLiteOpenHelper {
             qs.executeInsert();
         }
 
-        SQLiteStatement s = mDb.compileStatement("INSERT INTO alarms (hour, minute, threshold, days_of_week, followups, interval_start, interval_end, enabled) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
-        s.bindString(1, alarm.getHour() + "");
-        s.bindString(2, alarm.getMinute() + "");
-        s.bindString(3, alarm.getThreshold() + "");
-        s.bindString(4, alarm.getDaysOfWeek() + "");
-        s.bindString(5, alarm.getNumFollowups() + "");
-        s.bindString(6, alarm.getIntervalStart() + "");
-        s.bindString(7, alarm.getIntervalEnd() + "");
-        s.bindString(8, (alarm.getEnabled() ? 1 : 0) + "");
+        SQLiteStatement s = mDb.compileStatement("INSERT INTO alarms (id, hour, minute, threshold, days_of_week, followups, interval_start, interval_end, enabled) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        s.bindString(1, alarm.getId() + "");
+        s.bindString(2, alarm.getHour() + "");
+        s.bindString(3, alarm.getMinute() + "");
+        s.bindString(4, alarm.getThreshold() + "");
+        s.bindString(5, alarm.getDaysOfWeek() + "");
+        s.bindString(6, alarm.getNumFollowups() + "");
+        s.bindString(7, alarm.getIntervalStart() + "");
+        s.bindString(8, alarm.getIntervalEnd() + "");
+        s.bindString(9, (alarm.getEnabled() ? 1 : 0) + "");
         s.executeInsert();
         Log.w("40W", "40W: Alarm Saved - ID: " + alarm.getId() + ", Time:" + alarm);
     }
@@ -209,7 +210,8 @@ public class DBAdapter extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
 
             /* Populate alarm object */
-            result = new Alarm(cursor.getInt(0));
+            int newId = cursor.getInt(0);
+            result = new Alarm(newId);
             result.setHour(cursor.getInt(1));
             result.setMinute(cursor.getInt(2));
             result.setThreshold(cursor.getInt(3));
@@ -226,8 +228,10 @@ public class DBAdapter extends SQLiteOpenHelper {
             
             HashMap<Integer, Long> followups = new HashMap<Integer, Long>();
             
+            Log.i("40W", "Looking for followups in the database for alarm " + newId);
             if (followupCursor.moveToFirst()) {
                 do {
+                    Log.i("40W", "Found a followup in the database");
                     followups.put(followupCursor.getInt(0), followupCursor.getLong(1));
                 } while (followupCursor.moveToNext());
             }

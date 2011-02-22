@@ -254,7 +254,7 @@ public class Alarm implements Parcelable, Comparable {
         Calendar nextAlarmTime = new GregorianCalendar();
         nextAlarmTime.setTimeInMillis(getNextAlarmTime());
         
-        int offsetRange = getIntervalEnd() - getIntervalStart();
+        int offsetRange = Math.abs(getIntervalEnd() - getIntervalStart());
         
         for (int id : ids) {
             Log.i("40W", "Making a followup");
