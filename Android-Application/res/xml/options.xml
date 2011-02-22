@@ -9,5 +9,32 @@
 		android:key="@string/key_cycle_time"
 		android:title="@string/pref_sleep_cycle_title"
 		android:summary="@string/pref_sleep_cycle_summary"
+		android:inputType="number"
+		android:maxLength="3"
+		android:selectAllOnFocus="true"
 		android:defaultValue="90"/>
+	<EditTextPreference
+		android:dialogTitle="FollowUp Alarms"
+		android:dialogMessage="Set the default number of FollowUp Alarms"
+		android:positiveButtonText="OK"
+		android:negativeButtonText="Cancel"
+		android:key="@string/key_followup_alarms"
+		android:title="FollowUp Alarms"
+		android:summary="Set the default number of FollowUp Alarms"
+		android:inputType="number"
+		android:maxLength="2"
+		android:selectAllOnFocus="true"
+		android:defaultValue="4"/>
+	<EditTextPreference
+		android:dialogTitle="FollowUp Interval"
+		android:dialogMessage="Set the default time between FollowUp alarms in mins"
+		android:positiveButtonText="OK"
+		android:negativeButtonText="Cancel"
+		android:key="@string/key_followup_interval"
+		android:title="FollowUp Interval"
+		android:summary="Set the default time between FollowUp alarms in mins"
+		android:inputType="number"
+		android:maxLength="2"
+		android:selectAllOnFocus="true"
+		android:defaultValue="5"/>
 </PreferenceScreen>
