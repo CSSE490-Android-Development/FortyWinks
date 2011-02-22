@@ -107,6 +107,7 @@ public class DBAdapter extends SQLiteOpenHelper {
         
         
         if (alarm.isPowerNap()) {
+        	Log.w("40W", "40W Replacing Power Nap");
             /* Delete the current power nap */
             Alarm currentPowerNap = getPowerNap();
             if (currentPowerNap != null) {
@@ -198,7 +199,7 @@ public class DBAdapter extends SQLiteOpenHelper {
             result.setIntervalStart(cursor.getInt(6));
             result.setIntervalEnd(cursor.getInt(7));
             result.setEnabled(cursor.getInt(8) == 1);
-            
+            Log.w("40W", "40W: Alarm Loaded - ID:" + result.getId() + ", Time:" + result);
         } else {
             
             /* We didn't find that one */
@@ -208,7 +209,7 @@ public class DBAdapter extends SQLiteOpenHelper {
         if (cursor != null && !cursor.isClosed()) {
             cursor.close();
         }
-        Log.w("40W", "40W: Alarm Loaded - ID:" + result.getId() + ", Time:" + result);
+        
         return result;
     }
     
