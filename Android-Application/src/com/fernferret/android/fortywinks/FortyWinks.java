@@ -2,7 +2,6 @@ package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Formatter;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -12,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
@@ -113,7 +113,7 @@ public class FortyWinks extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				ProposedAlarm a = mQuickProposedAlarms.get(position);
 				mDatabaseAdapter.saveAlarm(new Alarm(a));
-				setQuickAlarm();
+				setPowerNap();
 				mDrawer.close();
 			}
 		});
@@ -142,23 +142,20 @@ public class FortyWinks extends Activity {
 		
 	}
 	
-	private void setQuickAlarm() {
+	private void setPowerNap() {
 		Intent singleAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
-		
-		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, SINGLE_ALARM_RC, singleAlarmIntent, NO_FLAGS);
-		
-		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		Alarm a = mDatabaseAdapter.getQuickAlarm();
-		long futureTime = a.getNextAlarmTime();
-		
 		Calendar calendar = Calendar.getInstance();
+		long futureTime = a.getNextAlarmTime();
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		// Iterate through all followups with the following
+		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, SINGLE_ALARM_RC, singleAlarmIntent, NO_FLAGS);
 		calendar.setTimeInMillis(futureTime);
-		
 		alarmManager.set(AlarmManager.RTC_WAKEUP, a.getNextAlarmTime(), singleAlarmPendingIntent);
+		// End iteration
 		mNextAlarmContainer.removeAllViews();
 		TextView newAlarm = new TextView(this);
 		
-		int calHour = calendar.get(Calendar.HOUR);
 		newAlarm.setText(getFriendlyCalendarString(calendar));
 		newAlarm.setTextSize(NEXT_ALARM_TEXT_SIZE);
 		mNextAlarmContainer.addView(newAlarm);
