@@ -22,7 +22,10 @@
 		<activity
 			android:name=".WakeUpAlert"
 			android:label="@string/activity_title_open_alarm"
-			android:configChanges="orientation"/>
+			android:configChanges="orientation"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.Wallpaper.NoTitleBar.Fullscreen">
+		</activity>
 		<activity
 			android:name=".EditAlarm"
 			android:label="@string/activity_title_edit_alarm"
