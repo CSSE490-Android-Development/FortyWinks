@@ -10,7 +10,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
+/**
+ * The activity that allows adding/editing of alarms
+ * @author Jimmy Theis
+ *
+ */
 public class EditAlarm extends Activity {
     
     private PreferenceView mThreshold;

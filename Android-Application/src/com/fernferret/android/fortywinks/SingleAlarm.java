@@ -8,7 +8,11 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.PowerManager;
 import android.widget.Toast;
-
+/**
+ * An alarm that fires off only once.
+ * @author Eric Stokes
+ *
+ */
 public class SingleAlarm extends BroadcastReceiver {
 	
 	PowerManager.WakeLock mWakeLock;

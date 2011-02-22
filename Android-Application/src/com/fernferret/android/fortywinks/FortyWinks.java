@@ -28,7 +28,11 @@ import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
-
+/**
+ * The primary application class that is allowed to be launched from the homescreen.
+ * @author Eric Stokes
+ *
+ */
 public class FortyWinks extends Activity {
 	
 	// General Class Variables

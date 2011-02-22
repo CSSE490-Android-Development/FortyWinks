@@ -6,7 +6,11 @@ import android.content.Context;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+/**
+ * Custom view that allows listing ov all Alarms that are currently active (excluding QuickAlarms)
+ * @author Eric Stokes
+ *
+ */
 public class AlarmLineItem extends RelativeLayout {
 	
 	private CheckBox mEnabled;
