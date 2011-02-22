@@ -7,8 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import com.fernferret.android.fortywinks.ProposedAlarm.ProposedAlarmType;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.format.DateFormat;
 
 /**
  * An implementation of a very versatile Alarm.  This alarm will support single runs, 
@@ -103,6 +106,11 @@ public class Alarm implements Parcelable {
     	this();
     	setHour(a.getHour());
     	setMinute(a.getMinute());
+    	if(a.getProposedAlarmType() == ProposedAlarmType.PowerNap) {
+    		setIsPowerNap(true);
+    	} else if(a.getProposedAlarmType() == ProposedAlarmType.QuickAlarm) {
+    		setIsQuikAlarm(true);
+    	}
     }
     
     /**
@@ -374,6 +382,9 @@ public class Alarm implements Parcelable {
     }
     
     public String toString() {
-        return super.toString();
+    	Calendar c = Calendar.getInstance();
+		c.set(Calendar.HOUR_OF_DAY, mHour);
+		c.set(Calendar.MINUTE, mMinute);
+		return DateFormat.format("h:mm aa", c).toString();
     }
 }
