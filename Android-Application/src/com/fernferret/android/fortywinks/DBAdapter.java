@@ -1,6 +1,7 @@
 package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class DBAdapter extends SQLiteOpenHelper {
 
         int seed = 1;
         if (cursor.moveToFirst()) {
-            seed = cursor.getInt(1);
+            seed = cursor.getInt(0);
         }
 
         for (int i = 0; i < n; i++) {
@@ -229,6 +230,7 @@ public class DBAdapter extends SQLiteOpenHelper {
         return result;
     }
     
+    @SuppressWarnings("unchecked")
     public List<Alarm> getQuickAlarmsAndAlarms() {
         List<Alarm> result = new ArrayList<Alarm>();
         
@@ -257,6 +259,7 @@ public class DBAdapter extends SQLiteOpenHelper {
             cursor.close();
         }
         
+        Collections.sort(result);
         return result;
     }
     

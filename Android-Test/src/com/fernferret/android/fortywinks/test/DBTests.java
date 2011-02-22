@@ -114,8 +114,16 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         
         b.setDaysOfWeek(2);
         b.setEnabled(false);
-        b.setHour(5);
+        b.setHour(4);
         b.setMinute(7);
+        b.setIsQuikAlarm(true);
+        
+        Alarm c = new Alarm(-1);
+        
+        b.setDaysOfWeek(2);
+        b.setEnabled(false);
+        b.setHour(4);
+        b.setMinute(5);
         b.setIsQuikAlarm(true);
         
         mDba.saveAlarm(a);
@@ -125,8 +133,12 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         assertFalse(b.getId() == -1);
         
         List<Alarm> quikAlarms = mDba.getQuickAlarmsAndAlarms();
-        testBasicEquality(quikAlarms.get(1), a);
-        testBasicEquality(quikAlarms.get(2), b);
+        //testBasicEquality(quikAlarms.get(0), c);
+        assertEquals(quikAlarms.get(0).getId(), c.getId());
+        //testBasicEquality(quikAlarms.get(1), a);
+        assertEquals(quikAlarms.get(1).getId(), a.getId());
+        //testBasicEquality(quikAlarms.get(2), b);
+        assertEquals(quikAlarms.get(2).getId(), b.getId());
         
     }
 }
