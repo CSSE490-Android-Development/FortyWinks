@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Random;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -120,6 +121,17 @@ public class Alarm implements Parcelable {
         setEnabled(in.readInt() == 1);
         setIsPowerNap(in.readInt() == 1);
         setIsQuikAlarm(in.readInt() == 1);
+        
+        /* The rest of the data in the parcel must be our followups map */
+        if (in.dataAvail() > 0) {
+            HashMap<Integer, Long> followups = new HashMap<Integer, Long>();
+            
+            while (in.dataAvail() > 0) {
+                followups.put(in.readInt(), in.readLong());
+            }
+            
+            setFollowups(followups);
+        }
     }
     
     public int getId() { return mId; }
@@ -155,9 +167,17 @@ public class Alarm implements Parcelable {
     public boolean isQuikAlarm() { return mIsQuikAlarm; }
     public void setIsQuikAlarm(boolean isQuikAlarm) { mIsQuikAlarm = isQuikAlarm; }
     
+    /**
+     * Get a clone of the current followups map
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public HashMap<Integer, Long> getFollowups() { return (HashMap<Integer, Long>) mFollowups.clone(); }
     
+    /**
+     * Set the current followups map. This method handles the cloning.
+     * @param followups
+     */
     @SuppressWarnings("unchecked")
     public void setFollowups(HashMap<Integer, Long> followups) { mFollowups = (HashMap<Integer, Long>) followups.clone(); }
     
@@ -320,6 +340,15 @@ public class Alarm implements Parcelable {
         dest.writeInt(getEnabled() ? 1 : 0);
         dest.writeInt(isPowerNap() ? 1 : 0);
         dest.writeInt(isQuikAlarm() ? 1 : 0);
+        
+        /* Write the contents of our followups map to the rest of parcel */
+        HashMap<Integer, Long> followups = getFollowups();
+        if (followups != null) {
+            for (int id : followups.keySet()) {
+                dest.writeInt(id);
+                dest.writeLong(followups.get(id));
+            }
+        }
     }
 
     @Override
