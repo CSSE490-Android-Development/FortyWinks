@@ -1,13 +1,15 @@
 package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 /**
- * An incredible implementation of a very versitile Alarm.  This alarm will support single runs, and indefinetly scheduled runs, in addition to thresholds, followups and advanced intervals.
+ * An incredible implementation of a very versatile Alarm.  This alarm will support single runs, and indefinitely scheduled runs, in addition to thresholds, followups and advanced intervals.
  * @author Jimmy Theis
  *
  */
