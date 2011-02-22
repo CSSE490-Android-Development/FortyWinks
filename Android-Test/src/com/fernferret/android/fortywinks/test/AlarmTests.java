@@ -1,8 +1,6 @@
 package com.fernferret.android.fortywinks.test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import junit.framework.TestCase;
 import android.os.Parcel;
@@ -187,13 +185,7 @@ public class AlarmTests extends TestCase {
         a.setIntervalStart(3);
         a.setIntervalEnd(5);
         
-        /* Fake list of ids from the database */
-        List<Integer> ids = new ArrayList<Integer>();
-        ids.add(1);
-        ids.add(2);
-        ids.add(3);
-        
-        a.populateFollowups(ids);
+        a.populateFollowups(new int[] {1, 2, 3});
         
         Parcel p = Parcel.obtain();
         a.writeToParcel(p, 0);
