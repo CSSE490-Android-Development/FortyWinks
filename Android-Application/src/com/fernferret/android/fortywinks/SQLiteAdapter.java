@@ -128,6 +128,21 @@ public class SQLiteAdapter implements DBAdapter {
         return 1;
     }
     
+    private boolean isPowerNap(int id) {
+        Log.d(TAG, "Checking if Alarm " + id + " is the power nap");
+        Cursor c = mDb.query(POWERNAP_TABLE, new String[] {POWERNAP_ID_COL}, "", null, null, null, null, "1");
+        if (c.moveToFirst()) {
+            Log.d(TAG, "Current power nap is " + c.getInt(0));
+            return c.getInt(0) == id;
+        }
+        Log.d(TAG, "No power nap, so no");
+        return false;
+    }
+    
+    private boolean isQuikAlarm(int id) {
+        return false;
+    }
+    
     private void writeAlarmData(Alarm a) {
         Log.d(TAG, "Writing alarm " + a.getId() + " to database");
         mInsertAlarmQuery.bindLong(1, a.getId());
@@ -154,7 +169,8 @@ public class SQLiteAdapter implements DBAdapter {
     
     private Alarm populateAlarmFromCursor(Cursor c) {
         Log.d(TAG, "Populating alarm object from database");
-        Alarm result = new Alarm(c.getInt(0));
+        int id = c.getInt(0);
+        Alarm result = new Alarm(id);
         Log.d(TAG, "  ID: " + c.getInt(0));
         result.setHour(c.getInt(1));
         Log.d(TAG, "  HOUR: " + c.getInt(1));
@@ -174,6 +190,9 @@ public class SQLiteAdapter implements DBAdapter {
         Log.d(TAG, "  ENABLED: " + (c.getInt(8) == 1));
         
         result.setFollowups(getFollowupsForAlarm(result));
+        
+        result.setIsPowerNap(isPowerNap(id));
+        result.setIsQuikAlarm(isQuikAlarm(id));
         
         Log.d(TAG, "Alarm " + result.getId() + " fully populated");
         
@@ -289,7 +308,7 @@ public class SQLiteAdapter implements DBAdapter {
     public Alarm getAlarm(int id) {
         Log.d(TAG, "Retrieving alarm " + id);
         Alarm result = null;
-        Cursor c = mDb.query(ALARMS_TABLE, ALARMS_COLS, "", null, null, null, "", "1");
+        Cursor c = mDb.query(ALARMS_TABLE, ALARMS_COLS, ALARMS_ID_COL + " = ?", new String[] {Integer.toString(id)}, null, null, "", "1");
         if (c.moveToFirst()) {
             result = populateAlarmFromCursor(c);
             nullSafeCloseCursor(c);
