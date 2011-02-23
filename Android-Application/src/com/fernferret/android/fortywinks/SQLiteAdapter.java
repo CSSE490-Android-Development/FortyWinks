@@ -186,6 +186,14 @@ public class SQLiteAdapter implements DBAdapter {
             mInsertFollowupQuery.executeInsert();
         }
     }
+    
+    private void setPowerNap(Alarm a) {
+        // TODO
+    }
+    
+    private void setQuikAlarm(Alarm a) {
+        // TODO
+    }
 
     @Override
     public boolean alarmExists(int id) {
@@ -211,7 +219,11 @@ public class SQLiteAdapter implements DBAdapter {
             deleteAlarm(a.getId());
         }
         
-        // TODO check for powernap, quikalarm
+        if (a.isPowerNap()) {
+            setPowerNap(a);
+        } else if (a.isQuikAlarm()) {
+            setQuikAlarm(a);
+        }
         
         writeAlarmData(a);
         
