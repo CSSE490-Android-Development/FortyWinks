@@ -9,7 +9,6 @@ import java.util.Random;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.fernferret.android.fortywinks.ProposedAlarm.ProposedAlarmType;
@@ -287,11 +286,13 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
     public long getNextAlarmTime() {
         GregorianCalendar now = new GregorianCalendar(); // now
         now.set(Calendar.SECOND, 0); // ...except truncate to whole minutes
+        now.set(Calendar.MILLISECOND, 0);
         
         GregorianCalendar t = new GregorianCalendar(); // time to check against
         t.set(Calendar.HOUR_OF_DAY, mHour);
         t.set(Calendar.MINUTE, mMinute);
         t.set(Calendar.SECOND, 0); // truncate here too
+        t.set(Calendar.MILLISECOND, 0);
         
         /* First we look at one-time instances */
         if (isOneTimeAlarm()) {
@@ -386,14 +387,11 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
     }
     
     public String toString() {
-    	Calendar c = Calendar.getInstance();
-		c.set(Calendar.HOUR_OF_DAY, mHour);
-		c.set(Calendar.MINUTE, mMinute);
-		return DateFormat.format("h:mm aa", c).toString();
+        return "Alarm " + getId() + " TIME: " + getHour() + ":" + getMinute() + " (" + getNextAlarmTime() + ")";
     }
 
     @Override
     public int compareTo(Alarm another) {
-        return (int) ((int) getNextAlarmTime() - another.getNextAlarmTime());
+        return ((int) getNextAlarmTime()) - ((int) another.getNextAlarmTime());
     }
 }

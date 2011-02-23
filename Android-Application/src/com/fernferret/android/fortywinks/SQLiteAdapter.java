@@ -307,7 +307,11 @@ public class SQLiteAdapter implements DBAdapter {
             result = populateAlarmFromCursor(c);
             nullSafeCloseCursor(c);
         }
-        Log.d(TAG, "Found Power Nap to be Alarm " + result.getId());
+        if (result == null) {
+            Log.d(TAG, "No Power Nap found");
+        } else {
+            Log.d(TAG, "Found Power Nap to be Alarm " + result.getId());
+        }
         return result;
     }
 
@@ -315,15 +319,30 @@ public class SQLiteAdapter implements DBAdapter {
     public List<Alarm> getQuikAlarmsAndAlarms() {
         Log.d(TAG, "Retrieving quik alarms and alarms");
         List<Alarm> result = new ArrayList<Alarm>();
-        Cursor c = mDb.rawQuery("SELECT * FROM " +  QUIK_ALARMS_TABLE + ", " + ALARMS_TABLE + " WHERE " + ALARMS_TABLE + "." + ALARMS_ID_COL + 
-                                " != (SELECT " + POWERNAP_ID_COL + " FROM " + POWERNAP_TABLE + " LIMIT 1) AND " + ALARMS_TABLE + "." + ALARMS_ID_COL + 
-                                " = " + QUIK_ALARMS_TABLE + "." + QUIK_ALARMS_ID_COL, null);
+        Alarm powerNap = getPowerNap();
+        Cursor c;
+        if (powerNap == null) {
+            Log.d(TAG, "SELECT " + ALARMS_TABLE + "." + ALARMS_ID_COL + ", " +  ALARMS_HOUR_COL +  ", " +  ALARMS_MINUTE_COL + ", " + 
+                                ALARMS_THRESHOLD_COL + ", " +  ALARMS_DAYS_COL + ", " +  ALARMS_FOLLOWUPS_COL +  ", " +  ALARMS_INTERVAL_START_COL + 
+                                ", " +  ALARMS_INTERVAL_END_COL +  ", " +  ALARMS_ENABLED_COL +" FROM " +  QUIK_ALARMS_TABLE + ", " + ALARMS_TABLE + 
+                                " WHERE " + ALARMS_TABLE + "." + ALARMS_ID_COL + " = " + QUIK_ALARMS_TABLE + "." + QUIK_ALARMS_ID_COL);
+            c = mDb.rawQuery("SELECT " + ALARMS_TABLE + "." + ALARMS_ID_COL + ", " +  ALARMS_HOUR_COL +  ", " +  ALARMS_MINUTE_COL + ", " + 
+                                ALARMS_THRESHOLD_COL + ", " +  ALARMS_DAYS_COL + ", " +  ALARMS_FOLLOWUPS_COL +  ", " +  ALARMS_INTERVAL_START_COL + 
+                                ", " +  ALARMS_INTERVAL_END_COL +  ", " +  ALARMS_ENABLED_COL +" FROM " +  QUIK_ALARMS_TABLE + ", " + ALARMS_TABLE + 
+                                " WHERE " + ALARMS_TABLE + "." + ALARMS_ID_COL + " = " + QUIK_ALARMS_TABLE + "." + QUIK_ALARMS_ID_COL, null);
+        } else {
+            c = mDb.rawQuery("SELECT * FROM " +  QUIK_ALARMS_TABLE + ", " + ALARMS_TABLE + " WHERE " + ALARMS_TABLE + "." + ALARMS_ID_COL + 
+                " != " + powerNap.getId() + " AND " + ALARMS_TABLE + "." + ALARMS_ID_COL + " = " + QUIK_ALARMS_TABLE + "." + QUIK_ALARMS_ID_COL, null);
+        }
+        
         if (c.moveToFirst()) {
             do {
                 result.add(populateAlarmFromCursor(c));
             } while (c.moveToNext());
         }
+        Log.d(TAG, "Before sort: " + result);
         Collections.sort(result);
+        Log.d(TAG, "After sort: " + result);
         Log.d(TAG, "Got alarms");
         return result;
     }
