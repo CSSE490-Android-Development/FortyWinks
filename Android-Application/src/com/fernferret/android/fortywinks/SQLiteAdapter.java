@@ -192,8 +192,15 @@ public class SQLiteAdapter implements DBAdapter {
 
     @Override
     public List<Alarm> getQuikAlarmsAndAlarms() {
-        // TODO Auto-generated method stub
-        return null;
+        List<Alarm> result = new ArrayList<Alarm>();
+        Cursor c = mDb.rawQuery("SELECT * FROM ?, ? WHERE ? != (SELECT ? FROM ? LIMIT 1)", 
+                                new String[] {QUIK_ALARMS_TABLE, ALARMS_TABLE, ALARMS_ID_COL, POWERNAP_ID_COL, POWERNAP_TABLE});
+        if (c.moveToFirst()) {
+            do {
+                result.add(populateAlarmFromCursor(c));
+            } while (c.moveToNext());
+        }
+        return result;
     }
 
     @Override
@@ -203,7 +210,7 @@ public class SQLiteAdapter implements DBAdapter {
 
     @Override
     public List<Alarm> getFullAlarmList(int numItems) {
-        List<Alarm> result = new ArrayList();
+        List<Alarm> result = new ArrayList<Alarm>();
         Alarm powerNap = getPowerNap();
         
         if (powerNap != null) {
