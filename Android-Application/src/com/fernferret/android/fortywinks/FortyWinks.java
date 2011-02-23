@@ -27,10 +27,10 @@ import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.DigitalClock;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
 import android.widget.SlidingDrawer.OnDrawerCloseListener;
@@ -47,6 +47,10 @@ import android.widget.Toast;
 public class FortyWinks extends Activity {
 	
 	private static final int NEXT_ALARM_TEXT_SIZE = 20;
+	private static final String FORTY_WINKS_POWER_NAP_CATEGORY = "FORTY_WINKS_POWER_NAP_CATEGORY";
+	private static final String FORTY_WINKS_FOLLOWUP_CATEGORY = "FORTY_WINKS_FOLLOWUP_CATEGORY";
+	private static final String FORTY_WINKS_QUIK_ALARM_CATEGORY = "FORTY_WINKS_QUIK_ALARM_CATEGORY";
+	private static final String FORTY_WINKS_STANDARD_ALARM_CATEGORY = "FORTY_WINKS_STANDARD_ALARM_CATEGORY";
 	
 	// General Class Variables
 	Resources mResources;
@@ -83,10 +87,13 @@ public class FortyWinks extends Activity {
 	
 	// Handler for runnable to update the listView once a second
 	private Handler mSingleHandler = new Handler();
-
+	
+	// Root AlarmManager for Android
+	AlarmManager mAlarmManager;
+	
 	private static final int NO_FLAGS = 0;
 	
-	private final CharSequence[] mPowerNapRightClickChoices = {"Delete"}; 
+	private final CharSequence[] mPowerNapRightClickChoices = { "Delete" };
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -95,6 +102,7 @@ public class FortyWinks extends Activity {
 		// Load Resources
 		mResources = getResources();
 		mSettings = PreferenceManager.getDefaultSharedPreferences(this);
+		mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		
 		mDatabaseAdapter = new DBAdapter(this);
 		
@@ -152,14 +160,69 @@ public class FortyWinks extends Activity {
 		mNextAlarmsAdapter = new SmallAlarmViewAdapter(this, R.layout.small_alarm_line_item, R.id.small_alarm_line_item_time, mUpcomingAlarms);
 		mNextAlarmsAdapter.notifyDataSetChanged();
 		mNextAlarmListView.setAdapter(mNextAlarmsAdapter);
-		
+		mNextAlarmListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(FortyWinks.this);
+				final int alarmIndex = position;
+				builder.setItems(mPowerNapRightClickChoices, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if (mPowerNapRightClickChoices[which].equals("Delete")) {
+							
+							Alarm toRemove = mUpcomingAlarms.get(alarmIndex);
+							Log.d("40W", "40W Removing Alarm that should fire at: " + toRemove);
+							// Remove the alarm and followups from the AlarmService
+							for(PendingIntent intent : getPendingIntentsForAlarm(toRemove)) {
+								intent.
+								mAlarmManager.cancel(intent);
+								
+							}
+							// 
+							
+							// Remove the alarm and followups from the db
+							mDatabaseAdapter.deleteAlarm(toRemove.getId());
+							
+							// Remove the alarm from the ListView
+							mUpcomingAlarms.remove(alarmIndex);
+							
+							// Let the ListView know we've changed it
+							mNextAlarmsAdapter.notifyDataSetChanged();
+						}
+					}
+				}).show();
+				return true;
+			}
+		});
+	}
+	
+	private ArrayList<PendingIntent> getPendingIntentsForAlarm(Alarm a) {
+		ArrayList<PendingIntent> allIntents = new ArrayList<PendingIntent>();
+		Intent rootAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
+		if(a.isPowerNap()) {
+		rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
+		} else if (a.isQuikAlarm()) {
+			rootAlarmIntent.addCategory(FORTY_WINKS_QUIK_ALARM_CATEGORY);
+		} else {
+			rootAlarmIntent.addCategory(FORTY_WINKS_STANDARD_ALARM_CATEGORY);
+		}
+		allIntents.add(PendingIntent.getBroadcast(FortyWinks.this, a.getId(), rootAlarmIntent, NO_FLAGS));
+		Log.d("40W.Intent", "Adding Intent to list with " + rootAlarmIntent.getCategories() + ", and ID: " + a.getId());
+		for (int entry : a.getFollowups().keySet()) {
+			
+			Intent followUpIntent = new Intent(FortyWinks.this, SingleAlarm.class);
+			followUpIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
+			allIntents.add(PendingIntent.getBroadcast(FortyWinks.this, entry, followUpIntent, NO_FLAGS));
+			Log.d("40W.Intent", "Adding Intent to list with " + followUpIntent.getCategories() + ", and ID: " + entry);
+		}
+		return allIntents;
 		
 	}
 	
 	private void removePowerNapsFromNextAlarmList() {
 		List<Alarm> powerNap = new ArrayList<Alarm>();
-		for( Alarm a : mUpcomingAlarms) {
-			if(a.isPowerNap()) {
+		for (Alarm a : mUpcomingAlarms) {
+			if (a.isPowerNap()) {
 				powerNap.add(a);
 			}
 		}
@@ -167,7 +230,6 @@ public class FortyWinks extends Activity {
 	}
 	
 	private void setPowerNap() {
-		Intent singleAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 		Alarm a = mDatabaseAdapter.getPowerNap();
 		removePowerNapsFromNextAlarmList();
 		mUpcomingAlarms.add(a);
@@ -176,23 +238,26 @@ public class FortyWinks extends Activity {
 		Calendar calendar = Calendar.getInstance();
 		long futureTime = a.getNextAlarmTime();
 		
-		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		// Iterate through all followups with the following
-		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, a.getId(), singleAlarmIntent, NO_FLAGS);
+		Intent rootAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
+		rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
+		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, a.getId(), rootAlarmIntent, NO_FLAGS);
 		calendar.setTimeInMillis(futureTime);
 		Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
 		Log.d("40W", "Number of followups: " + a.getFollowups().size());
-		alarmManager.set(AlarmManager.RTC_WAKEUP, futureTime, singleAlarmPendingIntent);
+		
+		// Iterate through all followups with the following
+		// Set the base alarm in the manager
+		mAlarmManager.set(AlarmManager.RTC_WAKEUP, futureTime, singleAlarmPendingIntent);
+		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar), Toast.LENGTH_SHORT).show();
+		Intent followUpAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
+		followUpAlarmIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
 		for (Map.Entry<Integer, Long> entry : a.getFollowups().entrySet()) {
-			singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, entry.getKey(), singleAlarmIntent, NO_FLAGS);
+			singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, entry.getKey(), followUpAlarmIntent, NO_FLAGS);
 			calendar.setTimeInMillis(entry.getValue());
-			alarmManager.set(AlarmManager.RTC_WAKEUP, entry.getValue(), singleAlarmPendingIntent);
+			mAlarmManager.set(AlarmManager.RTC_WAKEUP, entry.getValue(), singleAlarmPendingIntent);
 			Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
 		}
 		// End iteration
-		
-		
-		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar), Toast.LENGTH_SHORT).show();
 	}
 	
 	private String getFriendlyCalendarString(Calendar c) {
@@ -244,6 +309,7 @@ public class FortyWinks extends Activity {
 		}
 		mQuickAlarmAdapter.notifyDataSetChanged();
 	}
+	
 	private OnItemClickListener mListViewListener = new OnItemClickListener() {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -283,7 +349,7 @@ public class FortyWinks extends Activity {
 		@Override
 		public boolean onLongClick(View v) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(FortyWinks.this);
-			final CharSequence[] choices = {"Delete"};
+			final CharSequence[] choices = { "Delete" };
 			builder.setItems(choices, mOnRightClickListener);
 			return true;
 		}
@@ -291,7 +357,7 @@ public class FortyWinks extends Activity {
 	private DialogInterface.OnClickListener mOnRightClickListener = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			if(mPowerNapRightClickChoices[which].equals("Delete")) {
+			if (mPowerNapRightClickChoices[which].equals("Delete")) {
 				
 			}
 		}
