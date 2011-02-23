@@ -1,7 +1,5 @@
 package com.fernferret.android.fortywinks;
 
-import java.util.Calendar;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,7 +10,7 @@ import android.widget.TextView;
 
 public class SmallAlarmLineItem extends RelativeLayout {
 	
-	Activity mContext;
+	private Activity mContext;
 	
 	private ImageView mSpecialIcon;
 	private TextView mAlarmTime;
@@ -30,7 +28,7 @@ public class SmallAlarmLineItem extends RelativeLayout {
 		mAlarmTime.setText(time);
 	}
 	
-	public void setQuickAlarm() {
+	public void setQuikAlarm() {
 		mSpecialIcon.setImageDrawable(getResources().getDrawable(R.drawable.quick));
 		mSpecialIcon.setVisibility(View.VISIBLE);
 	}

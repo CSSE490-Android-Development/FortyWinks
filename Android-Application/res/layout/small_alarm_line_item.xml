@@ -12,11 +12,10 @@
 		android:text="12:22 pm"/>
 	<ImageView
 		android:id="@+id/small_alarm_line_item_icon"
-		
 		android:layout_width="20dip"
 		android:layout_height="20dip"
 		android:layout_toRightOf="@id/small_alarm_line_item_time"
 		android:layout_centerVertical="true"
 		android:scaleType="fitXY"
-		android:src="@drawable/zs"/>
+		android:src="@drawable/quick"/>
 </RelativeLayout>

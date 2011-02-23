@@ -2,6 +2,8 @@ package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
@@ -59,6 +61,7 @@ public class FortyWinks extends Activity {
 	
 	// ListViews
 	private ListView mQuickAlarmList;
+	private ListView mNextAlarmListView;
 	
 	// LinearLayout
 	private LinearLayout mNextAlarmContainer;
@@ -66,9 +69,12 @@ public class FortyWinks extends Activity {
 	// Drawer
 	private SlidingDrawer mDrawer;
 	
+	// List Adapters
 	private PreferenceViewAdapter mQuickAlarmAdapter;
+	private SmallAlarmViewAdapter mNextAlarmsAdapter;
 	
 	private ArrayList<ProposedAlarm> mQuickProposedAlarms;
+	private ArrayList<Alarm> mUpcomingAlarms;
 	
 	// Database Objects
 	private DBAdapter mDatabaseAdapter;
@@ -106,12 +112,14 @@ public class FortyWinks extends Activity {
 		mDoSleepButton = (Button) findViewById(R.id.main_do_sleep_button);
 		
 		mQuickAlarmList = (ListView) findViewById(R.id.main_quick_alarms_list);
-		
-		mNextAlarmContainer = (LinearLayout) findViewById(R.id.main_next_alarm_container);
+		mNextAlarmListView = (ListView) findViewById(R.id.main_next_alarm_list);
 		
 		mDrawer = (SlidingDrawer) findViewById(R.id.main_drawer);
 		
+		// Set Adapters
 		mQuickAlarmList.setAdapter(mQuickAlarmAdapter);
+		mNextAlarmListView.setAdapter(mNextAlarmsAdapter);
+		
 		// Set Listeners
 		mDrawer.setOnDrawerOpenListener(mDrawerOpenListener);
 		mDrawer.setOnDrawerCloseListener(mDrawerCloseListener);
@@ -119,6 +127,9 @@ public class FortyWinks extends Activity {
 		mQuickAlarmList.setOnItemClickListener(mListViewListener);
 		
 		mSingleHandler.postDelayed(mUpdateSingleTimerTask, 1000);
+		
+		mQuickProposedAlarms = new ArrayList<ProposedAlarm>();
+		mUpcomingAlarms = new ArrayList<Alarm>();
 		
 	}
 	
@@ -137,16 +148,35 @@ public class FortyWinks extends Activity {
 			// Someone entered NaN for their default value of REM cycle, let's use 90, the industry standard!
 			mCycleTime = 90;
 		}
+		// Populate ListViews for the Drawer
 		generateAlarms();
 		mQuickAlarmAdapter = new PreferenceViewAdapter(this, R.layout.preference_view, R.id.preference_view_left_text, mQuickProposedAlarms);
 		mQuickAlarmAdapter.notifyDataSetChanged();
 		mQuickAlarmList.setAdapter(mQuickAlarmAdapter);
 		
+		mNextAlarmsAdapter = new SmallAlarmViewAdapter(this, R.layout.small_alarm_line_item, R.id.small_alarm_line_item_time, mUpcomingAlarms);
+		mNextAlarmsAdapter.notifyDataSetChanged();
+		mNextAlarmListView.setAdapter(mNextAlarmsAdapter);
+		
+		
+	}
+	
+	private void removePowerNapsFromNextAlarmList() {
+		List<Alarm> powerNap = new ArrayList<Alarm>();
+		for( Alarm a : mUpcomingAlarms) {
+			if(a.isPowerNap()) {
+				powerNap.add(a);
+			}
+		}
+		mUpcomingAlarms.removeAll(powerNap);
 	}
 	
 	private void setPowerNap() {
 		Intent singleAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 		Alarm a = mDatabaseAdapter.getPowerNap();
+		removePowerNapsFromNextAlarmList();
+		mUpcomingAlarms.add(a);
+		mNextAlarmsAdapter.notifyDataSetChanged();
 		Log.w("40W", "Found PowerNap: " + a + ", ID: " + a.getId());
 		Calendar calendar = Calendar.getInstance();
 		long futureTime = a.getNextAlarmTime();
@@ -165,13 +195,8 @@ public class FortyWinks extends Activity {
 			Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
 		}
 		// End iteration
-		mNextAlarmContainer.removeAllViews();
-		TextView newAlarm = new TextView(this);
 		
-		newAlarm.setText(getFriendlyCalendarString(calendar));
-		newAlarm.setTextSize(NEXT_ALARM_TEXT_SIZE);
-		newAlarm.setOnLongClickListener(mAlarmClickListener);
-		mNextAlarmContainer.addView(newAlarm);
+		
 		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar), Toast.LENGTH_SHORT).show();
 	}
 	

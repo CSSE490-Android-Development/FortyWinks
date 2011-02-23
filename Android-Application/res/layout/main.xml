@@ -44,26 +44,21 @@
 		android:layout_below="@id/main_primary_seperator"
 		android:text="Next Alarm at:"
 		android:textSize="30dip"/>
-	<ScrollView
-		android:id="@+id/main_next_alarm_scroller"
+	<ListView
+		android:id="@+id/main_next_alarm_list"
+		android:layout_below="@id/main_next_alarm_title"
+		android:layout_centerHorizontal="true"
 		android:layout_width="120dip"
 		android:layout_height="170dip"
-		android:layout_centerHorizontal="true"
-		android:layout_below="@id/main_next_alarm_title">
-		<LinearLayout
-			android:id="@+id/main_next_alarm_container"
-			android:orientation="vertical"
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent">
-		</LinearLayout>
-	</ScrollView>
+		android:choiceMode="singleChoice"
+		android:cacheColorHint="#00000000"/>
 	<Button
 		android:id="@+id/main_new_quick_alarm_button"
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:text="Add Quick Alarm"
-		android:layout_toRightOf="@id/main_next_alarm_scroller"
-		android:layout_alignBottom="@id/main_next_alarm_scroller"/>
+		android:layout_toRightOf="@id/main_next_alarm_list"
+		android:layout_alignBottom="@id/main_next_alarm_list"/>
 	<Button
 		android:id="@+id/main_do_sleep_button"
 		android:layout_height="wrap_content"
