@@ -140,12 +140,9 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         
         List<Alarm> quikAlarms = mDba.getQuikAlarmsAndAlarms();
         assertEquals(quikAlarms.size(), 3);
-        //testBasicEquality(quikAlarms.get(0), c);
-        assertEquals(quikAlarms.get(0).getId(), c.getId());
-        //testBasicEquality(quikAlarms.get(1), a);
-        assertEquals(quikAlarms.get(1).getId(), a.getId());
-        //testBasicEquality(quikAlarms.get(2), b);
-        assertEquals(quikAlarms.get(2).getId(), b.getId());
+        testBasicEquality(quikAlarms.get(0), c);
+        testBasicEquality(quikAlarms.get(1), a);
+        testBasicEquality(quikAlarms.get(2), b);
         
     }
 }
