@@ -9,7 +9,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_margin="20dip"
-		android:padding="5dip"
+		android:padding="15dip"
 		android:orientation="vertical"
 		android:gravity="center_horizontal"
 		android:background="@drawable/popup_bg_9p">
@@ -32,6 +32,7 @@
 			android:text="Ok, i'm ready to wake up!"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:textSize="30sp"
 			android:padding="10dip"/>
 	</LinearLayout>
 </LinearLayout>
