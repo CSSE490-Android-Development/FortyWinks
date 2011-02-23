@@ -104,7 +104,7 @@ public class FortyWinks extends Activity {
 		mSettings = PreferenceManager.getDefaultSharedPreferences(this);
 		mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		
-		mDatabaseAdapter = new DBAdapter(this);
+		mDatabaseAdapter = new SQLiteAdapter(this);
 		
 		// Load UI Elements
 		mBigTime = (DigitalClock) findViewById(R.id.main_big_time);
