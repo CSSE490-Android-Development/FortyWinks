@@ -166,4 +166,50 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         HashMap<Integer, Long> followups = a.getFollowups();
         assertEquals(followups.keySet().size(), 4);
     }
+    
+    public void testRetrieveFollowups() {
+        Alarm a = new Alarm();
+        
+        a.setNumFollowups(4);
+        a.setIntervalStart(3);
+        a.setIntervalEnd(3);
+        a.enableDay(Alarm.Day.SUNDAY);
+        a.enableDay(Alarm.Day.MONDAY);
+        a.enableDay(Alarm.Day.TUESDAY);
+        a.enableDay(Alarm.Day.WEDNESDAY);
+        a.enableDay(Alarm.Day.THURSDAY);
+        a.enableDay(Alarm.Day.FRIDAY);
+        a.enableDay(Alarm.Day.SATURDAY);
+        
+        mDba.saveAlarm(a);
+        
+        Alarm result = mDba.getAlarm(a.getId());
+        
+        HashMap<Integer, Long> followups = result.getFollowups();
+        assertEquals(followups.keySet().size(), 4);
+    }
+    
+    public void testSetPowerNap() {
+        Alarm a = new Alarm();
+        
+        a.setIsPowerNap(true);
+        
+        mDba.saveAlarm(a);
+        
+        Alarm result = mDba.getAlarm(a.getId());
+        
+        assertTrue(result.isPowerNap());
+    }
+    
+    public void testSetQuikAlarm() {
+        Alarm a = new Alarm();
+        
+        a.setIsQuikAlarm(true);
+        
+        mDba.saveAlarm(a);
+        
+        Alarm result = mDba.getAlarm(a.getId());
+        
+        assertTrue(result.isQuikAlarm());
+    }
 }
