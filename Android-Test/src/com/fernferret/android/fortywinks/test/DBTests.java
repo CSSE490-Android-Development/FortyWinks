@@ -167,7 +167,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         assertEquals(followups.keySet().size(), 4);
     }
     
-    public void testRetrieveFollowups() {
+    public void testRetrieveFollowupsByRawNumber() {
         Alarm a = new Alarm();
         
         a.setNumFollowups(4);
