@@ -167,6 +167,26 @@ public class SQLiteAdapter implements DBAdapter {
         
         return result;
     }
+    
+    private void saveNewFollowups(Alarm a) {
+        int[] ids = new int[a.getNumFollowups()];
+        for (int i = 0; i < a.getNumFollowups(); i++) {
+            ids[i] = getNextFollowupId();
+        }
+        
+        a.populateFollowups(ids);
+        
+        HashMap<Integer, Long> followups = a.getFollowups();
+        
+        mInsertFollowupQuery.bindLong(5, a.getId());
+        
+        for (int id : followups.keySet()) {
+            Log.d(TAG, "Saving followup: ID: " + id + " TIME: " + followups.get(id));
+            mInsertFollowupQuery.bindLong(4, id);
+            mInsertFollowupQuery.bindLong(6, followups.get(id));
+            mInsertFollowupQuery.executeInsert();
+        }
+    }
 
     @Override
     public boolean alarmExists(int id) {
@@ -187,7 +207,7 @@ public class SQLiteAdapter implements DBAdapter {
     public Alarm saveAlarm(Alarm a) {
         if (a.getId() == -1) {
             a.setId(getNextAlarmId());
-            // TODO populate followups
+            saveNewFollowups(a);
         } else {
             deleteAlarm(a.getId());
         }
