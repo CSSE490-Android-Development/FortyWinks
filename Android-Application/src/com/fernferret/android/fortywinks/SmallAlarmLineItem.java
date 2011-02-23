@@ -16,9 +16,6 @@ public class SmallAlarmLineItem extends RelativeLayout {
 	
 	private ImageView mSpecialIcon;
 	private TextView mAlarmTime;
-	private Alarm mAlarm;
-	private DBAdapter mDatabaseAdapter;
-	private Calendar mTimeForAlarm;
 	
 	public SmallAlarmLineItem(Context context) {
 		super(context);
