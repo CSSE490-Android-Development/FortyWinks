@@ -1,5 +1,6 @@
 package com.fernferret.android.fortywinks.test;
 
+import java.util.HashMap;
 import java.util.List;
 
 import android.test.ActivityInstrumentationTestCase2;
@@ -144,5 +145,25 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         testBasicEquality(quikAlarms.get(1), a);
         testBasicEquality(quikAlarms.get(2), b);
         
+    }
+    
+    public void testCreateNumFollowups() {
+        Alarm a = new Alarm();
+        
+        a.setNumFollowups(4);
+        a.setIntervalStart(3);
+        a.setIntervalEnd(3);
+        a.enableDay(Alarm.Day.SUNDAY);
+        a.enableDay(Alarm.Day.MONDAY);
+        a.enableDay(Alarm.Day.TUESDAY);
+        a.enableDay(Alarm.Day.WEDNESDAY);
+        a.enableDay(Alarm.Day.THURSDAY);
+        a.enableDay(Alarm.Day.FRIDAY);
+        a.enableDay(Alarm.Day.SATURDAY);
+        
+        mDba.saveAlarm(a);
+        
+        HashMap<Integer, Long> followups = a.getFollowups();
+        assertEquals(followups.keySet().size(), 4);
     }
 }

@@ -203,10 +203,13 @@ public class SQLiteAdapter implements DBAdapter {
     }
     
     private void saveNewFollowups(Alarm a) {
+        Log.d(TAG, "Creating new followups for Alarm " + a.getId());
         int[] ids = new int[a.getNumFollowups()];
+        int seed = getNextFollowupId();
         for (int i = 0; i < a.getNumFollowups(); i++) {
-            ids[i] = getNextFollowupId();
+            ids[i] = seed++;
         }
+        Log.d(TAG, "Using follow ids: " + ids);
         
         a.populateFollowups(ids);
         
