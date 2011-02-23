@@ -16,23 +16,29 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:textSize="20sp"
 			android:text="It is:"/>
-		<TextView
+		<DigitalClock
+			android:id="@+id/wake_up_alert_time"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textSize="30sp"
+			android:textSize="40sp"
 			android:text="2:01 am"/>
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="Time to get up!"
+			android:textSize="20sp"
 			android:paddingBottom="40dip"/>
 		<Button
 			android:id="@+id/wake_up_alert_close"
 			android:text="Ok, i'm ready to wake up!"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textSize="30sp"
-			android:padding="10dip"/>
+			android:textSize="20sp"
+			android:paddingTop="20dip"
+			android:paddingLeft="10dip"
+			android:paddingRight="10dip"
+			android:paddingBottom="20dip"/>
 	</LinearLayout>
 </LinearLayout>

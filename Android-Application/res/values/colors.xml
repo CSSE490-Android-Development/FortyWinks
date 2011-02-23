@@ -2,5 +2,4 @@
 <resources>
 	<color name="seperator_color">#C8C8C8</color>
 	<color name="drawer_bg">#7D7D7D</color>
-	<color name="trans_black">#66000000</color>
 </resources>
