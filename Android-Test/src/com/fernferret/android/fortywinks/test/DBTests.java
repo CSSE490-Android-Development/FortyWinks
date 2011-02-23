@@ -189,27 +189,37 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         assertEquals(followups.keySet().size(), 4);
     }
     
-    public void testSetPowerNap() {
+    public void testSetIsPowerNap() {
         Alarm a = new Alarm();
+        Alarm b = new Alarm();
         
         a.setIsPowerNap(true);
+        b.setIsPowerNap(false);
         
         mDba.saveAlarm(a);
+        mDba.saveAlarm(b);
         
-        Alarm result = mDba.getAlarm(a.getId());
+        Alarm resultA = mDba.getAlarm(a.getId());
+        Alarm resultB = mDba.getAlarm(b.getId());
         
-        assertTrue(result.isPowerNap());
+        assertTrue(resultA.isPowerNap());
+        assertFalse(resultB.isPowerNap());
     }
     
-    public void testSetQuikAlarm() {
+    public void testSetIsQuikAlarm() {
         Alarm a = new Alarm();
+        Alarm b = new Alarm();
         
         a.setIsQuikAlarm(true);
+        b.setIsQuikAlarm(false);
         
         mDba.saveAlarm(a);
+        mDba.saveAlarm(b);
         
-        Alarm result = mDba.getAlarm(a.getId());
+        Alarm resultA = mDba.getAlarm(a.getId());
+        Alarm resultB = mDba.getAlarm(b.getId());
         
-        assertTrue(result.isQuikAlarm());
+        assertTrue(resultA.isQuikAlarm());
+        assertFalse(resultB.isQuikAlarm());
     }
 }
