@@ -9,6 +9,7 @@ import java.util.Random;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.fernferret.android.fortywinks.ProposedAlarm.ProposedAlarmType;
@@ -387,7 +388,10 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
     }
     
     public String toString() {
-        return "Alarm " + getId() + " TIME: " + getHour() + ":" + getMinute() + " (" + getNextAlarmTime() + ")";
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, mHour);
+        c.set(Calendar.MINUTE, mMinute);
+        return DateFormat.format("h:mm aa", c).toString();
     }
 
     @Override
