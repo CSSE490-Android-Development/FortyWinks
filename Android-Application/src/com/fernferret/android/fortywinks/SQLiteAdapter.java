@@ -3,6 +3,7 @@ package com.fernferret.android.fortywinks;
 import java.util.List;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
@@ -39,10 +40,14 @@ public class SQLiteAdapter implements DBAdapter {
     
     /* Quik Alarms table names */
     private static final String QUIK_ALARMS_TABLE = "quikalarms";
-    private static final String QUIK_ALARMS_ID = "id";
+    private static final String QUIK_ALARMS_ID_COL = "id";
     
     /* Lists of constants */
     private static final String[] ALL_TABLES = new String[] {ALARMS_TABLE, FOLLOWUPS_TABLE, POWERNAP_TABLE, QUIK_ALARMS_TABLE};
+    private static final String[] ALARMS_COLS = new String[] {ALARMS_ID_COL, ALARMS_HOUR_COL, ALARMS_MINUTE_COL, ALARMS_THRESHOLD_COL, 
+                                                                 ALARMS_DAYS_COL, ALARMS_FOLLOWUPS_COL, ALARMS_INTERVAL_START_COL, 
+                                                                 ALARMS_INTERVAL_END_COL, ALARMS_ENABLED_COL};
+    private static final String[] FOLLOWUPS_COLS = new String[] {FOLLOWUPS_ID_COL, FOLLOWUPS_ALARM_COL, FOLLOWUPS_TIME_COL};
     
     /* Queries */
     private static final String INSERT_ALARM_Q = "INSERT INTO ? (?, ?, ?, ?, ?, ?, ?, ?, ?) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -70,9 +75,46 @@ public class SQLiteAdapter implements DBAdapter {
         
         /* Compile our reusable statements once */
         mInsertAlarmQuery = mDb.compileStatement(INSERT_ALARM_Q);
+        mInsertAlarmQuery.bindString(0, ALARMS_TABLE);
+        for (int i = 1; i < ALARMS_COLS.length; mInsertAlarmQuery.bindString(i, ALARMS_COLS[i++]));
+        
         mInsertFollowupQuery = mDb.compileStatement(INSERT_FOLLOWUP_Q);
+        mInsertFollowupQuery.bindString(0, FOLLOWUPS_TABLE);
+        for (int i = 1; i < FOLLOWUPS_COLS.length; mInsertFollowupQuery.bindString(i, FOLLOWUPS_COLS[i++]));
+        
         mInsertPowerNapQuery = mDb.compileStatement(INSERT_POWERNAP_Q);
+        mInsertPowerNapQuery.bindString(0, POWERNAP_TABLE);
+        mInsertPowerNapQuery.bindString(1, POWERNAP_ID_COL);
+        
         mInsertQuikAlarmQuery = mDb.compileStatement(INSERT_QUIK_ALARM_Q);
+        mInsertQuikAlarmQuery.bindString(0, QUIK_ALARMS_TABLE);
+        mInsertQuikAlarmQuery.bindString(1, QUIK_ALARMS_ID_COL);
+    }
+    
+    private String boolToIntString(boolean b) { return b ? "1" : "0"; }
+    
+    private int getNextAlarmId() {
+        return -1;
+    }
+    
+    private int getNextFollowupId() {
+        return -1;
+    }
+    
+    private void writeAlarmData(Alarm a) {
+        mInsertAlarmQuery.bindLong(10, a.getId());
+        mInsertAlarmQuery.bindLong(11, a.getHour());
+        mInsertAlarmQuery.bindLong(12, a.getMinute());
+        mInsertAlarmQuery.bindLong(13, a.getThreshold());
+        mInsertAlarmQuery.bindLong(14, a.getDaysOfWeek());
+        mInsertAlarmQuery.bindLong(15, a.getIntervalStart());
+        mInsertAlarmQuery.bindLong(16, a.getIntervalEnd());
+        mInsertAlarmQuery.bindString(17, boolToIntString(a.getEnabled()));
+        mInsertAlarmQuery.executeInsert();
+    }
+    
+    private Alarm populateAlarmFromCursor(Cursor c) {
+        return null;
     }
 
     @Override
@@ -88,7 +130,12 @@ public class SQLiteAdapter implements DBAdapter {
 
     @Override
     public Alarm saveAlarm(Alarm a) {
-        // TODO Auto-generated method stub
+        if (a.getId() == -1) {
+            a.setId(getNextAlarmId());
+        }
+        
+        writeAlarmData(a);
+        
         return null;
     }
 
@@ -155,7 +202,7 @@ public class SQLiteAdapter implements DBAdapter {
             
             /* Create quik alarms table */
             db.execSQL("CREATE TABLE ? (? INTEGER PRIMARY KEY, FOREIGN KEY(?) REFERENCES ?(?))",
-                       new String[] {QUIK_ALARMS_TABLE, QUIK_ALARMS_ID, QUIK_ALARMS_ID, ALARMS_TABLE, ALARMS_ID_COL});
+                       new String[] {QUIK_ALARMS_TABLE, QUIK_ALARMS_ID_COL, QUIK_ALARMS_ID_COL, ALARMS_TABLE, ALARMS_ID_COL});
             
             Log.d(TAG, "Finished creating tables");
         }
