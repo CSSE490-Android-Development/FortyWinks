@@ -1,6 +1,7 @@
 package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
@@ -209,6 +210,7 @@ public class SQLiteAdapter implements DBAdapter {
                 result.add(populateAlarmFromCursor(c));
             } while (c.moveToNext());
         }
+        Collections.sort(result);
         return result;
     }
 
