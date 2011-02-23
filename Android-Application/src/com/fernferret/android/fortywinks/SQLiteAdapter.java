@@ -217,8 +217,8 @@ public class SQLiteAdapter implements DBAdapter {
         Log.d(TAG, "Populating followups");
         HashMap<Integer, Long> result = new HashMap<Integer, Long>();
 
-        Cursor c = mDb.query(FOLLOWUPS_TABLE, new String[] {FOLLOWUPS_ID_COL, FOLLOWUPS_TIME_COL}, "? = ?", 
-                             new String[] {FOLLOWUPS_ALARM_COL, Integer.toString(a.getId())} , null, null, null);
+        Cursor c = mDb.query(FOLLOWUPS_TABLE, new String[] {FOLLOWUPS_ID_COL, FOLLOWUPS_TIME_COL}, FOLLOWUPS_ALARM_COL + " = ?", 
+                             new String[] {Integer.toString(a.getId())} , null, null, null);
         
         if (c.moveToFirst()) {
             do {
