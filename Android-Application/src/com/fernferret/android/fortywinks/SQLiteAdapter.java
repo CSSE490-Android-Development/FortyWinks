@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class SQLiteAdapter implements DBAdapter {
     
-    private static final String TAG = "FortyWinks.DB";
+    private static final String TAG = "FortyWinks.SQLite";
     
     private static final String DATABASE_NAME = "fortywinks";
     private static final int DATABASE_VERSION = 1;
