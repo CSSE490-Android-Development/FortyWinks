@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content">
+	<TextView
+		android:id="@+id/small_alarm_line_item_time"
+		android:layout_width="100dip"
+		android:layout_height="wrap_content"
+		android:textSize="20sp"
+		android:gravity="center"
+		android:text="12:22 pm"/>
+	<ImageView
+		android:layout_width="20dip"
+		android:layout_height="20dip"
+		android:layout_toRightOf="@id/small_alarm_line_item_time"
+		android:layout_centerVertical="true"
+		android:scaleType="fitXY"
+		android:src="@drawable/zs"/>
+</RelativeLayout>

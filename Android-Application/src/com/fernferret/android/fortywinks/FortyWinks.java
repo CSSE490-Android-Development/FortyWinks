@@ -85,6 +85,8 @@ public class FortyWinks extends Activity {
 	private static final int MULTI_ALARM_RC = 1;
 	private static final int NO_FLAGS = 0;
 	
+	private final CharSequence[] mPowerNapRightClickChoices = {"Delete"}; 
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -113,7 +115,7 @@ public class FortyWinks extends Activity {
 		// Set Listeners
 		mDrawer.setOnDrawerOpenListener(mDrawerOpenListener);
 		mDrawer.setOnDrawerCloseListener(mDrawerCloseListener);
-		mDoSleepButton.setOnClickListener(mOnButtonClickListener);
+		
 		mQuickAlarmList.setOnItemClickListener(mListViewListener);
 		
 		mSingleHandler.postDelayed(mUpdateSingleTimerTask, 1000);
@@ -222,13 +224,6 @@ public class FortyWinks extends Activity {
 		}
 		mQuickAlarmAdapter.notifyDataSetChanged();
 	}
-	
-	private View.OnClickListener mOnButtonClickListener = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			
-		}
-	};
 	private OnItemClickListener mListViewListener = new OnItemClickListener() {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -268,14 +263,17 @@ public class FortyWinks extends Activity {
 		@Override
 		public boolean onLongClick(View v) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(FortyWinks.this);
-			builder.setTitle("STuff").setMessage("").setPositiveButton("Delete", mOnDeleteAlarmClickListener).show();
+			final CharSequence[] choices = {"Delete"};
+			builder.setItems(choices, mOnRightClickListener);
 			return true;
 		}
 	};
-	private DialogInterface.OnClickListener mOnDeleteAlarmClickListener = new DialogInterface.OnClickListener() {
+	private DialogInterface.OnClickListener mOnRightClickListener = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			// TODO Auto-generated method stub
+			if(mPowerNapRightClickChoices[which].equals("Delete")) {
+				
+			}
 		}
 	};
 	
