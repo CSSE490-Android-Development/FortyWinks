@@ -128,9 +128,10 @@ public class SQLiteAdapter implements DBAdapter {
         mInsertAlarmQuery.bindLong(12, a.getMinute());
         mInsertAlarmQuery.bindLong(13, a.getThreshold());
         mInsertAlarmQuery.bindLong(14, a.getDaysOfWeek());
-        mInsertAlarmQuery.bindLong(15, a.getIntervalStart());
-        mInsertAlarmQuery.bindLong(16, a.getIntervalEnd());
-        mInsertAlarmQuery.bindString(17, boolToIntString(a.getEnabled()));
+        mInsertAlarmQuery.bindLong(15, a.getNumFollowups());
+        mInsertAlarmQuery.bindLong(16, a.getIntervalStart());
+        mInsertAlarmQuery.bindLong(17, a.getIntervalEnd());
+        mInsertAlarmQuery.bindString(18, boolToIntString(a.getEnabled()));
         mInsertAlarmQuery.executeInsert();
     }
     
@@ -140,8 +141,9 @@ public class SQLiteAdapter implements DBAdapter {
         result.setMinute(c.getInt(2));
         result.setThreshold(c.getInt(3));
         result.setDaysOfWeek(c.getInt(4));
-        result.setIntervalStart(c.getInt(5));
-        result.setEnabled(c.getInt(6) == 1);
+        result.setNumFollowups(c.getInt(5));
+        result.setIntervalStart(c.getInt(6));
+        result.setEnabled(c.getInt(7) == 1);
         
         result.setFollowups(getFollowupsForAlarm(result));
         
