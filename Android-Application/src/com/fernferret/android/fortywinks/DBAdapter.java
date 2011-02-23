@@ -19,5 +19,7 @@ public interface DBAdapter {
     public List<Alarm> getFullAlarmList();
 
     public List<Alarm> getFullAlarmList(int numItems);
+    
+    void resetDatabase();
 
 }
