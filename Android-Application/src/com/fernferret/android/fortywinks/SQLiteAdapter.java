@@ -2,7 +2,48 @@ package com.fernferret.android.fortywinks;
 
 import java.util.List;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 public class SQLiteAdapter implements DBAdapter {
+    
+    private static final String TAG = "FortyWinks.DB";
+    
+    private static final String DATABASE_NAME = "fortywinks";
+    private static final int DATABASE_VERSION = 1;
+    
+    /* Alarms table names */
+    private static final String ALARMS_TABLE = "alarms";
+    private static final String ALARMS_ID_COL = "id";
+    private static final String ALARMS_HOUR_COL = "hour";
+    private static final String ALARMS_MINUTE_COL = "minute";
+    private static final String ALARMS_THRESHOLD_COL = "threshold";
+    private static final String ALARMS_DAYS_COL = "days_of_week";
+    private static final String ALARMS_FOLLOWUPS_COL = "followups";
+    private static final String ALARMS_INTERVAL_START_COL = "interval_start";
+    private static final String ALARMS_INTERVAL_END_COL = "interval_end";
+    private static final String ALARMS_ENABLED_COL = "enabled";
+    
+    /* Followups table names */
+    private static final String FOLLOWUPS_TABLE = "followups";
+    private static final String FOLLOWUPS_ID_COL = "id";
+    private static final String FOLLOWUPS_ALARM_COL = "alarm";
+    private static final String FOLLOWUPS_TIME_COL = "time";
+    
+    /* Powernap table names */
+    private static final String POWERNAP_TABLE = "powernap";
+    private static final String POWERNAP_ID_COL = "id";
+    
+    /* Quik Alarms table names */
+    private static final String QUIK_ALARMS_TABLE = "quikalarms";
+    private static final String QUIK_ALARMS_ID = "id";
+    
+    /* Lists of constants */
+    private static final String[] ALL_TABLES = new String[] {ALARMS_TABLE, FOLLOWUPS_TABLE, POWERNAP_TABLE, QUIK_ALARMS_TABLE};
+    
+    private SQLiteDatabase mDb;
 
     @Override
     public boolean alarmExists(int id) {
@@ -51,8 +92,85 @@ public class SQLiteAdapter implements DBAdapter {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public void resetDatabase() {
+        // TODO Auto-generated method stub
+        
+    }
     
+    private static class OpenHelper extends SQLiteOpenHelper {
+        
+        OpenHelper(Context context) {
+            super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            
+            Log.d(TAG, "Creating tables");
+            
+            /* Create alarms table */
+            db.execSQL("CREATE TABLE ? (? INTEGER PRIMARY KEY, ? INTEGER, ? INTEGER, ? INTEGER, ? INTEGER, ? INTEGER, ? INTEGER, ? INTEGER, ? INTEGER",
+                       new String[] {ALARMS_TABLE, ALARMS_ID_COL, ALARMS_HOUR_COL, ALARMS_MINUTE_COL, ALARMS_THRESHOLD_COL, ALARMS_DAYS_COL, 
+                                     ALARMS_FOLLOWUPS_COL, ALARMS_INTERVAL_START_COL, ALARMS_INTERVAL_END_COL, ALARMS_ENABLED_COL});
+
+            /* Create followups table */
+            db.execSQL("CREATE TABLE ? (? INTEGER PRIMARY KEY, ? INTEGER, ? REAL, FOREIGN KEY(?) REFERENCES ?(?))",
+                       new String[] {FOLLOWUPS_TABLE, FOLLOWUPS_ID_COL, FOLLOWUPS_ALARM_COL, FOLLOWUPS_TIME_COL, 
+                                     FOLLOWUPS_ALARM_COL, ALARMS_TABLE, ALARMS_ID_COL});
+            
+            /* Create powernap table */
+            db.execSQL("CREATE TABLE ? (? INTEGER PRIMARY KEY, FOREIGN KEY(?) REFERENCES ?(?))",
+                       new String[] {POWERNAP_TABLE, POWERNAP_ID_COL, POWERNAP_ID_COL, ALARMS_TABLE, ALARMS_ID_COL});
+            
+            /* Create quik alarms table */
+            db.execSQL("CREATE TABLE ? (? INTEGER PRIMARY KEY, FOREIGN KEY(?) REFERENCES ?(?))",
+                       new String[] {QUIK_ALARMS_TABLE, QUIK_ALARMS_ID, QUIK_ALARMS_ID, ALARMS_TABLE, ALARMS_ID_COL});
+            
+            Log.d(TAG, "Finished creating tables");
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            
+            Log.d(TAG, "Upgrading database from Version " + oldVersion + " to Version " + newVersion);
+            
+            Log.d(TAG, "Deleting all tables");
+            
+            /* Delete all tables */
+            for (String tableName : ALL_TABLES) {
+                db.execSQL("DELETE TABLE IF EXISTS ?", new String[] {tableName});
+            }
+            
+            Log.d(TAG, "Finished deleting tables");
+            
+            /* Recreate all tables */
+            onCreate(db);
+            
+            Log.d(TAG, "Upgrade complete");
+        }
+    }
 }
+
+//private static class OpenHelper extends SQLiteOpenHelper {
+//    58   
+//    59        OpenHelper(Context context) {
+//    60           super(context, DATABASE_NAME, null, DATABASE_VERSION);
+//    61        }
+//    62   
+//    63        @Override
+//    64        public void onCreate(SQLiteDatabase db) {
+//    65           db.execSQL("CREATE TABLE " + TABLE_NAME + "
+//    66            (id INTEGER PRIMARY KEY, name TEXT)");
+//    67        }
+//    68   
+//    69        @Override
+//    70        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+//    71           Log.w("Example", "Upgrading database, this will drop tables and recreate.");
+//    72           db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+//    73           onCreate(db);
+//    74        }
 
 
 //public class SQLiteAdapter extends SQLiteOpenHelper {
