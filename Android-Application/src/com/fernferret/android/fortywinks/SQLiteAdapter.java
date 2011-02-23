@@ -131,14 +131,23 @@ public class SQLiteAdapter implements DBAdapter {
     private void writeAlarmData(Alarm a) {
         Log.d(TAG, "Writing alarm " + a.getId() + " to database");
         mInsertAlarmQuery.bindLong(1, a.getId());
+        Log.d(TAG, "  ID: " + a.getId());
         mInsertAlarmQuery.bindLong(2, a.getHour());
+        Log.d(TAG, "  HOUR: " + a.getHour());
         mInsertAlarmQuery.bindLong(3, a.getMinute());
+        Log.d(TAG, "  MINUTE: " + a.getMinute());
         mInsertAlarmQuery.bindLong(4, a.getThreshold());
+        Log.d(TAG, "  THRESHOLD: " + a.getThreshold());
         mInsertAlarmQuery.bindLong(5, a.getDaysOfWeek());
+        Log.d(TAG, "  DAYS: " + a.getDaysOfWeek());
         mInsertAlarmQuery.bindLong(6, a.getNumFollowups());
+        Log.d(TAG, "  FOLLOWUPS: " + a.getNumFollowups());
         mInsertAlarmQuery.bindLong(7, a.getIntervalStart());
+        Log.d(TAG, "  INTERVAL START: " + a.getIntervalStart());
         mInsertAlarmQuery.bindLong(8, a.getIntervalEnd());
+        Log.d(TAG, "  INTERVAL END: " + a.getIntervalEnd());
         mInsertAlarmQuery.bindString(9, boolToIntString(a.getEnabled()));
+        Log.d(TAG, "  ENABLED: " + a.getEnabled());
         mInsertAlarmQuery.executeInsert();
         Log.d(TAG, "Data writing complete");
     }
@@ -146,13 +155,23 @@ public class SQLiteAdapter implements DBAdapter {
     private Alarm populateAlarmFromCursor(Cursor c) {
         Log.d(TAG, "Populating alarm object from database");
         Alarm result = new Alarm(c.getInt(0));
+        Log.d(TAG, "  ID: " + c.getInt(0));
         result.setHour(c.getInt(1));
+        Log.d(TAG, "  HOUR: " + c.getInt(1));
         result.setMinute(c.getInt(2));
+        Log.d(TAG, "  MINUTE: " + c.getInt(2));
         result.setThreshold(c.getInt(3));
+        Log.d(TAG, "  THRESHOLD: " + c.getInt(3));
         result.setDaysOfWeek(c.getInt(4));
+        Log.d(TAG, "  DAYS: " + c.getInt(4));
         result.setNumFollowups(c.getInt(5));
+        Log.d(TAG, "  FOLLOWUPS: " + c.getInt(5));
         result.setIntervalStart(c.getInt(6));
-        result.setEnabled(c.getInt(7) == 1);
+        Log.d(TAG, "  INTERVAL START: " + c.getInt(6));
+        result.setIntervalEnd(c.getInt(7));
+        Log.d(TAG, "  INTERVAL END: " + c.getInt(7));
+        result.setEnabled(c.getInt(8) == 1);
+        Log.d(TAG, "  ENABLED: " + (c.getInt(8) == 1));
         
         result.setFollowups(getFollowupsForAlarm(result));
         
@@ -208,14 +227,14 @@ public class SQLiteAdapter implements DBAdapter {
         mDb.delete(POWERNAP_TABLE, null, null);
         mInsertPowerNapQuery.bindLong(1, a.getId());
         mInsertPowerNapQuery.executeInsert();
-        Log.d(TAG, "Power nap set");
+        Log.d(TAG, "Power nap set to Alarm " + a.getId());
     }
     
     private void setQuikAlarm(Alarm a) {
         Log.d(TAG, "Adding quik alarm");
         mInsertQuikAlarmQuery.bindLong(1, a.getId());
         mInsertQuikAlarmQuery.executeInsert();
-        Log.d(TAG, "Quik alarm added");
+        Log.d(TAG, "Quik alarm added: Alarm " + a.getId());
     }
 
     @Override
@@ -280,12 +299,15 @@ public class SQLiteAdapter implements DBAdapter {
     public Alarm getPowerNap() {
         Log.d(TAG, "Retrieving power nap");
         Alarm result = null;
-        Cursor c = mDb.rawQuery("SELECT * FROM " + POWERNAP_TABLE + ", " + ALARMS_TABLE, null);
+        Cursor c = mDb.rawQuery("SELECT " + ALARMS_TABLE + "." + ALARMS_ID_COL + ", " +  ALARMS_HOUR_COL +  ", " +  ALARMS_MINUTE_COL + ", " + 
+                                ALARMS_THRESHOLD_COL + ", " +  ALARMS_DAYS_COL + ", " +  ALARMS_FOLLOWUPS_COL +  ", " +  ALARMS_INTERVAL_START_COL + 
+                                ", " +  ALARMS_INTERVAL_END_COL +  ", " +  ALARMS_ENABLED_COL +" FROM " + POWERNAP_TABLE + ", " + ALARMS_TABLE + " WHERE " + 
+                                ALARMS_TABLE + "." + ALARMS_ID_COL + " = " + POWERNAP_TABLE + "." + POWERNAP_ID_COL, null);
         if (c.moveToFirst()) {
             result = populateAlarmFromCursor(c);
             nullSafeCloseCursor(c);
         }
-        Log.d(TAG, "Got power nap");
+        Log.d(TAG, "Found Power Nap to be Alarm " + result.getId());
         return result;
     }
 
@@ -294,7 +316,8 @@ public class SQLiteAdapter implements DBAdapter {
         Log.d(TAG, "Retrieving quik alarms and alarms");
         List<Alarm> result = new ArrayList<Alarm>();
         Cursor c = mDb.rawQuery("SELECT * FROM " +  QUIK_ALARMS_TABLE + ", " + ALARMS_TABLE + " WHERE " + ALARMS_TABLE + "." + ALARMS_ID_COL + 
-                                " != (SELECT " + POWERNAP_ID_COL + " FROM " + POWERNAP_TABLE + " LIMIT 1)", null);
+                                " != (SELECT " + POWERNAP_ID_COL + " FROM " + POWERNAP_TABLE + " LIMIT 1) AND " + ALARMS_TABLE + "." + ALARMS_ID_COL + 
+                                " = " + QUIK_ALARMS_TABLE + "." + QUIK_ALARMS_ID_COL, null);
         if (c.moveToFirst()) {
             do {
                 result.add(populateAlarmFromCursor(c));

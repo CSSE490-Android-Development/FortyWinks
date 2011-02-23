@@ -80,6 +80,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         a.setHour(4);
         a.setMinute(6);
         a.setIsPowerNap(true);
+        a.setNumFollowups(7);
         
         Alarm b = new Alarm(-1);
         
@@ -88,6 +89,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         b.setHour(5);
         b.setMinute(7);
         b.setIsPowerNap(true);
+        b.setNumFollowups(9);
         
         mDba.saveAlarm(a);
         assertFalse(a.getId() == -1);
