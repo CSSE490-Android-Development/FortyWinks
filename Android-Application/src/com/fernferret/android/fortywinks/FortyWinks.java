@@ -63,9 +63,6 @@ public class FortyWinks extends Activity {
 	private ListView mQuickAlarmList;
 	private ListView mNextAlarmListView;
 	
-	// LinearLayout
-	private LinearLayout mNextAlarmContainer;
-	
 	// Drawer
 	private SlidingDrawer mDrawer;
 	
@@ -84,11 +81,9 @@ public class FortyWinks extends Activity {
 	int mCycleTime;
 	SharedPreferences mSettings;
 	
-	// Handler for runnable to update the listView once a minute
+	// Handler for runnable to update the listView once a second
 	private Handler mSingleHandler = new Handler();
-	
-	private static final int SINGLE_ALARM_RC = 0;
-	private static final int MULTI_ALARM_RC = 1;
+
 	private static final int NO_FLAGS = 0;
 	
 	private final CharSequence[] mPowerNapRightClickChoices = {"Delete"}; 
