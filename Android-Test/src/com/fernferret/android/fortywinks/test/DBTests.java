@@ -134,6 +134,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         assertFalse(b.getId() == -1);
         
         List<Alarm> quikAlarms = mDba.getQuikAlarmsAndAlarms();
+        assertEquals(quikAlarms.size(), 3);
         //testBasicEquality(quikAlarms.get(0), c);
         assertEquals(quikAlarms.get(0).getId(), c.getId());
         //testBasicEquality(quikAlarms.get(1), a);
