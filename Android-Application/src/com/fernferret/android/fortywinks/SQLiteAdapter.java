@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 public class SQLiteAdapter implements DBAdapter {
@@ -43,17 +44,35 @@ public class SQLiteAdapter implements DBAdapter {
     /* Lists of constants */
     private static final String[] ALL_TABLES = new String[] {ALARMS_TABLE, FOLLOWUPS_TABLE, POWERNAP_TABLE, QUIK_ALARMS_TABLE};
     
+    /* Queries */
+    private static final String INSERT_ALARM_Q = "INSERT INTO ? (?, ?, ?, ?, ?, ?, ?, ?, ?) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_FOLLOWUP_Q = "INSERT INTO ? (?, ?, ?) VALUES (?, ?, ?)";
+    private static final String INSERT_POWERNAP_Q = "INSERT INTO ? (?) VALUES (?)";
+    private static final String INSERT_QUIK_ALARM_Q = "INSERT INTO ? (?) VALUES (?)";
+    
+    private SQLiteOpenHelper mOpenHelper;
     private SQLiteDatabase mDb;
     
+    private SQLiteStatement mInsertAlarmQuery;
+    private SQLiteStatement mInsertFollowupQuery;
+    private SQLiteStatement mInsertPowerNapQuery;
+    private SQLiteStatement mInsertQuikAlarmQuery;
+    
     public SQLiteAdapter(Context context) {
-        SQLiteOpenHelper openHelper = new OpenHelper(context);
+        mOpenHelper = new OpenHelper(context);
         
         Log.d(TAG, "Adapter created. Expecting database version " + DATABASE_VERSION);
         
         /* We just use the open helper to get the database */
         Log.d(TAG, "Getting a database connection");
-        mDb = openHelper.getWritableDatabase();
+        mDb = mOpenHelper.getWritableDatabase();
         Log.d(TAG, "Got the database, clear to read/write");
+        
+        /* Compile our reusable statements once */
+        mInsertAlarmQuery = mDb.compileStatement(INSERT_ALARM_Q);
+        mInsertFollowupQuery = mDb.compileStatement(INSERT_FOLLOWUP_Q);
+        mInsertPowerNapQuery = mDb.compileStatement(INSERT_POWERNAP_Q);
+        mInsertQuikAlarmQuery = mDb.compileStatement(INSERT_QUIK_ALARM_Q);
     }
 
     @Override
@@ -105,8 +124,8 @@ public class SQLiteAdapter implements DBAdapter {
 
     @Override
     public void resetDatabase() {
-        // TODO Auto-generated method stub
-        
+        Log.d(TAG, "Recieved order to clear database. Faking an upgrade.");
+        mOpenHelper.onUpgrade(mDb, -1, DATABASE_VERSION);
     }
     
     private static class OpenHelper extends SQLiteOpenHelper {
