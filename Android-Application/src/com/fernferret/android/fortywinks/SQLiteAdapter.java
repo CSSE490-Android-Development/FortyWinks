@@ -140,6 +140,9 @@ public class SQLiteAdapter implements DBAdapter {
         result.setDaysOfWeek(c.getInt(4));
         result.setIntervalStart(c.getInt(5));
         result.setEnabled(c.getInt(6) == 1);
+        
+        // TODO populate followups
+        
         return result;
     }
 
