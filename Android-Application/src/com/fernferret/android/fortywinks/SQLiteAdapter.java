@@ -1,5 +1,6 @@
 package com.fernferret.android.fortywinks;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -93,12 +94,30 @@ public class SQLiteAdapter implements DBAdapter {
     
     private String boolToIntString(boolean b) { return b ? "1" : "0"; }
     
+    private void nullSafeCloseCursor(Cursor c) {
+        if (c != null && !c.isClosed()) {
+            c.close();
+        }  
+    }
+    
     private int getNextAlarmId() {
-        return -1;
+        Cursor c = mDb.query(ALARMS_TABLE, new String[] {ALARMS_ID_COL}, "", null, null, null, ALARMS_ID_COL + " DESC", "1");
+        if (c.moveToFirst()) {
+            int result = c.getInt(0);
+            nullSafeCloseCursor(c);
+            return result;
+        }
+        return 1;
     }
     
     private int getNextFollowupId() {
-        return -1;
+        Cursor c = mDb.query(FOLLOWUPS_TABLE, new String[] {FOLLOWUPS_ID_COL}, "", null, null, null, ALARMS_ID_COL + " DESC", "1");
+        if (c.moveToFirst()) {
+            int result = c.getInt(0);
+            nullSafeCloseCursor(c);
+            return result;
+        }
+        return 1;
     }
     
     private void writeAlarmData(Alarm a) {
@@ -114,7 +133,14 @@ public class SQLiteAdapter implements DBAdapter {
     }
     
     private Alarm populateAlarmFromCursor(Cursor c) {
-        return null;
+        Alarm result = new Alarm(c.getInt(0));
+        result.setHour(c.getInt(1));
+        result.setMinute(c.getInt(2));
+        result.setThreshold(c.getInt(3));
+        result.setDaysOfWeek(c.getInt(4));
+        result.setIntervalStart(c.getInt(5));
+        result.setEnabled(c.getInt(6) == 1);
+        return result;
     }
 
     @Override
@@ -132,6 +158,9 @@ public class SQLiteAdapter implements DBAdapter {
     public Alarm saveAlarm(Alarm a) {
         if (a.getId() == -1) {
             a.setId(getNextAlarmId());
+            // TODO populate followups
+        } else {
+            deleteAlarm(a.getId());
         }
         
         writeAlarmData(a);
@@ -141,14 +170,24 @@ public class SQLiteAdapter implements DBAdapter {
 
     @Override
     public Alarm getAlarm(int id) {
-        // TODO Auto-generated method stub
-        return null;
+        Alarm result = null;
+        Cursor c = mDb.query(FOLLOWUPS_TABLE, ALARMS_COLS, "", null, null, null, "", "1");
+        if (c.moveToFirst()) {
+            result = populateAlarmFromCursor(c);
+            nullSafeCloseCursor(c);
+        }
+        return result;
     }
 
     @Override
     public Alarm getPowerNap() {
-        // TODO Auto-generated method stub
-        return null;
+        Alarm result = null;
+        Cursor c = mDb.rawQuery("SELECT * FROM ?, ?", new String[] {POWERNAP_TABLE, ALARMS_TABLE});
+        if (c.moveToFirst()) {
+            result = populateAlarmFromCursor(c);
+            nullSafeCloseCursor(c);
+        }
+        return result;
     }
 
     @Override
@@ -159,14 +198,21 @@ public class SQLiteAdapter implements DBAdapter {
 
     @Override
     public List<Alarm> getFullAlarmList() {
-        // TODO Auto-generated method stub
-        return null;
+        return getFullAlarmList(-1);
     }
 
     @Override
     public List<Alarm> getFullAlarmList(int numItems) {
-        // TODO Auto-generated method stub
-        return null;
+        List<Alarm> result = new ArrayList();
+        Alarm powerNap = getPowerNap();
+        
+        if (powerNap != null) {
+            result.add(powerNap);
+        }
+        
+        result.addAll(getQuikAlarmsAndAlarms());
+        
+        return numItems == -1 ? result : result.subList(0, numItems);
     }
 
     @Override
