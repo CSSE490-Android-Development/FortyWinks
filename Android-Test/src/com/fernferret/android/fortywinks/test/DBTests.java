@@ -7,6 +7,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import com.fernferret.android.fortywinks.Alarm;
 import com.fernferret.android.fortywinks.DBAdapter;
 import com.fernferret.android.fortywinks.FortyWinks;
+import com.fernferret.android.fortywinks.SQLiteAdapter;
 
 public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
     
@@ -19,8 +20,8 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        mDba = new DBAdapter(this.getActivity());
-        mDba.smokeDatabase();
+        mDba = new SQLiteAdapter(this.getActivity());
+        mDba.resetDatabase();
     }
     
     public void testPreconditions() {
@@ -132,7 +133,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         mDba.saveAlarm(b);
         assertFalse(b.getId() == -1);
         
-        List<Alarm> quikAlarms = mDba.getQuickAlarmsAndAlarms();
+        List<Alarm> quikAlarms = mDba.getQuikAlarmsAndAlarms();
         //testBasicEquality(quikAlarms.get(0), c);
         assertEquals(quikAlarms.get(0).getId(), c.getId());
         //testBasicEquality(quikAlarms.get(1), a);

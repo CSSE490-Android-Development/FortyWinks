@@ -93,7 +93,7 @@ public class FortyWinks extends Activity {
 		mResources = getResources();
 		mSettings = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		mDatabaseAdapter = new DBAdapter(this);
+		mDatabaseAdapter = new SQLiteAdapter(this);
 		
 		// Load UI Elements
 		mBigTime = (DigitalClock) findViewById(R.id.main_big_time);
