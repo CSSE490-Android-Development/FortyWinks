@@ -147,6 +147,21 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         
     }
     
+    public void testGetFullAlarmList() {
+        assertEquals(mDba.getFullAlarmList().size(), 0);
+        
+        Alarm a = new Alarm();
+        a.setIsPowerNap(true);
+        
+        mDba.saveAlarm(a);
+        
+        assertEquals(mDba.getFullAlarmList().size(), 1);
+        
+        mDba.deleteAlarm(a);
+        
+        assertEquals(mDba.getFullAlarmList().size(), 0);
+    }
+    
     public void testCreateNumFollowups() {
         Alarm a = new Alarm();
         
