@@ -6,7 +6,7 @@ public interface DBAdapter {
 
     public boolean alarmExists(int id);
 
-    public boolean deleteAlarm(int id);
+    public void deleteAlarm(int id);
 
     public Alarm saveAlarm(Alarm a);
 

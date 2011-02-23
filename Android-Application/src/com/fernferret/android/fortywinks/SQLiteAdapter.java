@@ -152,9 +152,13 @@ public class SQLiteAdapter implements DBAdapter {
     }
 
     @Override
-    public boolean deleteAlarm(int id) {
-        // TODO Auto-generated method stub
-        return false;
+    public void deleteAlarm(int id) {
+        String simpleEq = "? = ?";
+        String idStr = Integer.toString(id);
+        mDb.delete(FOLLOWUPS_TABLE, simpleEq, new String[] {FOLLOWUPS_ALARM_COL, idStr});
+        mDb.delete(POWERNAP_TABLE, simpleEq, new String[] {POWERNAP_ID_COL, idStr});
+        mDb.delete(QUIK_ALARMS_TABLE, simpleEq, new String[] {QUIK_ALARMS_ID_COL, idStr});
+        mDb.delete(ALARMS_TABLE, simpleEq, new String[] {ALARMS_ID_COL, idStr});
     }
 
     @Override
@@ -165,6 +169,8 @@ public class SQLiteAdapter implements DBAdapter {
         } else {
             deleteAlarm(a.getId());
         }
+        
+        // TODO check for powernap, quikalarm
         
         writeAlarmData(a);
         
