@@ -174,7 +174,6 @@ public class FortyWinks extends Activity {
 							Log.d("40W", "40W Removing Alarm that should fire at: " + toRemove);
 							// Remove the alarm and followups from the AlarmService
 							for(PendingIntent intent : getPendingIntentsForAlarm(toRemove)) {
-								intent.
 								mAlarmManager.cancel(intent);
 								
 							}
@@ -211,7 +210,7 @@ public class FortyWinks extends Activity {
 		for (int entry : a.getFollowups().keySet()) {
 			
 			Intent followUpIntent = new Intent(FortyWinks.this, SingleAlarm.class);
-			followUpIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
+			followUpIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
 			allIntents.add(PendingIntent.getBroadcast(FortyWinks.this, entry, followUpIntent, NO_FLAGS));
 			Log.d("40W.Intent", "Adding Intent to list with " + followUpIntent.getCategories() + ", and ID: " + entry);
 		}
@@ -240,6 +239,7 @@ public class FortyWinks extends Activity {
 		
 		Intent rootAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 		rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
+		rootAlarmIntent.putExtra("ALARM_ID", a.getId());
 		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, a.getId(), rootAlarmIntent, NO_FLAGS);
 		calendar.setTimeInMillis(futureTime);
 		Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
@@ -249,9 +249,12 @@ public class FortyWinks extends Activity {
 		// Set the base alarm in the manager
 		mAlarmManager.set(AlarmManager.RTC_WAKEUP, futureTime, singleAlarmPendingIntent);
 		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar), Toast.LENGTH_SHORT).show();
-		Intent followUpAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
-		followUpAlarmIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
+		
+		
 		for (Map.Entry<Integer, Long> entry : a.getFollowups().entrySet()) {
+			Intent followUpAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
+			followUpAlarmIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
+			followUpAlarmIntent.putExtra("ALARM_ID", entry.getKey());
 			singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, entry.getKey(), followUpAlarmIntent, NO_FLAGS);
 			calendar.setTimeInMillis(entry.getValue());
 			mAlarmManager.set(AlarmManager.RTC_WAKEUP, entry.getValue(), singleAlarmPendingIntent);
