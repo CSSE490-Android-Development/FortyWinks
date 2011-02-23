@@ -44,11 +44,19 @@ public class SQLiteAdapter implements DBAdapter {
     private static final String[] ALL_TABLES = new String[] {ALARMS_TABLE, FOLLOWUPS_TABLE, POWERNAP_TABLE, QUIK_ALARMS_TABLE};
     
     private SQLiteDatabase mDb;
+    
+    public SQLiteAdapter(Context context) {
+        SQLiteOpenHelper openHelper = new OpenHelper(context);
+        
+        /* We just use the open helper to get the database */
+        Log.d(TAG, "Getting a database connection");
+        mDb = openHelper.getWritableDatabase();
+        Log.d(TAG, "Got the database, clear to read/write");
+    }
 
     @Override
     public boolean alarmExists(int id) {
-        // TODO Auto-generated method stub
-        return false;
+        return getAlarm(id) == null;
     }
 
     @Override
