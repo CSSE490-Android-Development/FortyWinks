@@ -379,7 +379,7 @@ public class SQLiteAdapter implements DBAdapter {
             
             /* Delete all tables */
             for (String tableName : ALL_TABLES) {
-                db.execSQL("DELETE TABLE IF EXISTS " + tableName);
+                db.execSQL("DROP TABLE IF EXISTS " + tableName);
             }
             
             Log.d(TAG, "Finished deleting tables");
