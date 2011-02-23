@@ -2,7 +2,9 @@ package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -142,7 +144,26 @@ public class SQLiteAdapter implements DBAdapter {
         result.setIntervalStart(c.getInt(5));
         result.setEnabled(c.getInt(6) == 1);
         
-        // TODO populate followups
+        result.setFollowups(getFollowupsForAlarm(result));
+        
+        return result;
+    }
+    
+    private void populateAndInsertFollowupFromCursor(Cursor c, HashMap<Integer, Long> m) {
+        m.put(c.getInt(0), c.getLong(1));
+    }
+    
+    private HashMap<Integer, Long> getFollowupsForAlarm(Alarm a) {
+        HashMap<Integer, Long> result = new HashMap<Integer, Long>();
+
+        Cursor c = mDb.query(FOLLOWUPS_TABLE, new String[] {FOLLOWUPS_ID_COL, FOLLOWUPS_TIME_COL}, "? = ?", 
+                             new String[] {FOLLOWUPS_ALARM_COL, Integer.toString(a.getId())} , null, null, null);
+        
+        if (c.moveToFirst()) {
+            do {
+                populateAndInsertFollowupFromCursor(c, result);
+            } while (c.moveToNext());
+        }
         
         return result;
     }
