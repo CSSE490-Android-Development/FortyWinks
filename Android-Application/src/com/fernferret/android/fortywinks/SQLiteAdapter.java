@@ -48,6 +48,8 @@ public class SQLiteAdapter implements DBAdapter {
     public SQLiteAdapter(Context context) {
         SQLiteOpenHelper openHelper = new OpenHelper(context);
         
+        Log.d(TAG, "Adapter created. Expecting database version " + DATABASE_VERSION);
+        
         /* We just use the open helper to get the database */
         Log.d(TAG, "Getting a database connection");
         mDb = openHelper.getWritableDatabase();
