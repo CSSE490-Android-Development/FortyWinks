@@ -188,11 +188,14 @@ public class SQLiteAdapter implements DBAdapter {
     }
     
     private void setPowerNap(Alarm a) {
-        // TODO
+        mDb.delete(POWERNAP_TABLE, null, null);
+        mInsertPowerNapQuery.bindLong(2, a.getId());
+        mInsertPowerNapQuery.executeInsert();
     }
     
     private void setQuikAlarm(Alarm a) {
-        // TODO
+        mInsertQuikAlarmQuery.bindLong(2, a.getId());
+        mInsertQuikAlarmQuery.executeInsert();
     }
 
     @Override
