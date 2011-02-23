@@ -140,6 +140,16 @@ public class SQLiteAdapter implements DBAdapter {
     }
     
     private boolean isQuikAlarm(int id) {
+        Log.d(TAG, "Checking if Alarm " + id + " is the quik alarm");
+        Cursor c = mDb.query(QUIK_ALARMS_TABLE, new String[] {QUIK_ALARMS_ID_COL}, "", null, null, null, null, "1");
+        if (c.moveToFirst()) {
+            do {
+                if (c.getInt(0) == id) {
+                    return true;
+                }
+            } while (c.moveToNext());
+        }
+        Log.d(TAG, "Didn't find a matching quik alarm entry");
         return false;
     }
     
