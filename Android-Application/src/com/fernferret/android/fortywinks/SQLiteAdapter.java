@@ -202,6 +202,11 @@ public class SQLiteAdapter implements DBAdapter {
     public boolean alarmExists(int id) {
         return getAlarm(id) == null;
     }
+    
+    @Override
+    public void deleteAlarm(Alarm a) {
+        deleteAlarm(a.getId());
+    }
 
     @Override
     public void deleteAlarm(int id) {

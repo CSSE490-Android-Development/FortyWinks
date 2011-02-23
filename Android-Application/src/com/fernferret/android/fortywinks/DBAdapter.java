@@ -5,6 +5,8 @@ import java.util.List;
 public interface DBAdapter {
 
     public boolean alarmExists(int id);
+    
+    public void deleteAlarm(Alarm a);
 
     public void deleteAlarm(int id);
 
