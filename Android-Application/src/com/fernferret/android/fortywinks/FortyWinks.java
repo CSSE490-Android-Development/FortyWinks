@@ -209,6 +209,7 @@ public class FortyWinks extends Activity {
 		// Remove the alarm and followups from the AlarmService
 		for (PendingIntent intent : getPendingIntentsForAlarm(a)) {
 			mAlarmManager.cancel(intent);
+			Log.w("40W", "Canceling a PendingIntent for " + a.getId());
 		}
 		mDatabaseAdapter.deleteAlarm(a);
 		
@@ -221,21 +222,11 @@ public class FortyWinks extends Activity {
 		mNextAlarmsAdapter.notifyDataSetChanged();
 		
 	}
-	// TODO: I don't think we need this method anymore, investigate.
-	private void removePowerNapsFromNextAlarmList() {
-		List<Alarm> powerNap = new ArrayList<Alarm>();
-		for (Alarm a : mUpcomingAlarms) {
-			if (a.isPowerNap()) {
-				powerNap.add(a);
-			}
-		}
-		mUpcomingAlarms.removeAll(powerNap);
-	}
+	
 	private void setPowerNap() {
+		mSettings = PreferenceManager.getDefaultSharedPreferences(this);
 		Alarm a = mDatabaseAdapter.getPowerNap();
 		
-		mUpcomingAlarms.add(a);
-		mNextAlarmsAdapter.notifyDataSetChanged();
 		Log.w("40W", "Found PowerNap: " + a + ", ID: " + a.getId());
 		Calendar calendar = Calendar.getInstance();
 		long futureTime = a.getNextAlarmTime();
@@ -243,13 +234,15 @@ public class FortyWinks extends Activity {
 		Intent rootAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 		rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
 		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_id), a.getId());
-		if(a.getNumFollowups() == 0) {
-			rootAlarmIntent.putExtra("ALARM_LAST" , true);
-		}
+		// If there are no followups, this is the LAST alarm!
+		rootAlarmIntent.putExtra("ALARM_LAST", (a.getNumFollowups() == 0));
+		rootAlarmIntent.putExtra("ALARM_FOLLOWUP_NUMBER", 0);
+		Log.d("40W", "Loading item from settings: " + mSettings.getString(getString(R.string.key_default_alarm_tone), "FAILURE"));
+		
 		rootAlarmIntent.putExtra("ALARM_SOUND", mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
 		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, a.getId(), rootAlarmIntent, NO_FLAGS);
 		calendar.setTimeInMillis(futureTime);
-
+		
 		// Iterate through all followups with the following
 		// Set the base alarm in the manager
 		mAlarmManager.set(AlarmManager.RTC_WAKEUP, futureTime, singleAlarmPendingIntent);
@@ -261,7 +254,7 @@ public class FortyWinks extends Activity {
 			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_id), a.getId());
 			followUpAlarmIntent.putExtra("ALARM_FOLLOWUP_NUMBER", entry.getKey());
 			followUpAlarmIntent.putExtra("ALARM_SOUND", mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
-			if(a.getNumFollowups() == currentFollowup) {
+			if (a.getNumFollowups() == currentFollowup) {
 				// This is the last followup, make it remove things from the original intent.
 				followUpAlarmIntent.putExtra("ALARM_LAST", true);
 				
@@ -273,6 +266,9 @@ public class FortyWinks extends Activity {
 			mAlarmManager.set(AlarmManager.RTC_WAKEUP, entry.getValue(), singleAlarmPendingIntent);
 			Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
 		}
+		
+		mDatabaseAdapter.updateFullAlarmList(mUpcomingAlarms);
+		mNextAlarmsAdapter.notifyDataSetChanged();
 		// End iteration
 	}
 	
@@ -316,6 +312,7 @@ public class FortyWinks extends Activity {
 		mQuickProposedAlarms = listItems;
 		
 	}
+	
 	/**
 	 * Recalculates the time a PowerNap will end
 	 */
@@ -342,16 +339,18 @@ public class FortyWinks extends Activity {
 			} catch (NumberFormatException e) {
 				a.setNumberOfIntervals(4);
 			}
-			Log.w("40W", "40W" + a.getPrettyTime());
+			Log.w("40W", "The user chose this time for an alarm: " + a.getPrettyTime());
 			
 			Alarm zombiePowerNap = mDatabaseAdapter.getPowerNap();
 			
-			if(zombiePowerNap != null) {
-				removeAlarm(zombiePowerNap);
-			}
-			
+			Log.d("40W", "Number of alarms remaining: " + mUpcomingAlarms.size());
 			mDatabaseAdapter.saveAlarm(new Alarm(a));
 			setPowerNap();
+			if (zombiePowerNap != null) {
+				Log.w("40W", "Removing Zombie PowerNap, ID: " + zombiePowerNap.getId());
+				removeAlarm(zombiePowerNap);
+			}
+			Log.d("40W", "Number of alarms remaining: " + mUpcomingAlarms.size());
 			mDrawer.animateClose();
 		}
 	};

@@ -4,4 +4,6 @@
     <string name="app_name">FortyWinks</string>
     <string name="preferences">Preferences</string>
     <string name="intent_alarm_id">ALARM_ID</string>
+    <string name="intent_alarm_sound">ALARM_SOUND</string>
+    <string name="intent_alarm_last">ALARM_LAST</string>
 </resources>
