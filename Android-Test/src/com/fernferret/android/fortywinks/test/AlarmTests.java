@@ -199,7 +199,7 @@ public class AlarmTests extends TestCase {
         assertEquals(a.getIntervalStart(), result.getIntervalStart());
         assertEquals(a.getIntervalEnd(), result.getIntervalEnd());
         assertEquals(a.getDaysOfWeek(), result.getDaysOfWeek());
-        assertEquals(a.getEnabled(), result.getEnabled());
+        assertEquals(a.isEnabled(), result.isEnabled());
         assertEquals(a.isPowerNap(), result.isPowerNap());
         assertEquals(a.isQuikAlarm(), result.isQuikAlarm());
         assertEquals(a, result);
