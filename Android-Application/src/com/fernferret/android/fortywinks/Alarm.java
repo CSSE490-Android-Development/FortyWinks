@@ -429,7 +429,10 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
                 return time;
             }
             
-            return DateFormat.format("h:mm aa", followupsList.get(0)).toString();
+            Calendar result = followupsList.get(0);
+            result.add(Calendar.MINUTE, -1);
+            
+            return DateFormat.format("h:mm aa", result).toString();
         }
         
         return time;
@@ -452,7 +455,7 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
             
             Collections.sort(followupsList);
             
-            return followupsList.size();
+            return followupsList.size() - 1;
         }
         
         return 0;
