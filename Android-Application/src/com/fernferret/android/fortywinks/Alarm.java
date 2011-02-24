@@ -396,8 +396,10 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, mHour);
         c.set(Calendar.MINUTE, mMinute);
-        String time = DateFormat.format("h:mm aa", c).toString();
-        
+        return DateFormat.format("h:mm aa", c).toString();
+    }
+    
+    public int getRemainingAlarms() {
         if (isActive()) {
             
             Calendar now = new GregorianCalendar();
@@ -412,15 +414,12 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
                 }
             }
             
-            if (followupsList.size() < 1) {
-                return time;
-            }
-            
             Collections.sort(followupsList);
             
-            return DateFormat.format("h:mm aa", followupsList.get(0)) + " (" + followupsList.size() + " left)";
+            return followupsList.size();
         }
-        return time;
+        
+        return 0;
     }
 
     @Override
