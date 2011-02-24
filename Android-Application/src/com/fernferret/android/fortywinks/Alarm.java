@@ -396,7 +396,31 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, mHour);
         c.set(Calendar.MINUTE, mMinute);
-        return DateFormat.format("h:mm aa", c).toString();
+        
+        String time = DateFormat.format("h:mm aa", c).toString();
+        if (isActive()) {
+            
+            Calendar now = new GregorianCalendar();
+            HashMap<Integer, Long> followups = getFollowups();
+            ArrayList<Calendar> followupsList = new ArrayList<Calendar>();
+            
+            for (int id : followups.keySet()) {
+                Calendar next = new GregorianCalendar();
+                next.setTimeInMillis(followups.get(id));
+                if (next.after(now)) {
+                    followupsList.add(next);
+                }
+            }
+            Collections.sort(followupsList);
+            
+            if (followupsList.size() == 0) {
+                return time;
+            }
+            
+            return DateFormat.format("h:mm aa", followupsList.get(0)).toString();
+        }
+        
+        return time;
     }
     
     public int getRemainingActiveAlarms() {
