@@ -242,10 +242,16 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
     
     public void testSetAlarmActive() {
         Alarm a = new Alarm();
+        a.setNumFollowups(5);
+        a.setIntervalStart(3);
+        a.setIntervalEnd(3);
         mDba.saveAlarm(a);
         mDba.setAlarmActive(a);
         
         Alarm result = mDba.getAlarm(a.getId());
+        
+        HashMap<Integer, Long> followups = result.getFollowups();
+        assertEquals(followups.keySet().size(), 5);
         assertTrue(result.isActive());
     }
 }
