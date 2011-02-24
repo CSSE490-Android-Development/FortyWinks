@@ -48,7 +48,7 @@
 		android:id="@+id/main_next_alarm_list"
 		android:layout_below="@id/main_next_alarm_title"
 		android:layout_centerHorizontal="true"
-		android:layout_width="200dip"
+		android:layout_width="wrap_content"
 		android:layout_height="170dip"
 		android:choiceMode="singleChoice"
 		android:cacheColorHint="#00000000"/>

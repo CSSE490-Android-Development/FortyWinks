@@ -14,6 +14,7 @@ public class SmallAlarmLineItem extends RelativeLayout {
 	
 	private ImageView mSpecialIcon;
 	private TextView mAlarmTime;
+	private TextView mRemainingAlarms;
 	
 	public SmallAlarmLineItem(Context context) {
 		super(context);
@@ -21,6 +22,7 @@ public class SmallAlarmLineItem extends RelativeLayout {
 		LayoutInflater layoutInflater = mContext.getLayoutInflater();
 		layoutInflater.inflate(R.layout.small_alarm_line_item, this);
 		mAlarmTime = (TextView) findViewById(R.id.small_alarm_line_item_time);
+		mRemainingAlarms = (TextView) findViewById(R.id.small_alarm_line_item_remaining);
 		mSpecialIcon = (ImageView) findViewById(R.id.small_alarm_line_item_icon);
 	}
 	
@@ -40,6 +42,11 @@ public class SmallAlarmLineItem extends RelativeLayout {
 	
 	public void setRegularAlarm() {
 		mSpecialIcon.setVisibility(View.INVISIBLE);
+	}
+
+	public void setRemainingAlarmsText(String string) {
+		mRemainingAlarms.setText(string);
+		mRemainingAlarms.setVisibility(View.VISIBLE);
 	}
 	
 }
