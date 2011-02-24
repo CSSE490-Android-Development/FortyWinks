@@ -27,7 +27,9 @@ public class SmallAlarmViewAdapter extends ArrayAdapter<Alarm>{
 		}
 		Alarm a = getItem(position);
 		alarmView.setAlarmText(a.toString());
-		
+		if(a.getRemainingActiveAlarms() != 0) {
+			alarmView.setRemainingAlarmsText("(" + a.getRemainingActiveAlarms() + ")");
+		}
 		if(a.isPowerNap()) {
 			alarmView.setPowerNap();
 		} else if(a.isQuikAlarm()) {

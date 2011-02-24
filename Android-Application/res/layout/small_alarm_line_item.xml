@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content"
+	android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
-	<TextView
-		android:id="@+id/small_alarm_line_item_time"
-		android:layout_width="150dip"
+	<LinearLayout
+		android:id="@+id/small_alarm_line_item_container"
+		android:layout_centerInParent="true"
+		android:layout_width="wrap_content"
+		android:padding="5dip"
 		android:layout_height="wrap_content"
-		android:textSize="30sp"
 		android:gravity="center"
-		android:text="12:22 pm"/>
-	<ImageView
-		android:id="@+id/small_alarm_line_item_icon"
-		android:layout_width="30dip"
-		android:layout_height="30dip"
-		android:layout_toRightOf="@id/small_alarm_line_item_time"
+		android:orientation="horizontal">
+		<TextView
+			android:id="@+id/small_alarm_line_item_time"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="30sp"
+			android:gravity="center"
+			android:text="12:22 pm"/>
+		<ImageView
+			android:id="@+id/small_alarm_line_item_icon"
+			android:layout_width="30dip"
+			android:layout_height="30dip"
+			android:layout_toRightOf="@id/small_alarm_line_item_time"
+			android:layout_centerVertical="true"
+			android:scaleType="fitXY"
+			android:src="@drawable/zs"/>
+	</LinearLayout>
+	<TextView
+		android:id="@+id/small_alarm_line_item_remaining"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		android:layout_centerVertical="true"
-		android:scaleType="fitXY"
-		android:src="@drawable/zs"/>
+		android:layout_toRightOf="@id/small_alarm_line_item_container"
+		android:textSize="20sp"
+		android:text="(4)"
+		android:visibility="invisible"/>
 </RelativeLayout>
