@@ -63,7 +63,7 @@ public class WakeUpAlert extends Activity {
 		
 		int maxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 		mUserVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-		//mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,maxVolume, 0);
+		mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,maxVolume, 0);
 		mp.setLooping(true);
 		mp.start();
 	}
