@@ -38,6 +38,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         assertEquals(a.getIntervalStart(), b.getIntervalStart());
         assertEquals(a.getIntervalEnd(), b.getIntervalEnd());
         assertEquals(a.isActive(), b.isActive());
+        assertEquals(a.getIdentifier(), b.getIdentifier());
     }
     
     public void testSaveSimpleAlarm() {

@@ -17,7 +17,7 @@ public class SQLiteAdapter implements DBAdapter {
     private static final String TAG = "FortyWinks.SQLite";
     
     private static final String DATABASE_NAME = "fortywinks";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 4;
     
     /* Alarms table names */
     private static final String ALARMS_TABLE = "alarms";
@@ -31,6 +31,7 @@ public class SQLiteAdapter implements DBAdapter {
     private static final String ALARMS_INTERVAL_END_COL = "interval_end";
     private static final String ALARMS_ENABLED_COL = "enabled";
     private static final String ALARMS_ACTIVE_COL = "active";
+    private static final String ALARMS_IDENTIFIER_COL = "identifier";
     
     /* Followups table names */
     private static final String FOLLOWUPS_TABLE = "followups";
@@ -50,13 +51,13 @@ public class SQLiteAdapter implements DBAdapter {
     private static final String[] ALL_TABLES = new String[] {ALARMS_TABLE, FOLLOWUPS_TABLE, POWERNAP_TABLE, QUIK_ALARMS_TABLE};
     private static final String[] ALARMS_COLS = new String[] {ALARMS_ID_COL, ALARMS_HOUR_COL, ALARMS_MINUTE_COL, ALARMS_THRESHOLD_COL, 
                                                                  ALARMS_DAYS_COL, ALARMS_FOLLOWUPS_COL, ALARMS_INTERVAL_START_COL, 
-                                                                 ALARMS_INTERVAL_END_COL, ALARMS_ENABLED_COL, ALARMS_ACTIVE_COL};
+                                                                 ALARMS_INTERVAL_END_COL, ALARMS_ENABLED_COL, ALARMS_ACTIVE_COL, ALARMS_IDENTIFIER_COL};
     
     /* Queries */
     private static final String INSERT_ALARM_Q = "INSERT INTO " + ALARMS_TABLE + " (" + ALARMS_ID_COL + ", " + ALARMS_HOUR_COL + ", " + 
                                                     ALARMS_MINUTE_COL + ", " + ALARMS_THRESHOLD_COL + ", " + ALARMS_DAYS_COL + ", " + ALARMS_FOLLOWUPS_COL + 
                                                     ", " + ALARMS_INTERVAL_START_COL + ", " + ALARMS_INTERVAL_END_COL + ", " + ALARMS_ENABLED_COL + 
-                                                    ", " + ALARMS_ACTIVE_COL + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                                    ", " + ALARMS_ACTIVE_COL + ", " + ALARMS_IDENTIFIER_COL + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String INSERT_FOLLOWUP_Q = "INSERT INTO " + FOLLOWUPS_TABLE + " (" + FOLLOWUPS_ID_COL + ", " + FOLLOWUPS_ALARM_COL + ", " + 
                                                        FOLLOWUPS_TIME_COL + ") VALUES (?, ?, ?)";
     private static final String INSERT_POWERNAP_Q = "INSERT INTO " + POWERNAP_TABLE + " (" + POWERNAP_ID_COL + ") VALUES (?)";
@@ -176,6 +177,8 @@ public class SQLiteAdapter implements DBAdapter {
         Log.d(TAG, "  ENABLED: " + a.isEnabled());
         mInsertAlarmQuery.bindString(10, boolToIntString(a.isActive()));
         Log.d(TAG, "  ACTIVE: " + a.isActive());
+        mInsertAlarmQuery.bindLong(11, a.getIdentifier());
+        Log.d(TAG, "  IDENTIFIER: " + a.getIdentifier());
         mInsertAlarmQuery.executeInsert();
         Log.d(TAG, "Data writing complete");
     }
@@ -203,6 +206,8 @@ public class SQLiteAdapter implements DBAdapter {
         Log.d(TAG, "  ENABLED: " + (c.getInt(8) == 1));
         result.setIsActive(c.getInt(9) == 1);
         Log.d(TAG, "  ACTIVE: " + (c.getInt(9) == 1));
+        result.setIdentifier(c.getLong(10));
+        Log.d(TAG, "  IDENTIFIER: " + (c.getLong(10)));
         
         result.setFollowups(getFollowupsForAlarm(result));
         
@@ -338,7 +343,7 @@ public class SQLiteAdapter implements DBAdapter {
         Alarm result = null;
         Cursor c = mDb.rawQuery("SELECT " + ALARMS_TABLE + "." + ALARMS_ID_COL + ", " +  ALARMS_HOUR_COL +  ", " +  ALARMS_MINUTE_COL + ", " + 
                                 ALARMS_THRESHOLD_COL + ", " +  ALARMS_DAYS_COL + ", " +  ALARMS_FOLLOWUPS_COL +  ", " +  ALARMS_INTERVAL_START_COL + 
-                                ", " +  ALARMS_INTERVAL_END_COL +  ", " +  ALARMS_ENABLED_COL + ", " + ALARMS_ACTIVE_COL + " FROM " + POWERNAP_TABLE + ", " 
+                                ", " +  ALARMS_INTERVAL_END_COL +  ", " +  ALARMS_ENABLED_COL + ", " + ALARMS_ACTIVE_COL + ", " + ALARMS_IDENTIFIER_COL + " FROM " + POWERNAP_TABLE + ", " 
                                 + ALARMS_TABLE + " WHERE " + ALARMS_TABLE + "." + ALARMS_ID_COL + " = " + POWERNAP_TABLE + "." + POWERNAP_ID_COL, null);
         if (c.moveToFirst()) {
             result = populateAlarmFromCursor(c);
@@ -361,7 +366,7 @@ public class SQLiteAdapter implements DBAdapter {
         if (powerNap == null) {
             c = mDb.rawQuery("SELECT " + ALARMS_TABLE + "." + ALARMS_ID_COL + ", " +  ALARMS_HOUR_COL +  ", " +  ALARMS_MINUTE_COL + ", " + 
                                 ALARMS_THRESHOLD_COL + ", " +  ALARMS_DAYS_COL + ", " +  ALARMS_FOLLOWUPS_COL +  ", " +  ALARMS_INTERVAL_START_COL + 
-                                ", " +  ALARMS_INTERVAL_END_COL +  ", " +  ALARMS_ENABLED_COL + ", " + ALARMS_ACTIVE_COL + " FROM " +  QUIK_ALARMS_TABLE + ", " + ALARMS_TABLE + 
+                                ", " +  ALARMS_INTERVAL_END_COL +  ", " +  ALARMS_ENABLED_COL + ", " + ALARMS_ACTIVE_COL + ", " + ALARMS_IDENTIFIER_COL + " FROM " +  QUIK_ALARMS_TABLE + ", " + ALARMS_TABLE + 
                                 " WHERE " + ALARMS_TABLE + "." + ALARMS_ID_COL + " = " + QUIK_ALARMS_TABLE + "." + QUIK_ALARMS_ID_COL, null);
         } else {
             c = mDb.rawQuery("SELECT * FROM " +  QUIK_ALARMS_TABLE + ", " + ALARMS_TABLE + " WHERE " + ALARMS_TABLE + "." + ALARMS_ID_COL + 
@@ -440,10 +445,11 @@ public class SQLiteAdapter implements DBAdapter {
             
             Log.i(TAG, "Creating tables");
             
-            /* Create alarms table */            
+            /* Create alarms table */
             db.execSQL("CREATE TABLE " + ALARMS_TABLE + " (" + ALARMS_ID_COL + " INTEGER PRIMARY KEY, " + ALARMS_HOUR_COL + " INTEGER, " + 
                        ALARMS_MINUTE_COL + " INTEGER, " + ALARMS_THRESHOLD_COL + " INTEGER, " + ALARMS_DAYS_COL + " INTEGER, " + ALARMS_FOLLOWUPS_COL + 
-                       " INTEGER, " + ALARMS_INTERVAL_START_COL + " INTEGER, " + ALARMS_INTERVAL_END_COL + " INTEGER, " + ALARMS_ENABLED_COL + " INTEGER, " + ALARMS_ACTIVE_COL + " INTEGER)");
+                       " INTEGER, " + ALARMS_INTERVAL_START_COL + " INTEGER, " + ALARMS_INTERVAL_END_COL + " INTEGER, " + ALARMS_ENABLED_COL + " INTEGER, " + 
+                       ALARMS_ACTIVE_COL + " INTEGER, " + ALARMS_IDENTIFIER_COL + " REAL)");
             
             Log.d(TAG, "Created alarms table");
 
