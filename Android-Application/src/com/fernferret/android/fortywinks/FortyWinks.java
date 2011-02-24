@@ -120,7 +120,7 @@ public class FortyWinks extends Activity {
 		
 		// Set Adapters
 		mQuickAlarmList.setAdapter(mQuickAlarmAdapter);
-		mNextAlarmListView.setAdapter(mNextAlarmsAdapter);
+		//mNextAlarmListView.setAdapter(mNextAlarmsAdapter);
 		
 		// Set Listeners
 		mDrawer.setOnDrawerOpenListener(mDrawerOpenListener);
@@ -157,8 +157,8 @@ public class FortyWinks extends Activity {
 		mQuickAlarmList.setAdapter(mQuickAlarmAdapter);
 		mDatabaseAdapter.updateFullAlarmList(mUpcomingAlarms);
 		mNextAlarmsAdapter = new SmallAlarmViewAdapter(this, R.layout.small_alarm_line_item, R.id.small_alarm_line_item_time, mUpcomingAlarms);
-		mNextAlarmsAdapter.notifyDataSetChanged();
 		mNextAlarmListView.setAdapter(mNextAlarmsAdapter);
+		mNextAlarmsAdapter.notifyDataSetChanged();
 		mNextAlarmListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -225,6 +225,7 @@ public class FortyWinks extends Activity {
 		
 		// Let the ListView know we've changed it
 		mNextAlarmsAdapter.notifyDataSetChanged();
+		mNextAlarmsAdapter.notifyDataSetInvalidated();
 		
 	}
 	
@@ -245,6 +246,7 @@ public class FortyWinks extends Activity {
 		Log.d("40W", "Loading item from settings: " + mSettings.getString(getString(R.string.key_default_alarm_tone), "FAILURE"));
 		
 		rootAlarmIntent.putExtra("ALARM_SOUND", mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
+		Log.d("40W", "Proposed bundle: " + rootAlarmIntent.getExtras());
 		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, a.getId(), rootAlarmIntent, NO_FLAGS);
 		calendar.setTimeInMillis(futureTime);
 		
@@ -273,7 +275,10 @@ public class FortyWinks extends Activity {
 		}
 		
 		mDatabaseAdapter.updateFullAlarmList(mUpcomingAlarms);
-		mNextAlarmsAdapter.notifyDataSetChanged();
+		Log.d("40W", "Alright, I've created your PowerNap. Here's what I have for the list: " + mUpcomingAlarms);
+		Log.d("40W", "Here are the remaining Active Alarms: " + mUpcomingAlarms.get(0).getRemainingActiveAlarms());
+		//mNextAlarmsAdapter.notifyDataSetChanged();
+		mNextAlarmsAdapter.notifyDataSetInvalidated();
 		// End iteration
 	}
 	

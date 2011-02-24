@@ -22,8 +22,12 @@ public class SmallAlarmViewAdapter extends ArrayAdapter<Alarm>{
 		SmallAlarmLineItem alarmView = null;
 		if(convertView == null) {
 			alarmView = new SmallAlarmLineItem(mContext);
+			alarmView.hideRemainingAlarmsText();
+			Log.v("40W", "Creating New View for SmallAlarmViewAdapter");
 		} else {
 			alarmView = (SmallAlarmLineItem) convertView;
+			alarmView.hideRemainingAlarmsText();
+			Log.v("40W", "Recycling Old View for SmallAlarmViewAdapter");
 		}
 		Alarm a = getItem(position);
 		alarmView.setAlarmText(a.toString());

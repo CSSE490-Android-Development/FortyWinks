@@ -48,5 +48,9 @@ public class SmallAlarmLineItem extends RelativeLayout {
 		mRemainingAlarms.setText(string);
 		mRemainingAlarms.setVisibility(View.VISIBLE);
 	}
+
+	public void hideRemainingAlarmsText() {
+		mRemainingAlarms.setVisibility(View.INVISIBLE);
+	}
 	
 }
