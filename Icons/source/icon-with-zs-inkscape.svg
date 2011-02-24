@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="390.91336"
+   height="340.104"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="icon-with-zs-inkscape.svg"
+   inkscape:export-filename="/home/theisje/forty.png"
+   inkscape:export-xdpi="230.48833"
+   inkscape:export-ydpi="230.48833">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient3799">
+      <stop
+         style="stop-color:#131313;stop-opacity:1;"
+         offset="0"
+         id="stop3801" />
+      <stop
+         style="stop-color:#5a5a5a;stop-opacity:1;"
+         offset="1"
+         id="stop3803" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3791">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3793" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop3795" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3783">
+      <stop
+         style="stop-color:#00c8d4;stop-opacity:1;"
+         offset="0"
+         id="stop3785" />
+      <stop
+         style="stop-color:#00a2a5;stop-opacity:1;"
+         offset="1"
+         id="stop3787" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3783"
+       id="linearGradient3789"
+       x1="216.54834"
+       y1="676.29321"
+       x2="216.54834"
+       y2="1015.0005"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-14.100823,-1.3238001)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3791"
+       id="linearGradient3797"
+       x1="214.5"
+       y1="1052.4874"
+       x2="214.5"
+       y2="653.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3799"
+       id="linearGradient3805"
+       x1="214.5"
+       y1="1052.4874"
+       x2="214.5"
+       y2="653.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3783"
+       id="linearGradient3820"
+       x1="182"
+       y1="-0.66666669"
+       x2="182"
+       y2="399.55548"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3783-6"
+       id="linearGradient3789-2"
+       x1="216.54834"
+       y1="676.29321"
+       x2="216.54834"
+       y2="1015.0005"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient3783-6">
+      <stop
+         style="stop-color:#00c8d4;stop-opacity:1;"
+         offset="0"
+         id="stop3785-8" />
+      <stop
+         style="stop-color:#00a2a5;stop-opacity:1;"
+         offset="1"
+         id="stop3787-2" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3783-6"
+       id="linearGradient3836"
+       x1="216.54834"
+       y1="676.29321"
+       x2="216.54834"
+       y2="1015.0005"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient3838">
+      <stop
+         style="stop-color:#00c8d4;stop-opacity:1;"
+         offset="0"
+         id="stop3840" />
+      <stop
+         style="stop-color:#00a2a5;stop-opacity:1;"
+         offset="1"
+         id="stop3842" />
+    </linearGradient>
+    <linearGradient
+       gradientTransform="translate(-2.0546468e-7,-647.69772)"
+       y2="676.75928"
+       x2="197.07578"
+       y1="1015.8479"
+       x1="197.07578"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3846"
+       xlink:href="#linearGradient3799"
+       inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3783-9"
+       id="linearGradient3820-4"
+       x1="182"
+       y1="-0.66666669"
+       x2="182"
+       y2="399.55548"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient3783-9">
+      <stop
+         style="stop-color:#00c8d4;stop-opacity:1;"
+         offset="0"
+         id="stop3785-4" />
+      <stop
+         style="stop-color:#00a2a5;stop-opacity:1;"
+         offset="1"
+         id="stop3787-5" />
+    </linearGradient>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3910">
+      <path
+         style="fill:url(#linearGradient3914);fill-opacity:1;stroke:none;display:inline"
+         d="m 0.50276303,0.49560088 401.87510697,0 0,396.14875912 z"
+         id="path3912"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3783-9"
+       id="linearGradient3914"
+       gradientUnits="userSpaceOnUse"
+       x1="182"
+       y1="-0.66666669"
+       x2="182"
+       y2="399.55548"
+       gradientTransform="scale(1.0072016,0.9928499)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3799"
+       id="linearGradient3927"
+       x1="334.32263"
+       y1="137.79999"
+       x2="334.1333"
+       y2="30.46666"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.4252733,0,0,1.4252733,-146.83789,27.411909)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3799"
+       id="linearGradient3940"
+       x1="-3.1599987"
+       y1="74.802605"
+       x2="-3.1599987"
+       y2="23.466665"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.468254,0,0,2.468254,231.01831,92.015863)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3799"
+       id="linearGradient3953"
+       x1="-117.67733"
+       y1="76.133331"
+       x2="-115.82667"
+       y2="26.799997"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.515873,0,0,1.515873,340.53194,245.11639)" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3141">
+      <rect
+         style="fill:#20a3d3;fill-opacity:1;stroke:none"
+         id="rect3143"
+         width="164.50958"
+         height="97.961189"
+         x="52.374481"
+         y="951.50977" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3783"
+       id="linearGradient3227"
+       gradientUnits="userSpaceOnUse"
+       x1="216.54834"
+       y1="676.29321"
+       x2="216.54834"
+       y2="1015.0005" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.5"
+     inkscape:cx="33.933332"
+     inkscape:cy="134.00671"
+     inkscape:document-units="px"
+     inkscape:current-layer="g3133"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0.3"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     showborder="true"
+     inkscape:window-width="1916"
+     inkscape:window-height="1057"
+     inkscape:window-x="1920"
+     inkscape:window-y="19"
+     inkscape:window-maximized="0"
+     borderlayer="true" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     style="display:inline"
+     transform="translate(-10.7,-680.92484)"
+     inkscape:label="Text"
+     id="g3133"
+     inkscape:groupmode="layer">
+    <text
+       transform="scale(0.9928499,1.0072016)"
+       sodipodi:linespacing="125%"
+       id="text3135"
+       y="1009.9555"
+       x="4.4766884"
+       style="font-size:235.80462646px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient3789);fill-opacity:1;stroke:none;font-family:Bebas Neue;-inkscape-font-specification:Bebas Neue"
+       xml:space="preserve"><tspan
+         style="font-size:471.60925293px;fill:url(#linearGradient3789);fill-opacity:1"
+         y="1009.9555"
+         x="4.4766884"
+         id="tspan3137"
+         sodipodi:role="line">40</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer7"
+     inkscape:label="Small Z"
+     style="display:inline"
+     transform="translate(-10.7,-28.56266)">
+    <text
+       xml:space="preserve"
+       style="font-size:109.14286041px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient3953);fill-opacity:1;stroke:none;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold"
+       x="144.47905"
+       y="361.33334"
+       id="text3943"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3945"
+         x="144.47905"
+         y="361.33334"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:url(#linearGradient3953);fill-opacity:1;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold">Z</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Text Overlay"
+     transform="translate(-10.7,-680.92484)"
+     style="display:inline">
+    <text
+       xml:space="preserve"
+       style="font-size:235.80462646px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient3227);fill-opacity:1;stroke:none;font-family:Bebas Neue;-inkscape-font-specification:Bebas Neue"
+       x="18.577511"
+       y="1011.2793"
+       id="text2985"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.9928499,0,0,1.0072016,-14,-1.3333334)"
+       clip-path="url(#clipPath3141)"><tspan
+         sodipodi:role="line"
+         id="tspan2987"
+         x="18.577511"
+         y="1011.2793"
+         style="font-size:471.60925293px;fill:url(#linearGradient3227);fill-opacity:1">40</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer6"
+     inkscape:label="Medium Z"
+     style="display:inline"
+     transform="translate(-10.7,-28.56266)">
+    <text
+       xml:space="preserve"
+       style="font-size:177.71427917px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient3940);fill-opacity:1;stroke:none;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold"
+       x="188.23526"
+       y="274.66666"
+       id="text3930"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3932"
+         x="188.23526"
+         y="274.66666"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:url(#linearGradient3940);fill-opacity:1;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold">Z</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="Big Z"
+     style="display:inline"
+     transform="translate(-10.7,-28.56266)">
+    <text
+       xml:space="preserve"
+       style="font-size:223.42857361px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient3927);fill-opacity:1;stroke:none;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold"
+       x="286.51709"
+       y="225.99995"
+       id="text3917"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3919"
+         x="286.51709"
+         y="225.99995"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:url(#linearGradient3927);fill-opacity:1;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold">Z</tspan></text>
+  </g>
+</svg>
