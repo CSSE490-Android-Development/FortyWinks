@@ -31,6 +31,7 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
     private int mIntervalEnd;
     private int mDaysOfWeek = 0;
     private boolean mEnabled;
+    private boolean mActive;
     private boolean mIsPowerNap;
     private boolean mIsQuikAlarm;
     private HashMap<Integer, Long> mFollowups;
@@ -130,7 +131,7 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
         setIntervalStart(in.readInt());
         setIntervalEnd(in.readInt());
         setDaysOfWeek(in.readInt());
-        setEnabled(in.readInt() == 1);
+        setIsEnabled(in.readInt() == 1);
         setIsPowerNap(in.readInt() == 1);
         setIsQuikAlarm(in.readInt() == 1);
         
@@ -170,8 +171,11 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
     public int getDaysOfWeek() { return mDaysOfWeek; }
     public void setDaysOfWeek(int daysOfWeek) { mDaysOfWeek = daysOfWeek; }
     
-    public boolean getEnabled() { return mEnabled; }
-    public void setEnabled(boolean enabled) { mEnabled = enabled; }
+    public boolean isEnabled() { return mEnabled; }
+    public void setIsEnabled(boolean enabled) { mEnabled = enabled; }
+    
+    public boolean isActive() { return mActive; }
+    public void setIsActive(boolean isActive) { mActive = isActive; }
     
     public boolean isPowerNap() { return mIsPowerNap; }
     public void setIsPowerNap(boolean isPowerNap) { mIsPowerNap = isPowerNap; }
@@ -355,7 +359,7 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
         dest.writeInt(getIntervalStart());
         dest.writeInt(getIntervalEnd());
         dest.writeInt(getDaysOfWeek());
-        dest.writeInt(getEnabled() ? 1 : 0);
+        dest.writeInt(isEnabled() ? 1 : 0);
         dest.writeInt(isPowerNap() ? 1 : 0);
         dest.writeInt(isQuikAlarm() ? 1 : 0);
         
@@ -382,7 +386,7 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
                 getIntervalStart() == a.getIntervalStart() &&
                 getIntervalEnd() == a.getIntervalEnd() &&
                 getDaysOfWeek() == a.getDaysOfWeek() &&
-                getEnabled() == a.getEnabled() &&
+                isEnabled() == a.isEnabled() &&
                 isQuikAlarm() == a.isQuikAlarm() &&
                 isPowerNap() == a.isPowerNap();
     }

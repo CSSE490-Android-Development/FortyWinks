@@ -31,7 +31,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
     
     private void testBasicEquality(Alarm a, Alarm b) {
         assertEquals(a.getDaysOfWeek(), b.getDaysOfWeek());
-        assertEquals(a.getEnabled(), b.getEnabled());
+        assertEquals(a.isEnabled(), b.isEnabled());
         assertEquals(a.getHour(), b.getHour());
         assertEquals(a.getMinute(), b.getMinute());
         assertEquals(a.getNumFollowups(), b.getNumFollowups());
@@ -43,7 +43,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         Alarm a = new Alarm(-1);
         
         a.setDaysOfWeek(1);
-        a.setEnabled(false);
+        a.setIsEnabled(false);
         a.setHour(4);
         a.setMinute(6);
         a.setNumFollowups(7);
@@ -60,7 +60,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         Alarm a = new Alarm(-1);
         
         a.setDaysOfWeek(1);
-        a.setEnabled(false);
+        a.setIsEnabled(false);
         a.setHour(4);
         a.setMinute(6);
         a.setIsPowerNap(true);
@@ -77,7 +77,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         Alarm a = new Alarm(-1);
         
         a.setDaysOfWeek(1);
-        a.setEnabled(false);
+        a.setIsEnabled(false);
         a.setHour(4);
         a.setMinute(6);
         a.setIsPowerNap(true);
@@ -86,7 +86,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         Alarm b = new Alarm(-1);
         
         b.setDaysOfWeek(2);
-        b.setEnabled(false);
+        b.setIsEnabled(false);
         b.setHour(5);
         b.setMinute(7);
         b.setIsPowerNap(true);
@@ -109,7 +109,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         Alarm a = new Alarm();
         
         a.setDaysOfWeek(127);
-        a.setEnabled(false);
+        a.setIsEnabled(false);
         a.setHour(4);
         a.setMinute(6);
         a.setIsQuikAlarm(true);
@@ -117,7 +117,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         Alarm b = new Alarm();
         
         b.setDaysOfWeek(127);
-        b.setEnabled(false);
+        b.setIsEnabled(false);
         b.setHour(4);
         b.setMinute(7);
         b.setIsQuikAlarm(true);
@@ -125,7 +125,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         Alarm c = new Alarm();
         
         c.setDaysOfWeek(127);
-        c.setEnabled(false);
+        c.setIsEnabled(false);
         c.setHour(4);
         c.setMinute(5);
         c.setIsQuikAlarm(true);

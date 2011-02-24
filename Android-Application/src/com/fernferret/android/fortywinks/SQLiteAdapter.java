@@ -171,8 +171,8 @@ public class SQLiteAdapter implements DBAdapter {
         Log.d(TAG, "  INTERVAL START: " + a.getIntervalStart());
         mInsertAlarmQuery.bindLong(8, a.getIntervalEnd());
         Log.d(TAG, "  INTERVAL END: " + a.getIntervalEnd());
-        mInsertAlarmQuery.bindString(9, boolToIntString(a.getEnabled()));
-        Log.d(TAG, "  ENABLED: " + a.getEnabled());
+        mInsertAlarmQuery.bindString(9, boolToIntString(a.isEnabled()));
+        Log.d(TAG, "  ENABLED: " + a.isEnabled());
         mInsertAlarmQuery.executeInsert();
         Log.d(TAG, "Data writing complete");
     }
@@ -196,7 +196,7 @@ public class SQLiteAdapter implements DBAdapter {
         Log.d(TAG, "  INTERVAL START: " + c.getInt(6));
         result.setIntervalEnd(c.getInt(7));
         Log.d(TAG, "  INTERVAL END: " + c.getInt(7));
-        result.setEnabled(c.getInt(8) == 1);
+        result.setIsEnabled(c.getInt(8) == 1);
         Log.d(TAG, "  ENABLED: " + (c.getInt(8) == 1));
         
         result.setFollowups(getFollowupsForAlarm(result));
