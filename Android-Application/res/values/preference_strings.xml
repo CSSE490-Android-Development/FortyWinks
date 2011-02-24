@@ -5,4 +5,5 @@
 <string name="key_number_quick_alarms">key_number_quick_alarms</string>
 <string name="key_followup_alarms">key_followup_alarms</string>
 <string name="key_followup_interval">key_followup_interval</string>
+<string name="key_default_alarm_tone">key_default_alarm_tone</string>
 </resources>

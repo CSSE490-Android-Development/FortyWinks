@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
@@ -257,6 +258,7 @@ public class FortyWinks extends Activity {
 			Intent followUpAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 			followUpAlarmIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
 			followUpAlarmIntent.putExtra("ALARM_ID", entry.getKey());
+			followUpAlarmIntent.putExtra("ALARM_SOUND", mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
 			singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, entry.getKey(), followUpAlarmIntent, NO_FLAGS);
 			calendar.setTimeInMillis(entry.getValue());
 			mAlarmManager.set(AlarmManager.RTC_WAKEUP, entry.getValue(), singleAlarmPendingIntent);
@@ -289,6 +291,9 @@ public class FortyWinks extends Activity {
 		return days + "days, " + hours + "hours, " + minutes + "minutes";
 	}
 	
+	/**
+	 * Generate the list of PowerNaps for the user based on various settings
+	 */
 	private void generateAlarms() {
 		ArrayList<ProposedAlarm> listItems = new ArrayList<ProposedAlarm>();
 		long currentTime = System.currentTimeMillis();
@@ -302,14 +307,13 @@ public class FortyWinks extends Activity {
 		mQuickProposedAlarms = listItems;
 		
 	}
-	
+	/**
+	 * Recalculates the time a PowerNap will end
+	 */
 	private void refreshPowerNaps() {
-		// Log.w("40W", "40W - Refreshing Alarms");
 		Calendar calendar = Calendar.getInstance();
 		for (ProposedAlarm a : mQuickProposedAlarms) {
 			calendar.add(Calendar.MINUTE, mCycleTime);
-			// Log.w("40W", "Current time: " + DateFormat.format("h:mm aa", Calendar.getInstance()));
-			// Log.w("40W", "Alarm time:   " + DateFormat.format("h:mm aa", calendar));
 			a.setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 		}
 		mQuickAlarmAdapter.notifyDataSetChanged();
@@ -330,6 +334,13 @@ public class FortyWinks extends Activity {
 				a.setNumberOfIntervals(4);
 			}
 			Log.w("40W", "40W" + a.getPrettyTime());
+			
+			Alarm zombiePowerNap = mDatabaseAdapter.getPowerNap();
+			
+			if(zombiePowerNap != null) {
+				removeAlarm(zombiePowerNap);
+			}
+			
 			mDatabaseAdapter.saveAlarm(new Alarm(a));
 			setPowerNap();
 			mDrawer.animateClose();

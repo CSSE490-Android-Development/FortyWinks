@@ -37,4 +37,11 @@
 		android:maxLength="2"
 		android:selectAllOnFocus="true"
 		android:defaultValue="5"/>
+	<RingtonePreference
+		android:ringtoneType="all"
+		android:showDefault="true"
+		android:showSilent="false"
+		android:key="@string/key_default_alarm_tone"
+		android:title="Default Alarm Sound"
+		android:summary="Pick the sound that will be used for Quik Alarms and Power Naps"/>
 </PreferenceScreen>
