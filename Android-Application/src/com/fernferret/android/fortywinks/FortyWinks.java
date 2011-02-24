@@ -168,7 +168,10 @@ public class FortyWinks extends Activity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						if (mPowerNapRightClickChoices[which].equals("Delete")) {
-							removeAlarm(mUpcomingAlarms.get(alarmIndex));
+							Alarm a = mUpcomingAlarms.get(alarmIndex);
+							Log.w("40W", "Preparing to remove Alarm with ID" + a.getId() + "(" + a + ")");
+							Log.d("40W", "This alarm has " + a.getFollowups().size() + " followups");
+							removeAlarm(a);
 							
 						}
 					}
@@ -180,6 +183,7 @@ public class FortyWinks extends Activity {
 	
 	private ArrayList<PendingIntent> getPendingIntentsForAlarm(Alarm a) {
 		ArrayList<PendingIntent> allIntents = new ArrayList<PendingIntent>();
+		Log.d("40W", "Alarm has " + a.getFollowups().size() + " followups");
 		Intent rootAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 		if (a.isPowerNap()) {
 			Log.d("40W", "[INTENT] Found a PowerNap, adding the category");
@@ -344,14 +348,15 @@ public class FortyWinks extends Activity {
 			// The user has requested a new PowerNap. Any old PowerNaps are now zombies (Alarms that should be dead but aren't). Kill them.
 			Alarm zombiePowerNap = mDatabaseAdapter.getPowerNap();
 			
-			Log.d("40W", "Number of alarms remaining: " + mUpcomingAlarms.size());
+			Log.d("40W", "Number of all alarms remaining: " + mUpcomingAlarms.size());
 			mDatabaseAdapter.saveAlarm(new Alarm(a));
 			setPowerNap();
+			Log.w("40W", "Looking for Zombie PowerNap");
 			if (zombiePowerNap != null) {
 				Log.w("40W", "Removing Zombie PowerNap, ID: " + zombiePowerNap.getId());
 				removeAlarm(zombiePowerNap);
 			}
-			Log.d("40W", "Number of alarms remaining: " + mUpcomingAlarms.size());
+			Log.d("40W", "Number of all alarms remaining: " + mUpcomingAlarms.size());
 			mDrawer.animateClose();
 		}
 	};
