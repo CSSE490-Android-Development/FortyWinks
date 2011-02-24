@@ -2,6 +2,8 @@ package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
@@ -241,8 +243,8 @@ public class FortyWinks extends Activity {
 		rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
 		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_id), a.getId());
 		// If there are no followups, this is the LAST alarm!
-		rootAlarmIntent.putExtra("ALARM_LAST", (a.getNumFollowups() == 0));
-		rootAlarmIntent.putExtra("ALARM_FOLLOWUP_NUMBER", 0);
+		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_last), (a.getNumFollowups() == 0));
+		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_followup_number), 0);
 		Log.d("40W", "Loading item from settings: " + mSettings.getString(getString(R.string.key_default_alarm_tone), "FAILURE"));
 		
 		rootAlarmIntent.putExtra("ALARM_SOUND", mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
@@ -255,22 +257,28 @@ public class FortyWinks extends Activity {
 		mAlarmManager.set(AlarmManager.RTC_WAKEUP, futureTime, singleAlarmPendingIntent);
 		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar), Toast.LENGTH_SHORT).show();
 		int currentFollowup = 1;
-		for (Map.Entry<Integer, Long> entry : a.getFollowups().entrySet()) {
+		
+		Map<Integer, Long> alarmFollowUps = new HashMap<Integer, Long>(a.getFollowups());
+		
+		ArrayList<Integer> alarmFollowUpIds = new ArrayList<Integer>(a.getFollowups().keySet());
+		Collections.sort(alarmFollowUpIds);
+		for (Integer alarmFollowUpId : alarmFollowUpIds) {
 			Intent followUpAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 			followUpAlarmIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
 			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_id), a.getId());
-			followUpAlarmIntent.putExtra("ALARM_FOLLOWUP_NUMBER", entry.getKey());
-			followUpAlarmIntent.putExtra("ALARM_SOUND", mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
+			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_followup_number), alarmFollowUpId);
+			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_sound), mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
 			if (a.getNumFollowups() == currentFollowup) {
 				// This is the last followup, make it remove things from the original intent.
-				followUpAlarmIntent.putExtra("ALARM_LAST", true);
+				followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_last), true);
 				
 			} else {
+				followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_last), false);
 				currentFollowup++;
 			}
-			singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, entry.getKey(), followUpAlarmIntent, NO_FLAGS);
-			calendar.setTimeInMillis(entry.getValue());
-			mAlarmManager.set(AlarmManager.RTC_WAKEUP, entry.getValue(), singleAlarmPendingIntent);
+			singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, alarmFollowUpId, followUpAlarmIntent, NO_FLAGS);
+			calendar.setTimeInMillis(alarmFollowUps.get(alarmFollowUpId));
+			mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarmFollowUps.get(alarmFollowUpId), singleAlarmPendingIntent);
 			Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
 		}
 		
