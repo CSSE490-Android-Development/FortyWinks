@@ -36,7 +36,7 @@ public class AlarmLineItem extends RelativeLayout {
 	
 	public void setAll(Alarm a) {
 		mID = a.getId();
-		mEnabled.setEnabled(a.getEnabled());
+		mEnabled.setEnabled(a.isEnabled());
 		long currentTime = System.currentTimeMillis();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(currentTime);
