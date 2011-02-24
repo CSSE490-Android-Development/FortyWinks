@@ -44,7 +44,7 @@
 		android:layout_height="wrap_content"
 		android:layout_centerHorizontal="true"
 		android:layout_below="@id/main_primary_seperator"
-		android:text="Next Alarm at:"
+		android:text="Next Alarm:"
 		android:textSize="30dip"/>
 	<ListView
 		android:id="@+id/main_next_alarm_list"

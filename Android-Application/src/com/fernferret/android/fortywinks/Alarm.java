@@ -257,7 +257,7 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
         Random r = new Random();
         
         Calendar nextAlarmTime = new GregorianCalendar();
-        nextAlarmTime.setTimeInMillis(getNextAlarmTime());
+        nextAlarmTime.setTimeInMillis(getNextAlarmTimeUnrounded());
         
         int offsetRange = Math.abs(getIntervalEnd() - getIntervalStart());
         
@@ -285,20 +285,26 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
         return getDaysOfWeek() == 0;
     }
     
+    public long getNextAlarmTime() {
+        GregorianCalendar c = new GregorianCalendar();
+        c.setTimeInMillis(getNextAlarmTimeUnrounded());
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        return c.getTimeInMillis();
+    }
+    
     /**
      * Returns the next alarm time for this alarm in Milliseconds. This method is what reminds me that Jimmy is truly a genius. Seriously.
      * @return The next  activation time for this alarm in Milliseconds
      */
-    public long getNextAlarmTime() {
-        GregorianCalendar now = new GregorianCalendar(); // now
-        now.set(Calendar.SECOND, 0); // ...except truncate to whole minutes
-        now.set(Calendar.MILLISECOND, 0);
+    public long getNextAlarmTimeUnrounded() {
+        GregorianCalendar now = new GregorianCalendar();
         
         GregorianCalendar t = new GregorianCalendar(); // time to check against
         t.set(Calendar.HOUR_OF_DAY, mHour);
         t.set(Calendar.MINUTE, mMinute);
-        t.set(Calendar.SECOND, 0); // truncate here too
-        t.set(Calendar.MILLISECOND, 0);
+//        t.set(Calendar.SECOND, 0); // truncate here too
+//        t.set(Calendar.MILLISECOND, 0);
         
         /* First we look at one-time instances */
         if (isOneTimeAlarm()) {

@@ -258,7 +258,7 @@ public class FortyWinks extends Activity {
 		// Iterate through all followups with the following
 		// Set the base alarm in the manager
 		mAlarmManager.set(AlarmManager.RTC_WAKEUP, futureTime, singleAlarmPendingIntent);
-		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar), Toast.LENGTH_SHORT).show();
+		Toast.makeText(FortyWinks.this, "Alarm set for " + getFriendlyTimeTillAlarm(calendar) + " from now.", Toast.LENGTH_SHORT).show();
 		int currentFollowup = 1;
 		
 		Map<Integer, Long> alarmFollowUps = new HashMap<Integer, Long>(a.getFollowups());
@@ -325,7 +325,9 @@ public class FortyWinks extends Activity {
 			minutes += 60;
 			hours--;
 		}
-		return days + "days, " + hours + "hours, " + minutes + "minutes";
+		return (days == 0 ? "" : days + (days == 1 ? "day, " : " days, ")) + 
+		        (hours == 0 ? "" : hours + (hours == 1 ? "hour, " : " hours, ")) + 
+		        minutes + (minutes == 1 ? " minute" : " minutes");
 	}
 	
 	/**
