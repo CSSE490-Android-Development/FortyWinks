@@ -169,21 +169,10 @@ public class FortyWinks extends Activity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						if (mPowerNapRightClickChoices[which].equals("Delete")) {
+							removeAlarm(mUpcomingAlarms.get(alarmIndex));
 							
-							Alarm toRemove = mUpcomingAlarms.get(alarmIndex);
-							Log.d("40W", "40W Removing Alarm that should fire at: " + toRemove);
-							// Remove the alarm and followups from the AlarmService
-							for(PendingIntent intent : getPendingIntentsForAlarm(toRemove)) {
-								mAlarmManager.cancel(intent);
-								
-							}
-							// 
-							
-							// Remove the alarm and followups from the db
-							mDatabaseAdapter.deleteAlarm(toRemove.getId());
-							
-							// Remove the alarm from the ListView
-							mUpcomingAlarms.remove(alarmIndex);
+							// We want to get all new items
+							mUpcomingAlarms = (ArrayList<Alarm>) mDatabaseAdapter.getFullAlarmList();
 							
 							// Let the ListView know we've changed it
 							mNextAlarmsAdapter.notifyDataSetChanged();
@@ -217,7 +206,20 @@ public class FortyWinks extends Activity {
 		return allIntents;
 		
 	}
-	
+	private void removeAlarm(Alarm a) {
+
+		
+		Log.d("40W", "40W Removing Alarm that should fire at: " + a);
+		// Remove the alarm and followups from the AlarmService
+		for(PendingIntent intent : getPendingIntentsForAlarm(a)) {
+			mAlarmManager.cancel(intent);
+			
+		}
+		// 
+		
+		// Remove the alarm and followups from the db
+		mDatabaseAdapter.deleteAlarm(a.getId());
+	}
 	private void removePowerNapsFromNextAlarmList() {
 		List<Alarm> powerNap = new ArrayList<Alarm>();
 		for (Alarm a : mUpcomingAlarms) {
