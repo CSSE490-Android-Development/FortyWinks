@@ -276,18 +276,18 @@ public class SQLiteAdapter implements DBAdapter {
     
     @Override
     public void deleteAlarm(Alarm a) {
+        Log.d(TAG, "Deleting alarm by object");
         deleteAlarm(a.getId());
     }
 
     @Override
     public void deleteAlarm(int id) {
         Log.d(TAG, "Deleting alarm " + id);
-        String simpleEq = "? = ?";
         String idStr = Integer.toString(id);
-        mDb.delete(FOLLOWUPS_TABLE, simpleEq, new String[] {FOLLOWUPS_ALARM_COL, idStr});
-        mDb.delete(POWERNAP_TABLE, simpleEq, new String[] {POWERNAP_ID_COL, idStr});
-        mDb.delete(QUIK_ALARMS_TABLE, simpleEq, new String[] {QUIK_ALARMS_ID_COL, idStr});
-        mDb.delete(ALARMS_TABLE, simpleEq, new String[] {ALARMS_ID_COL, idStr});
+        mDb.delete(FOLLOWUPS_TABLE, FOLLOWUPS_ALARM_COL + " = ?", new String[] {idStr});
+        mDb.delete(POWERNAP_TABLE, POWERNAP_ID_COL + " = ?", new String[] {idStr});
+        mDb.delete(QUIK_ALARMS_TABLE, QUIK_ALARMS_ID_COL + " = ?", new String[] {idStr});
+        mDb.delete(ALARMS_TABLE, ALARMS_ID_COL + " = ?", new String[] {idStr});
         Log.d(TAG, "Alarm deleted");
     }
 
