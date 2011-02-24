@@ -259,7 +259,7 @@ public class FortyWinks extends Activity {
 			Intent followUpAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 			followUpAlarmIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
 			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_id), a.getId());
-			followUpAlarmIntent.putExtra("ALARM_REPEAT_ID", entry.getKey());
+			followUpAlarmIntent.putExtra("ALARM_FOLLOWUP_NUMBER", entry.getKey());
 			followUpAlarmIntent.putExtra("ALARM_SOUND", mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
 			if(a.getNumFollowups() == currentFollowup) {
 				// This is the last followup, make it remove things from the original intent.

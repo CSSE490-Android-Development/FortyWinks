@@ -5,8 +5,10 @@ import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -32,6 +34,7 @@ public class WakeUpAlert extends Activity {
 			SQLiteAdapter dbAdapter = new SQLiteAdapter(this);
 			dbAdapter.deleteAlarm(getIntent().getIntExtra("ALARM_ID", 0));
 		}
+		Uri soundLocation = Uri.parse(getIntent().getStringExtra("ALARM_SOUND"));
 		
 		Toast.makeText(this, "You should get up!", Toast.LENGTH_SHORT).show();
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -42,7 +45,9 @@ public class WakeUpAlert extends Activity {
 		mClose = (Button) findViewById(R.id.wake_up_alert_close);
 		mClose.setOnClickListener(mCloseClickListener);
 		mKeyguardLock.disableKeyguard();
-		mp = MediaPlayer.create(this, R.raw.woah);
+		mp = MediaPlayer.create(this, soundLocation);
+		//mp = MediaPlayer.create(this, R.raw.woah);
+		mp.setVolume(1.0f, 1.0f);
 		mp.setLooping(true);
 		mp.start();
 	}
@@ -52,6 +57,7 @@ public class WakeUpAlert extends Activity {
 		public void onClick(View v) {
 			if(mp.isPlaying()) {
 				mp.stop();
+				mp.release();
 			}
 			mKeyguardLock.reenableKeyguard();
 			mWakeLock.release();
