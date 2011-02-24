@@ -287,13 +287,13 @@ public class SQLiteAdapter implements DBAdapter {
 
     @Override
     public void deleteAlarm(int id) {
-        Log.d(TAG, "Deleting alarm " + id);
+        Log.w(TAG, "Deleting alarm " + id);
         String idStr = Integer.toString(id);
         mDb.delete(FOLLOWUPS_TABLE, FOLLOWUPS_ALARM_COL + " = ?", new String[] {idStr});
         mDb.delete(POWERNAP_TABLE, POWERNAP_ID_COL + " = ?", new String[] {idStr});
         mDb.delete(QUIK_ALARMS_TABLE, QUIK_ALARMS_ID_COL + " = ?", new String[] {idStr});
         mDb.delete(ALARMS_TABLE, ALARMS_ID_COL + " = ?", new String[] {idStr});
-        Log.d(TAG, "Alarm deleted");
+        Log.i(TAG, "Alarm " + id + " deleted");
     }
 
     @Override
@@ -438,7 +438,7 @@ public class SQLiteAdapter implements DBAdapter {
         @Override
         public void onCreate(SQLiteDatabase db) {
             
-            Log.d(TAG, "Creating tables");
+            Log.i(TAG, "Creating tables");
             
             /* Create alarms table */            
             db.execSQL("CREATE TABLE " + ALARMS_TABLE + " (" + ALARMS_ID_COL + " INTEGER PRIMARY KEY, " + ALARMS_HOUR_COL + " INTEGER, " + 
@@ -465,27 +465,27 @@ public class SQLiteAdapter implements DBAdapter {
             
             Log.d(TAG, "Created quik alarms table");
             
-            Log.d(TAG, "Finished creating tables");
+            Log.i(TAG, "Finished creating tables");
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             
-            Log.d(TAG, "Upgrading database from Version " + oldVersion + " to Version " + newVersion);
+            Log.i(TAG, "Upgrading database from Version " + oldVersion + " to Version " + newVersion);
             
-            Log.d(TAG, "Deleting all tables");
+            Log.w(TAG, "Deleting all tables");
             
             /* Delete all tables */
             for (String tableName : ALL_TABLES) {
                 db.execSQL("DROP TABLE IF EXISTS " + tableName);
             }
             
-            Log.d(TAG, "Finished deleting tables");
+            Log.i(TAG, "Finished deleting tables");
             
             /* Recreate all tables */
             onCreate(db);
             
-            Log.d(TAG, "Upgrade complete");
+            Log.i(TAG, "Upgrade complete");
         }
     }
 }
