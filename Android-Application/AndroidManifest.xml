@@ -29,14 +29,23 @@
 		<activity
 			android:name=".EditAlarm"
 			android:label="@string/activity_title_edit_alarm"
-			android:configChanges="orientation"/>
+			android:configChanges="orientation"
+			android:screenOrientation="portrait"/>
+		<activity
+			android:name=".AddQuikAlarm"
+			android:label="Add new QuikAlarm"
+			android:configChanges="orientation"
+			android:screenOrientation="portrait">
+		</activity>
 		<activity
 			android:name=".ListAlarms"
 			android:label="@string/activity_title_view_alarms"
-			android:configChanges="orientation"/>
+			android:configChanges="orientation"
+			android:screenOrientation="portrait"/>
 		<activity
 			android:name=".FortyPrefs"
-			android:label="@string/preferences"/>
+			android:label="@string/preferences"
+			android:screenOrientation="portrait"/>
 		<receiver
 			android:name=".SingleAlarm"
 			android:process=":remote"/>

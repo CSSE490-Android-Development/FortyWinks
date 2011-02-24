@@ -2,8 +2,6 @@ package com.fernferret.android.fortywinks;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
@@ -184,20 +182,23 @@ public class FortyWinks extends Activity {
 		ArrayList<PendingIntent> allIntents = new ArrayList<PendingIntent>();
 		Intent rootAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 		if (a.isPowerNap()) {
+			Log.d("40W", "[INTENT] Found a PowerNap, adding the category");
 			rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
 		} else if (a.isQuikAlarm()) {
+			Log.d("40W", "[INTENT] Found a QuikAlarm, adding the category");
 			rootAlarmIntent.addCategory(FORTY_WINKS_QUIK_ALARM_CATEGORY);
 		} else {
+			Log.d("40W", "[INTENT] Found a Standard, adding the category");
 			rootAlarmIntent.addCategory(FORTY_WINKS_STANDARD_ALARM_CATEGORY);
 		}
 		allIntents.add(PendingIntent.getBroadcast(FortyWinks.this, a.getId(), rootAlarmIntent, NO_FLAGS));
-		Log.d("40W.Intent", "Adding Intent to list with " + rootAlarmIntent.getCategories() + ", and ID: " + a.getId());
+		Log.d("40W", "Adding Intent to list with " + rootAlarmIntent.getCategories() + ", and ID: " + a.getId());
 		for (int entry : a.getFollowups().keySet()) {
-			
+			Log.d("40W", "[INTENT] Found a FollowUp Alarm(" + entry + "), adding the alarm to list");
 			Intent followUpIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 			followUpIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
 			allIntents.add(PendingIntent.getBroadcast(FortyWinks.this, entry, followUpIntent, NO_FLAGS));
-			Log.d("40W.Intent", "Adding Intent to list with " + followUpIntent.getCategories() + ", and ID: " + entry);
+			Log.d("40W", "Adding Intent to list with " + followUpIntent.getCategories() + ", and ID: " + entry);
 		}
 		return allIntents;
 		
