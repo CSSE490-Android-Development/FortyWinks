@@ -47,7 +47,7 @@ public class WakeUpAlert extends Activity {
 			soundLocation = Settings.System.DEFAULT_ALARM_ALERT_URI;
 		}
 		
-		Toast.makeText(this, "You should get up!", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "You should get up!", Toast.LENGTH_SHORT).show();
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
 		mKeyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
