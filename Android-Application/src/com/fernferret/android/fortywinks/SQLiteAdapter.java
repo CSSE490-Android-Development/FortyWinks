@@ -399,6 +399,12 @@ public class SQLiteAdapter implements DBAdapter {
         Log.d(TAG, "Got full alarm list");
         return numItems == -1 ? result : result.subList(0, numItems);
     }
+    
+    @Override
+    public void updateFullAlarmList(List<Alarm> alarms) {
+        alarms.clear();
+        alarms.addAll(getFullAlarmList());
+    }
 
     @Override
     public void resetDatabase() {
