@@ -37,6 +37,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         assertEquals(a.getNumFollowups(), b.getNumFollowups());
         assertEquals(a.getIntervalStart(), b.getIntervalStart());
         assertEquals(a.getIntervalEnd(), b.getIntervalEnd());
+        assertEquals(a.isActive(), b.isActive());
     }
     
     public void testSaveSimpleAlarm() {
@@ -49,6 +50,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         a.setNumFollowups(7);
         a.setIntervalStart(3);
         a.setIntervalEnd(3);
+        a.setIsActive(true);
         
         mDba.saveAlarm(a);
         assertFalse(a.getId() == -1);
@@ -236,5 +238,14 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         
         assertTrue(resultA.isQuikAlarm());
         assertFalse(resultB.isQuikAlarm());
+    }
+    
+    public void testSetAlarmActive() {
+        Alarm a = new Alarm();
+        mDba.saveAlarm(a);
+        mDba.setAlarmActive(a);
+        
+        Alarm result = mDba.getAlarm(a.getId());
+        assertTrue(result.isActive());
     }
 }
