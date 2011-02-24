@@ -187,25 +187,25 @@ public class FortyWinks extends Activity {
 		ArrayList<PendingIntent> allIntents = new ArrayList<PendingIntent>();
 		Log.d("40W", "Alarm has " + a.getFollowups().size() + " followups");
 		Intent rootAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
-//		if (a.isPowerNap()) {
-//			Log.d("40W", "[INTENT] Found a PowerNap, adding the category");
-//			rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
-//		} else if (a.isQuikAlarm()) {
-//			Log.d("40W", "[INTENT] Found a QuikAlarm, adding the category");
-//			rootAlarmIntent.addCategory(FORTY_WINKS_QUIK_ALARM_CATEGORY);
-//		} else {
-//			Log.d("40W", "[INTENT] Found a Standard, adding the category");
-//			rootAlarmIntent.addCategory(FORTY_WINKS_STANDARD_ALARM_CATEGORY);
-//		}
-		allIntents.add(PendingIntent.getBroadcast(FortyWinks.this, (int) a.getNextAlarmTime(), rootAlarmIntent, NO_FLAGS));
-		Log.d("40W", "Adding Intent to list with " + rootAlarmIntent.getCategories() + ", and ID: " + a.getId());
+		// if (a.isPowerNap()) {
+		// Log.d("40W", "[INTENT] Found a PowerNap, adding the category");
+		// rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
+		// } else if (a.isQuikAlarm()) {
+		// Log.d("40W", "[INTENT] Found a QuikAlarm, adding the category");
+		// rootAlarmIntent.addCategory(FORTY_WINKS_QUIK_ALARM_CATEGORY);
+		// } else {
+		// Log.d("40W", "[INTENT] Found a Standard, adding the category");
+		// rootAlarmIntent.addCategory(FORTY_WINKS_STANDARD_ALARM_CATEGORY);
+		// }
+		allIntents.add(PendingIntent.getBroadcast(FortyWinks.this, (int) a.getIdentifier(), rootAlarmIntent, NO_FLAGS));
+		Log.d("40W", "Adding Intent to list with " + rootAlarmIntent.getCategories() + ", and ID: " + (int) a.getIdentifier());
 		for (Map.Entry<Integer, Long> entry : a.getFollowups().entrySet()) {
 			Log.d("40W", "[INTENT] Found a FollowUp Alarm(" + entry + "), adding the alarm to list");
 			Intent followUpIntent = new Intent(FortyWinks.this, SingleAlarm.class);
-			//followUpIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
+			// followUpIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
 			long timeStamp = entry.getValue();
 			allIntents.add(PendingIntent.getBroadcast(FortyWinks.this, (int) timeStamp, followUpIntent, NO_FLAGS));
-			Log.d("40W", "Adding Intent to list with " + followUpIntent.getCategories() + ", and ID: " + entry);
+			Log.d("40W", "Adding Intent to list with " + followUpIntent.getCategories() + ", and ID: " + (int) timeStamp);
 		}
 		return allIntents;
 		
@@ -217,7 +217,7 @@ public class FortyWinks extends Activity {
 		// Remove the alarm and followups from the AlarmService
 		for (PendingIntent intent : getPendingIntentsForAlarm(a)) {
 			mAlarmManager.cancel(intent);
-			Log.w("40W", "Canceling a PendingIntent for " + a.getId());
+			Log.w("40W", "Canceling a PendingIntent for " + a.getId() + " with Unique ID: " + (int) a.getIdentifier());
 		}
 		mDatabaseAdapter.deleteAlarm(a);
 		
@@ -238,13 +238,12 @@ public class FortyWinks extends Activity {
 		
 		Log.w("40W", "Found PowerNap: " + a + ", ID: " + a.getId());
 		Calendar calendar = Calendar.getInstance();
-		long uniqueTimeAddon =  getCurrentSecsAndMillis();
 		long futureTime = a.getNextAlarmTime();
 		
 		Intent rootAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 		// rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
 		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_id), a.getId());
-		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_mgr_id), (int) (futureTime + uniqueTimeAddon));
+		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_mgr_id), (int) a.getIdentifier());
 		// If there are no followups, this is the LAST alarm!
 		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_last), (a.getNumFollowups() == 0));
 		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_followup_number), 0);
@@ -252,13 +251,14 @@ public class FortyWinks extends Activity {
 		
 		rootAlarmIntent.putExtra("ALARM_SOUND", mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
 		Log.d("40W", "Proposed bundle: " + rootAlarmIntent.getExtras());
-		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, (int) (futureTime + uniqueTimeAddon), rootAlarmIntent, NO_FLAGS);
+		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, (int) a.getIdentifier(), rootAlarmIntent, NO_FLAGS);
 		calendar.setTimeInMillis(futureTime);
 		
 		// Iterate through all followups with the following
 		// Set the base alarm in the manager
 		mAlarmManager.set(AlarmManager.RTC_WAKEUP, futureTime, singleAlarmPendingIntent);
 		Toast.makeText(FortyWinks.this, "Alarm set for " + getFriendlyTimeTillAlarm(calendar) + " from now.", Toast.LENGTH_SHORT).show();
+		Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar) + " - With ID: " + (int) a.getIdentifier());
 		int currentFollowup = 1;
 		
 		Map<Integer, Long> alarmFollowUps = new HashMap<Integer, Long>(a.getFollowups());
@@ -266,15 +266,21 @@ public class FortyWinks extends Activity {
 		ArrayList<Integer> alarmFollowUpIds = new ArrayList<Integer>(a.getFollowups().keySet());
 		Collections.sort(alarmFollowUpIds);
 		for (Integer alarmFollowUpId : alarmFollowUpIds) {
-			futureTime = alarmFollowUps.get(alarmFollowUpId);
-			
-			//futureTime += getCurrentSecsAndMillis();
+			// This is the unrounded time
+			long unRoundedTime = alarmFollowUps.get(alarmFollowUpId);
+			Calendar c = Calendar.getInstance();
+			c.setTimeInMillis(unRoundedTime);
+			// Round the time
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+			long roundedFollowUpTime = c.getTimeInMillis();
+			// futureTime += getCurrentSecsAndMillis();
 			
 			Intent followUpAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 			// followUpAlarmIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
 			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_id), a.getId());
 			
-			rootAlarmIntent.putExtra(getString(R.string.intent_alarm_mgr_id), (int) (futureTime + uniqueTimeAddon ));
+			rootAlarmIntent.putExtra(getString(R.string.intent_alarm_mgr_id), (int) unRoundedTime);
 			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_followup_number), alarmFollowUpId);
 			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_sound), mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
 			if (a.getNumFollowups() == currentFollowup) {
@@ -285,10 +291,10 @@ public class FortyWinks extends Activity {
 				followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_last), false);
 				currentFollowup++;
 			}
-			singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, (int) (futureTime + uniqueTimeAddon), followUpAlarmIntent, NO_FLAGS);
-			calendar.setTimeInMillis(futureTime);
-			mAlarmManager.set(AlarmManager.RTC_WAKEUP, futureTime, singleAlarmPendingIntent);
-			Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar) + " - With ID: " + (int) (futureTime + uniqueTimeAddon));
+			singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, (int) unRoundedTime, followUpAlarmIntent, NO_FLAGS);
+			calendar.setTimeInMillis(roundedFollowUpTime);
+			mAlarmManager.set(AlarmManager.RTC_WAKEUP, roundedFollowUpTime, singleAlarmPendingIntent);
+			Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar) + " - With ID: " + (int) unRoundedTime);
 		}
 		
 		mDatabaseAdapter.updateFullAlarmList(mUpcomingAlarms);
@@ -303,7 +309,7 @@ public class FortyWinks extends Activity {
 		Calendar c = Calendar.getInstance();
 		return c.get(Calendar.MILLISECOND) + c.get(Calendar.SECOND) * 1000;
 	}
-
+	
 	private String getFriendlyCalendarString(Calendar c) {
 		c.getTime();
 		Time t = new Time();
@@ -325,9 +331,9 @@ public class FortyWinks extends Activity {
 			minutes += 60;
 			hours--;
 		}
-		return (days == 0 ? "" : days + (days == 1 ? "day, " : " days, ")) + 
-		        (hours == 0 ? "" : hours + (hours == 1 ? "hour, " : " hours, ")) + 
-		        minutes + (minutes == 1 ? " minute" : " minutes");
+		return (days == 0 ? "" : days + (days == 1 ? "day, " : " days, ")) +
+				(hours == 0 ? "" : hours + (hours == 1 ? "hour, " : " hours, ")) +
+				minutes + (minutes == 1 ? " minute" : " minutes");
 	}
 	
 	/**
