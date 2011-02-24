@@ -204,23 +204,21 @@ public class FortyWinks extends Activity {
 	
 	private void removeAlarm(Alarm a) {
 		
-		Log.d("40W", "40W Removing Alarm that should fire at: " + a);
+		Log.d("40W", "40W Removing Alarm that should fire : " + a);
 		// Remove the alarm and followups from the AlarmService
 		for (PendingIntent intent : getPendingIntentsForAlarm(a)) {
 			mAlarmManager.cancel(intent);
-			
 		}
-		//
-		Log.d("40W", "UpcomingAlarms: " + mUpcomingAlarms);
-		// We want to get all new items
-		mUpcomingAlarms.remove(a);
-		mNextAlarmsAdapter.notifyDataSetChanged();
+		mDatabaseAdapter.deleteAlarm(a);
 		
 		Log.d("40W", "UpcomingAlarms: " + mUpcomingAlarms);
+		// We want to get all new items
+		mDatabaseAdapter.updateFullAlarmList(mUpcomingAlarms);
+		Log.d("40W", "UpcomingAlarms: " + mUpcomingAlarms);
+		
 		// Let the ListView know we've changed it
 		mNextAlarmsAdapter.notifyDataSetChanged();
-		// Remove the alarm and followups from the db
-		mDatabaseAdapter.deleteAlarm(a);
+		
 	}
 	
 	private void removePowerNapsFromNextAlarmList() {
