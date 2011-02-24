@@ -418,8 +418,8 @@ public class SQLiteAdapter implements DBAdapter {
         if (a == null) {
             Log.e(TAG, "Looked for a non-existant alarm to set active: " + id);
         } else {
-            a.setIsActive(true);
-            saveAlarm(a); 
+            SQLiteStatement s = mDb.compileStatement("UPDATE " + ALARMS_TABLE + " SET " + ALARMS_ACTIVE_COL + " = 1 WHERE " + ALARMS_ID_COL + " = " + id);
+            s.executeInsert();
         }
     }
 
