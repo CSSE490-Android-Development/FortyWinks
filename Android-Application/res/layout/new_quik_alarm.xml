@@ -15,6 +15,7 @@
 		android:layout_height="wrap_content">
 		<RadioButton
 			android:id="@+id/new_quik_alarm_radio_time_until"
+			android:checked="true"
 			android:text="Time Until Alarm"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"/>
@@ -24,18 +25,19 @@
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"/>
 	</RadioGroup>
-	<LinearLayout
-		android:id="@+id/new_quik_alarm_time_until"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content">
-		<TextView
+	<TextView
+		android:id="@+id/new_quik_alarm_help_text"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Enter the time in hours and minutes for the alarm to go off"/>
-	</LinearLayout>
-	<LinearLayout
-		android:id="@+id/new_quik_alarm_time_for"
+	<TimePicker
+		android:id="@+id/new_quik_alarm_time_picker"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+		<LinearLayout
+		android:orientation="horizontal"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content">
-	</LinearLayout>
+		
+		</LinearLayout>
 </LinearLayout>

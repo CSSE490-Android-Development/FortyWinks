@@ -31,11 +31,12 @@ public class WakeUpAlert extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		SQLiteAdapter dbAdapter = new SQLiteAdapter(this);
 		setContentView(R.layout.wake_up_alert);
-		
+		dbAdapter.setAlarmActive(getIntent().getIntExtra("ALARM_ID", 0));
 		// If this is the last alarm in this package of alarm...
 		if(getIntent().getBooleanExtra("ALARM_LAST", false)) {
-			SQLiteAdapter dbAdapter = new SQLiteAdapter(this);
+			
 			dbAdapter.deleteAlarm(getIntent().getIntExtra("ALARM_ID", 0));
 		}
 		Uri soundLocation = null;

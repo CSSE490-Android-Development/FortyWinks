@@ -340,7 +340,7 @@ public class FortyWinks extends Activity {
 				a.setNumberOfIntervals(4);
 			}
 			Log.w("40W", "The user chose this time for an alarm: " + a.getPrettyTime());
-			// The user has requested a new PowerNap. Any old PowerNaps are now zombies. Kill them.
+			// The user has requested a new PowerNap. Any old PowerNaps are now zombies (Alarms that should be dead but aren't). Kill them.
 			Alarm zombiePowerNap = mDatabaseAdapter.getPowerNap();
 			
 			Log.d("40W", "Number of alarms remaining: " + mUpcomingAlarms.size());
