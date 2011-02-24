@@ -419,6 +419,8 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
             for (int id : followups.keySet()) {
                 Calendar next = new GregorianCalendar();
                 next.setTimeInMillis(followups.get(id));
+                next.set(Calendar.SECOND, 0);
+                next.set(Calendar.MILLISECOND, 0);
                 if (next.after(now)) {
                     followupsList.add(next);
                 }
@@ -448,6 +450,8 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
             for (int id : followups.keySet()) {
                 Calendar next = new GregorianCalendar();
                 next.setTimeInMillis(followups.get(id));
+                next.set(Calendar.SECOND, 0);
+                next.set(Calendar.MILLISECOND, 0);
                 if (next.after(now)) {
                     followupsList.add(next);
                 }
