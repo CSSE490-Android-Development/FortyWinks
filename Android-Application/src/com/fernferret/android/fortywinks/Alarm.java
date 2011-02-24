@@ -36,6 +36,7 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
     private boolean mIsPowerNap;
     private boolean mIsQuikAlarm;
     private HashMap<Integer, Long> mFollowups;
+    private long mIdentifier;
     
     /**
      * The Day Enum allows very easy access from any class to the concept of a named day
@@ -184,6 +185,9 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
     public boolean isQuikAlarm() { return mIsQuikAlarm; }
     public void setIsQuikAlarm(boolean isQuikAlarm) { mIsQuikAlarm = isQuikAlarm; }
     
+    public long getIdentifier() { return mIdentifier; }
+    public void setIdentifier(long identifier) { mIdentifier = identifier; }
+    
     /**
      * Get a clone of the current followups map
      * @return
@@ -258,6 +262,7 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
         
         Calendar nextAlarmTime = new GregorianCalendar();
         nextAlarmTime.setTimeInMillis(getNextAlarmTimeUnrounded());
+        setIdentifier(nextAlarmTime.getTimeInMillis());
         
         int offsetRange = Math.abs(getIntervalEnd() - getIntervalStart());
         
@@ -268,6 +273,7 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
         }
         
         setFollowups(followups);
+
     }
     
     /**
