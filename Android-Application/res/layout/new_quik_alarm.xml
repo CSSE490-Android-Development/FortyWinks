@@ -53,4 +53,24 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Enter the time in hours and minutes for the alarm to go off"/>
+	<TableLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:stretchColumns="*"
+		android:layout_alignParentBottom="true"
+		android:padding="10dip">
+		<TableRow>
+			<Button
+				android:id="@+id/new_quik_alarm_add_alarm_button"
+				android:layout_width="100dip"
+				android:layout_height="wrap_content"
+				android:text="Add Alarm"/>
+				
+				<Button
+				android:id="@+id/new_quik_alarm_cancel_button"
+				android:layout_width="100dip"
+				android:layout_height="wrap_content"
+				android:text="Cancel"/>
+		</TableRow>
+	</TableLayout>
 </RelativeLayout>

@@ -6,8 +6,8 @@
     <string name="intent_alarm_id">ALARM_ID</string>
     <string name="intent_alarm_sound">ALARM_SOUND</string>
     <string name="intent_alarm_last">ALARM_LAST</string>
-    <string name="help_time_for">Enter the time until the alarm should go off (Hours in the left box, Minutes in the right). This is effectively a timer.</string>
-    <string name="help_time_until">Enter the time you would like the Alarm to go off. This is basically a standard alarm, but quicker!</string>
+    <string name="help_time_until">Enter the time until the alarm should go off (Hours in the left box, Minutes in the right). This is effectively a timer.</string>
+    <string name="help_time_for">Enter the time you would like the Alarm to go off. This is basically a standard alarm, but quicker!</string>
     <string name="intent_alarm_followup_number">ALARM_FOLLOWUP_NUMBER</string>
     <string name="intent_alarm_mgr_id">AlarmManagerAlarmID</string>
 </resources>

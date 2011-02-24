@@ -93,6 +93,7 @@ public class FortyWinks extends Activity {
 	AlarmManager mAlarmManager;
 	
 	private static final int NO_FLAGS = 0;
+	private static final int ADD_QUIK_REQUEST_CODE = 13;
 	
 	private final CharSequence[] mPowerNapRightClickChoices = { "Delete" };
 	
@@ -450,8 +451,17 @@ public class FortyWinks extends Activity {
 				Intent options = new Intent(this, FortyPrefs.class);
 				startActivity(options);
 				break;
+			case R.id.menu_add_quik_alarm:
+				Intent quikAlarm = new Intent(this, AddQuikAlarm.class);
+				startActivityForResult(quikAlarm, ADD_QUIK_REQUEST_CODE);
 		}
 		return true;
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
 	private Runnable mUpdateSingleTimerTask = new Runnable() {
