@@ -399,7 +399,7 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
         return DateFormat.format("h:mm aa", c).toString();
     }
     
-    public int getRemainingAlarms() {
+    public int getRemainingActiveAlarms() {
         if (isActive()) {
             
             Calendar now = new GregorianCalendar();
