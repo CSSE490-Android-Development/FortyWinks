@@ -359,10 +359,6 @@ public class SQLiteAdapter implements DBAdapter {
         Alarm powerNap = getPowerNap();
         Cursor c;
         if (powerNap == null) {
-            Log.d(TAG, "SELECT " + ALARMS_TABLE + "." + ALARMS_ID_COL + ", " +  ALARMS_HOUR_COL +  ", " +  ALARMS_MINUTE_COL + ", " + 
-                                ALARMS_THRESHOLD_COL + ", " +  ALARMS_DAYS_COL + ", " +  ALARMS_FOLLOWUPS_COL +  ", " +  ALARMS_INTERVAL_START_COL + 
-                                ", " +  ALARMS_INTERVAL_END_COL +  ", " +  ALARMS_ENABLED_COL + ", " + ALARMS_ACTIVE_COL + " FROM " +  QUIK_ALARMS_TABLE + ", " + ALARMS_TABLE + 
-                                " WHERE " + ALARMS_TABLE + "." + ALARMS_ID_COL + " = " + QUIK_ALARMS_TABLE + "." + QUIK_ALARMS_ID_COL);
             c = mDb.rawQuery("SELECT " + ALARMS_TABLE + "." + ALARMS_ID_COL + ", " +  ALARMS_HOUR_COL +  ", " +  ALARMS_MINUTE_COL + ", " + 
                                 ALARMS_THRESHOLD_COL + ", " +  ALARMS_DAYS_COL + ", " +  ALARMS_FOLLOWUPS_COL +  ", " +  ALARMS_INTERVAL_START_COL + 
                                 ", " +  ALARMS_INTERVAL_END_COL +  ", " +  ALARMS_ENABLED_COL + ", " + ALARMS_ACTIVE_COL + " FROM " +  QUIK_ALARMS_TABLE + ", " + ALARMS_TABLE + 
@@ -419,8 +415,12 @@ public class SQLiteAdapter implements DBAdapter {
     @Override
     public void setAlarmActive(int id) {
         Alarm a = getAlarm(id);
-        a.setIsActive(true);
-        saveAlarm(a);
+        if (a == null) {
+            Log.e(TAG, "Looked for a non-existant alarm to set active: " + id);
+        } else {
+            a.setIsActive(true);
+            saveAlarm(a); 
+        }
     }
 
     @Override
