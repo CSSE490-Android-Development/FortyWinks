@@ -171,11 +171,6 @@ public class FortyWinks extends Activity {
 						if (mPowerNapRightClickChoices[which].equals("Delete")) {
 							removeAlarm(mUpcomingAlarms.get(alarmIndex));
 							
-							// We want to get all new items
-							mUpcomingAlarms = (ArrayList<Alarm>) mDatabaseAdapter.getFullAlarmList();
-							
-							// Let the ListView know we've changed it
-							mNextAlarmsAdapter.notifyDataSetChanged();
 						}
 					}
 				}).show();
@@ -187,8 +182,8 @@ public class FortyWinks extends Activity {
 	private ArrayList<PendingIntent> getPendingIntentsForAlarm(Alarm a) {
 		ArrayList<PendingIntent> allIntents = new ArrayList<PendingIntent>();
 		Intent rootAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
-		if(a.isPowerNap()) {
-		rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
+		if (a.isPowerNap()) {
+			rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
 		} else if (a.isQuikAlarm()) {
 			rootAlarmIntent.addCategory(FORTY_WINKS_QUIK_ALARM_CATEGORY);
 		} else {
@@ -206,20 +201,28 @@ public class FortyWinks extends Activity {
 		return allIntents;
 		
 	}
+	
 	private void removeAlarm(Alarm a) {
-
 		
 		Log.d("40W", "40W Removing Alarm that should fire at: " + a);
 		// Remove the alarm and followups from the AlarmService
-		for(PendingIntent intent : getPendingIntentsForAlarm(a)) {
+		for (PendingIntent intent : getPendingIntentsForAlarm(a)) {
 			mAlarmManager.cancel(intent);
 			
 		}
-		// 
+		//
+		Log.d("40W", "UpcomingAlarms: " + mUpcomingAlarms);
+		// We want to get all new items
+		mUpcomingAlarms.remove(a);
+		mNextAlarmsAdapter.notifyDataSetChanged();
 		
+		Log.d("40W", "UpcomingAlarms: " + mUpcomingAlarms);
+		// Let the ListView know we've changed it
+		mNextAlarmsAdapter.notifyDataSetChanged();
 		// Remove the alarm and followups from the db
-		mDatabaseAdapter.deleteAlarm(a.getId());
+		mDatabaseAdapter.deleteAlarm(a);
 	}
+	
 	private void removePowerNapsFromNextAlarmList() {
 		List<Alarm> powerNap = new ArrayList<Alarm>();
 		for (Alarm a : mUpcomingAlarms) {
@@ -251,7 +254,6 @@ public class FortyWinks extends Activity {
 		// Set the base alarm in the manager
 		mAlarmManager.set(AlarmManager.RTC_WAKEUP, futureTime, singleAlarmPendingIntent);
 		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar), Toast.LENGTH_SHORT).show();
-		
 		
 		for (Map.Entry<Integer, Long> entry : a.getFollowups().entrySet()) {
 			Intent followUpAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
