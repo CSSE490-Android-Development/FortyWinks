@@ -122,7 +122,7 @@ public class FortyWinks extends Activity {
 		
 		// Set Adapters
 		mQuickAlarmList.setAdapter(mQuickAlarmAdapter);
-		//mNextAlarmListView.setAdapter(mNextAlarmsAdapter);
+		// mNextAlarmListView.setAdapter(mNextAlarmsAdapter);
 		
 		// Set Listeners
 		mDrawer.setOnDrawerOpenListener(mDrawerOpenListener);
@@ -187,23 +187,24 @@ public class FortyWinks extends Activity {
 		ArrayList<PendingIntent> allIntents = new ArrayList<PendingIntent>();
 		Log.d("40W", "Alarm has " + a.getFollowups().size() + " followups");
 		Intent rootAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
-		if (a.isPowerNap()) {
-			Log.d("40W", "[INTENT] Found a PowerNap, adding the category");
-			rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
-		} else if (a.isQuikAlarm()) {
-			Log.d("40W", "[INTENT] Found a QuikAlarm, adding the category");
-			rootAlarmIntent.addCategory(FORTY_WINKS_QUIK_ALARM_CATEGORY);
-		} else {
-			Log.d("40W", "[INTENT] Found a Standard, adding the category");
-			rootAlarmIntent.addCategory(FORTY_WINKS_STANDARD_ALARM_CATEGORY);
-		}
-		allIntents.add(PendingIntent.getBroadcast(FortyWinks.this, a.getId(), rootAlarmIntent, NO_FLAGS));
+//		if (a.isPowerNap()) {
+//			Log.d("40W", "[INTENT] Found a PowerNap, adding the category");
+//			rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
+//		} else if (a.isQuikAlarm()) {
+//			Log.d("40W", "[INTENT] Found a QuikAlarm, adding the category");
+//			rootAlarmIntent.addCategory(FORTY_WINKS_QUIK_ALARM_CATEGORY);
+//		} else {
+//			Log.d("40W", "[INTENT] Found a Standard, adding the category");
+//			rootAlarmIntent.addCategory(FORTY_WINKS_STANDARD_ALARM_CATEGORY);
+//		}
+		allIntents.add(PendingIntent.getBroadcast(FortyWinks.this, (int) a.getNextAlarmTime(), rootAlarmIntent, NO_FLAGS));
 		Log.d("40W", "Adding Intent to list with " + rootAlarmIntent.getCategories() + ", and ID: " + a.getId());
-		for (int entry : a.getFollowups().keySet()) {
+		for (Map.Entry<Integer, Long> entry : a.getFollowups().entrySet()) {
 			Log.d("40W", "[INTENT] Found a FollowUp Alarm(" + entry + "), adding the alarm to list");
 			Intent followUpIntent = new Intent(FortyWinks.this, SingleAlarm.class);
-			followUpIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
-			allIntents.add(PendingIntent.getBroadcast(FortyWinks.this, entry, followUpIntent, NO_FLAGS));
+			//followUpIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
+			long timeStamp = entry.getValue();
+			allIntents.add(PendingIntent.getBroadcast(FortyWinks.this, (int) timeStamp, followUpIntent, NO_FLAGS));
 			Log.d("40W", "Adding Intent to list with " + followUpIntent.getCategories() + ", and ID: " + entry);
 		}
 		return allIntents;
@@ -237,11 +238,13 @@ public class FortyWinks extends Activity {
 		
 		Log.w("40W", "Found PowerNap: " + a + ", ID: " + a.getId());
 		Calendar calendar = Calendar.getInstance();
+		long uniqueTimeAddon =  getCurrentSecsAndMillis();
 		long futureTime = a.getNextAlarmTime();
 		
 		Intent rootAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
-		rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
+		// rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
 		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_id), a.getId());
+		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_mgr_id), (int) (futureTime + uniqueTimeAddon));
 		// If there are no followups, this is the LAST alarm!
 		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_last), (a.getNumFollowups() == 0));
 		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_followup_number), 0);
@@ -249,7 +252,7 @@ public class FortyWinks extends Activity {
 		
 		rootAlarmIntent.putExtra("ALARM_SOUND", mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
 		Log.d("40W", "Proposed bundle: " + rootAlarmIntent.getExtras());
-		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, a.getId(), rootAlarmIntent, NO_FLAGS);
+		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, (int) (futureTime + uniqueTimeAddon), rootAlarmIntent, NO_FLAGS);
 		calendar.setTimeInMillis(futureTime);
 		
 		// Iterate through all followups with the following
@@ -263,9 +266,15 @@ public class FortyWinks extends Activity {
 		ArrayList<Integer> alarmFollowUpIds = new ArrayList<Integer>(a.getFollowups().keySet());
 		Collections.sort(alarmFollowUpIds);
 		for (Integer alarmFollowUpId : alarmFollowUpIds) {
+			futureTime = alarmFollowUps.get(alarmFollowUpId);
+			
+			//futureTime += getCurrentSecsAndMillis();
+			
 			Intent followUpAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
-			followUpAlarmIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
+			// followUpAlarmIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
 			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_id), a.getId());
+			
+			rootAlarmIntent.putExtra(getString(R.string.intent_alarm_mgr_id), (int) (futureTime + uniqueTimeAddon ));
 			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_followup_number), alarmFollowUpId);
 			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_sound), mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
 			if (a.getNumFollowups() == currentFollowup) {
@@ -276,20 +285,25 @@ public class FortyWinks extends Activity {
 				followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_last), false);
 				currentFollowup++;
 			}
-			singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, alarmFollowUpId, followUpAlarmIntent, NO_FLAGS);
-			calendar.setTimeInMillis(alarmFollowUps.get(alarmFollowUpId));
-			mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarmFollowUps.get(alarmFollowUpId), singleAlarmPendingIntent);
-			Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
+			singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, (int) (futureTime + uniqueTimeAddon), followUpAlarmIntent, NO_FLAGS);
+			calendar.setTimeInMillis(futureTime);
+			mAlarmManager.set(AlarmManager.RTC_WAKEUP, futureTime, singleAlarmPendingIntent);
+			Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar) + " - With ID: " + (int) (futureTime + uniqueTimeAddon));
 		}
 		
 		mDatabaseAdapter.updateFullAlarmList(mUpcomingAlarms);
 		Log.d("40W", "Alright, I've created your PowerNap. Here's what I have for the list: " + mUpcomingAlarms);
 		Log.d("40W", "Here are the remaining Active Alarms: " + mUpcomingAlarms.get(0).getRemainingActiveAlarms());
-		//mNextAlarmsAdapter.notifyDataSetChanged();
+		// mNextAlarmsAdapter.notifyDataSetChanged();
 		mNextAlarmsAdapter.notifyDataSetInvalidated();
 		// End iteration
 	}
 	
+	private long getCurrentSecsAndMillis() {
+		Calendar c = Calendar.getInstance();
+		return c.get(Calendar.MILLISECOND) + c.get(Calendar.SECOND) * 1000;
+	}
+
 	private String getFriendlyCalendarString(Calendar c) {
 		c.getTime();
 		Time t = new Time();
