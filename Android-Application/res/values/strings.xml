@@ -3,4 +3,5 @@
     <string name="hello">Hello World, FortyWinks!</string>
     <string name="app_name">FortyWinks</string>
     <string name="preferences">Preferences</string>
+    <string name="intent_alarm_id">ALARM_ID</string>
 </resources>

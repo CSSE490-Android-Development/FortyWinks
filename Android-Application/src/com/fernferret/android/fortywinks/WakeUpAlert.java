@@ -26,6 +26,13 @@ public class WakeUpAlert extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.wake_up_alert);
+		
+		// If this is the last alarm in this package of alarm...
+		if(getIntent().getBooleanExtra("ALARM_LAST", false)) {
+			SQLiteAdapter dbAdapter = new SQLiteAdapter(this);
+			dbAdapter.deleteAlarm(getIntent().getIntExtra("ALARM_ID", 0));
+		}
+		
 		Toast.makeText(this, "You should get up!", Toast.LENGTH_SHORT).show();
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");

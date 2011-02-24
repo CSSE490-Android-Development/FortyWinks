@@ -157,7 +157,7 @@ public class FortyWinks extends Activity {
 		mQuickAlarmAdapter = new PreferenceViewAdapter(this, R.layout.preference_view, R.id.preference_view_left_text, mQuickProposedAlarms);
 		mQuickAlarmAdapter.notifyDataSetChanged();
 		mQuickAlarmList.setAdapter(mQuickAlarmAdapter);
-		
+		mDatabaseAdapter.updateFullAlarmList(mUpcomingAlarms);
 		mNextAlarmsAdapter = new SmallAlarmViewAdapter(this, R.layout.small_alarm_line_item, R.id.small_alarm_line_item_time, mUpcomingAlarms);
 		mNextAlarmsAdapter.notifyDataSetChanged();
 		mNextAlarmListView.setAdapter(mNextAlarmsAdapter);
@@ -221,7 +221,7 @@ public class FortyWinks extends Activity {
 		mNextAlarmsAdapter.notifyDataSetChanged();
 		
 	}
-	
+	// TODO: I don't think we need this method anymore, investigate.
 	private void removePowerNapsFromNextAlarmList() {
 		List<Alarm> powerNap = new ArrayList<Alarm>();
 		for (Alarm a : mUpcomingAlarms) {
@@ -231,10 +231,9 @@ public class FortyWinks extends Activity {
 		}
 		mUpcomingAlarms.removeAll(powerNap);
 	}
-	
 	private void setPowerNap() {
 		Alarm a = mDatabaseAdapter.getPowerNap();
-		removePowerNapsFromNextAlarmList();
+		
 		mUpcomingAlarms.add(a);
 		mNextAlarmsAdapter.notifyDataSetChanged();
 		Log.w("40W", "Found PowerNap: " + a + ", ID: " + a.getId());
@@ -243,22 +242,32 @@ public class FortyWinks extends Activity {
 		
 		Intent rootAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 		rootAlarmIntent.addCategory(FORTY_WINKS_POWER_NAP_CATEGORY);
-		rootAlarmIntent.putExtra("ALARM_ID", a.getId());
+		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_id), a.getId());
+		if(a.getNumFollowups() == 0) {
+			rootAlarmIntent.putExtra("ALARM_LAST" , true);
+		}
+		rootAlarmIntent.putExtra("ALARM_SOUND", mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
 		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, a.getId(), rootAlarmIntent, NO_FLAGS);
 		calendar.setTimeInMillis(futureTime);
-		Log.d("40W", "40W: Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar));
-		Log.d("40W", "Number of followups: " + a.getFollowups().size());
-		
+
 		// Iterate through all followups with the following
 		// Set the base alarm in the manager
 		mAlarmManager.set(AlarmManager.RTC_WAKEUP, futureTime, singleAlarmPendingIntent);
 		Toast.makeText(FortyWinks.this, "Your alarm has been set for" + getFriendlyTimeTillAlarm(calendar), Toast.LENGTH_SHORT).show();
-		
+		int currentFollowup = 1;
 		for (Map.Entry<Integer, Long> entry : a.getFollowups().entrySet()) {
 			Intent followUpAlarmIntent = new Intent(FortyWinks.this, SingleAlarm.class);
 			followUpAlarmIntent.addCategory(FORTY_WINKS_FOLLOWUP_CATEGORY);
-			followUpAlarmIntent.putExtra("ALARM_ID", entry.getKey());
+			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_id), a.getId());
+			followUpAlarmIntent.putExtra("ALARM_REPEAT_ID", entry.getKey());
 			followUpAlarmIntent.putExtra("ALARM_SOUND", mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
+			if(a.getNumFollowups() == currentFollowup) {
+				// This is the last followup, make it remove things from the original intent.
+				followUpAlarmIntent.putExtra("ALARM_LAST", true);
+				
+			} else {
+				currentFollowup++;
+			}
 			singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, entry.getKey(), followUpAlarmIntent, NO_FLAGS);
 			calendar.setTimeInMillis(entry.getValue());
 			mAlarmManager.set(AlarmManager.RTC_WAKEUP, entry.getValue(), singleAlarmPendingIntent);

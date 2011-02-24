@@ -30,13 +30,10 @@ public class SmallAlarmViewAdapter extends ArrayAdapter<Alarm>{
 		
 		if(a.isPowerNap()) {
 			alarmView.setPowerNap();
-			Log.d("40W", "Set as PowerNap");
 		} else if(a.isQuikAlarm()) {
 			alarmView.setQuikAlarm();
-			Log.d("40W", "Set as QuikAlarm");
 		} else {
 			alarmView.setRegularAlarm();
-			Log.d("40W", "Set as Regular Alarm");
 		}
 		
 		return alarmView;
