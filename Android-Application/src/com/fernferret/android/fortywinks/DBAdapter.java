@@ -24,6 +24,10 @@ public interface DBAdapter {
     
     public void updateFullAlarmList(List<Alarm> alarms);
     
+    public void setAlarmActive(Alarm a);
+    
+    public void setAlarmActive(int id);
+    
     void resetDatabase();
 
 }

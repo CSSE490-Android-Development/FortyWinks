@@ -405,6 +405,18 @@ public class SQLiteAdapter implements DBAdapter {
         alarms.clear();
         alarms.addAll(getFullAlarmList());
     }
+    
+    @Override
+    public void setAlarmActive(Alarm a) {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    @Override
+    public void setAlarmActive(int id) {
+        // TODO Auto-generated method stub
+        
+    }
 
     @Override
     public void resetDatabase() {
