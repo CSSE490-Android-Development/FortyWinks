@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -53,6 +54,7 @@ public class WakeUpAlert extends Activity {
 		mClose = (Button) findViewById(R.id.wake_up_alert_close);
 		mClose.setOnClickListener(mCloseClickListener);
 		mKeyguardLock.disableKeyguard();
+		Log.d("40W", "40W - Preparing to play a sound...(" + soundLocation + ")");
 		mp = MediaPlayer.create(this, soundLocation);
 		//mp = MediaPlayer.create(this, R.raw.woah);
 		AudioManager mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
