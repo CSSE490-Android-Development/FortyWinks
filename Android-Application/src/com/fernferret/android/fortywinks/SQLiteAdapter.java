@@ -358,7 +358,7 @@ public class SQLiteAdapter implements DBAdapter {
     }
 
     @Override
-    public List<Alarm> getQuikAlarmsAndAlarms() {
+    public List<Alarm> getQuikAlarmsAndScheduledAlarms() {
         Log.d(TAG, "Retrieving quik alarms and alarms");
         List<Alarm> result = new ArrayList<Alarm>();
         Alarm powerNap = getPowerNap();
@@ -400,7 +400,7 @@ public class SQLiteAdapter implements DBAdapter {
             result.add(powerNap);
         }
         
-        result.addAll(getQuikAlarmsAndAlarms());
+        result.addAll(getQuikAlarmsAndScheduledAlarms());
         
         Log.d(TAG, "Got full alarm list");
         return numItems == -1 ? result : result.subList(0, numItems);

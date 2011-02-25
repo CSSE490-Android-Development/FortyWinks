@@ -142,7 +142,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         mDba.saveAlarm(c);
         assertFalse(c.getId() == -1);
         
-        List<Alarm> quikAlarms = mDba.getQuikAlarmsAndAlarms();
+        List<Alarm> quikAlarms = mDba.getQuikAlarmsAndScheduledAlarms();
         assertEquals(quikAlarms.size(), 3);
         testBasicEquality(quikAlarms.get(0), c);
         testBasicEquality(quikAlarms.get(1), a);
