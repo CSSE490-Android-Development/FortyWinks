@@ -6,4 +6,9 @@
 <string name="key_followup_alarms">key_followup_alarms</string>
 <string name="key_followup_interval">key_followup_interval</string>
 <string name="key_default_alarm_tone">key_default_alarm_tone</string>
+<string name="pref_time_to_sleep_dialog_title">Enter Time to Fall Asleep</string>
+<string name="pref_time_to_sleep_dialog_message">Please enter the average amount of time it takes you to fall asleep in minutes</string>
+<string name="key_time_to_sleep">key_time_to_sleep</string>
+<string name="pref_time_to_sleep_title">Time to sleep</string>
+<string name="pref_time_to_sleep_summary">Amount of time it takes you to fall asleep</string>
 </resources>
