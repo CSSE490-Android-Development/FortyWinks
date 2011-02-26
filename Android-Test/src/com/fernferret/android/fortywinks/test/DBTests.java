@@ -27,6 +27,12 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         mDba.resetDatabase();
     }
     
+    @Override
+    protected void tearDown() throws Exception {
+        mDba.resetDatabase();
+        super.tearDown();
+    }
+    
     public void testPreconditions() {
         assertNotNull(mDba);
     }
