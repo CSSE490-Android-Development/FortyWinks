@@ -84,6 +84,7 @@ public class FortyWinks extends Activity {
 	// Important values used in generating the drawer items
 	int mNumberOfAlarms;
 	int mCycleTime;
+	int mTimeTillSleep;
 	SharedPreferences mSettings;
 	
 	// Handler for runnable to update the listView once a second
@@ -152,6 +153,12 @@ public class FortyWinks extends Activity {
 		} catch (NumberFormatException e) {
 			// Someone entered NaN for their default value of REM cycle, let's use 90, the industry standard!
 			mCycleTime = 90;
+		}
+		
+		try {
+		    mTimeTillSleep = Integer.parseInt(mSettings.getString(getString(R.string.key_time_to_sleep), "14"));
+		} catch (NumberFormatException e) {
+		    mTimeTillSleep = 14;
 		}
 		// Populate ListViews for the Drawer
 		generateAlarms();
@@ -348,7 +355,7 @@ public class FortyWinks extends Activity {
 		
 		for (int i = 1; i <= mNumberOfAlarms; i++) {
 			calendar.add(Calendar.MINUTE, mCycleTime);
-			listItems.add(new ProposedAlarm(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), i, mCycleTime, ProposedAlarm.ProposedAlarmType.PowerNap));
+			listItems.add(new ProposedAlarm(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), i, mCycleTime, mTimeTillSleep, ProposedAlarm.ProposedAlarmType.PowerNap));
 		}
 		mQuickProposedAlarms = listItems;
 		

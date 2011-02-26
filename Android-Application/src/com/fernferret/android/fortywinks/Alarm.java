@@ -108,6 +108,14 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
      */
     public Alarm(ProposedAlarm a) {
     	this();
+    	int minute = a.getMinute() + a.getTimeTillSleep();
+    	int hour = a.getHour();
+    	
+    	if (minute >= 60) {
+    	    minute %= 60;
+    	    hour++;
+    	}
+    	
     	setHour(a.getHour());
     	setMinute(a.getMinute());
     	setIntervalStart(a.getIntervalLength());

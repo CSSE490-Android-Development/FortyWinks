@@ -48,10 +48,18 @@ public class AddQuikAlarm extends Activity {
 			public void onClick(View v) {
 				Intent result = new Intent();
 				int numberOfFollowups;
+				int timeTillSleep;
+				
 				try {
 					numberOfFollowups = Integer.parseInt(mSettings.getString(getString(R.string.key_followup_alarms), "4"));
 				} catch (NumberFormatException e) {
 					numberOfFollowups = 4;
+				}
+				
+				try {
+				    timeTillSleep = Integer.parseInt(mSettings.getString(getString(R.string.key_time_to_sleep), "14"));
+				} catch (NumberFormatException e) {
+				    timeTillSleep = 14;
 				}
 				
 				int lengthBetweenFollowup;
@@ -61,9 +69,9 @@ public class AddQuikAlarm extends Activity {
 					lengthBetweenFollowup = 5;
 				}
 				if(mTypePicker.getCheckedRadioButtonId() == R.id.new_quik_alarm_radio_time_until) {
-					mProposedAlarm = new ProposedAlarm(mTimePicker.getCurrentHour(), mTimePicker.getCurrentMinute(), numberOfFollowups, lengthBetweenFollowup);
+					mProposedAlarm = new ProposedAlarm(mTimePicker.getCurrentHour(), mTimePicker.getCurrentMinute(), numberOfFollowups, lengthBetweenFollowup, timeTillSleep);
 				} else {
-					mProposedAlarm = new ProposedAlarm(mTimePicker.getCurrentHour(), mTimePicker.getCurrentMinute(), numberOfFollowups, lengthBetweenFollowup, ProposedAlarmType.QuickAlarm);
+					mProposedAlarm = new ProposedAlarm(mTimePicker.getCurrentHour(), mTimePicker.getCurrentMinute(), numberOfFollowups, lengthBetweenFollowup, timeTillSleep, ProposedAlarmType.QuickAlarm);
 				}
 				
 				Alarm transport = new Alarm(mProposedAlarm);
