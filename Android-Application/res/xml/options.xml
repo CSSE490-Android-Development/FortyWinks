@@ -14,13 +14,13 @@
 		android:selectAllOnFocus="true"
 		android:defaultValue="90"/>
 	<EditTextPreference
-		android:dialogTitle="@string/pref_time_to_sleep_dialog_title"
-		android:dialogMessage="@string/pref_time_to_sleep_dialog_message"
+		android:dialogTitle="@string/pref_time_till_sleep_dialog_title"
+		android:dialogMessage="@string/pref_time_till_sleep_dialog_message"
 		android:positiveButtonText="OK"
 		android:negativeButtonText="Cancel"
-		android:key="@string/key_time_to_sleep"
-		android:title="@string/pref_time_to_sleep_title"
-		android:summary="@string/pref_time_to_sleep_summary"
+		android:key="@string/key_time_till_sleep"
+		android:title="@string/pref_time_till_sleep_title"
+		android:summary="@string/pref_time_till_sleep_summary"
 		android:inputType="number"
 		android:maxLength="2"
 		android:selectAllOnFocus="true"

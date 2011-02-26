@@ -156,7 +156,7 @@ public class FortyWinks extends Activity {
 		}
 		
 		try {
-		    mTimeTillSleep = Integer.parseInt(mSettings.getString(getString(R.string.key_time_to_sleep), "14"));
+		    mTimeTillSleep = Integer.parseInt(mSettings.getString(getString(R.string.key_time_till_sleep), "14"));
 		} catch (NumberFormatException e) {
 		    mTimeTillSleep = 14;
 		}

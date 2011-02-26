@@ -57,7 +57,7 @@ public class AddQuikAlarm extends Activity {
 				}
 				
 				try {
-				    timeTillSleep = Integer.parseInt(mSettings.getString(getString(R.string.key_time_to_sleep), "14"));
+				    timeTillSleep = Integer.parseInt(mSettings.getString(getString(R.string.key_time_till_sleep), "14"));
 				} catch (NumberFormatException e) {
 				    timeTillSleep = 14;
 				}
