@@ -116,8 +116,8 @@ public class Alarm implements Parcelable, Comparable<Alarm> {
     	    hour++;
     	}
     	
-    	setHour(a.getHour());
-    	setMinute(a.getMinute());
+    	setHour(hour);
+    	setMinute(minute);
     	setIntervalStart(a.getIntervalLength());
     	setIntervalEnd(a.getIntervalLength());
     	setNumFollowups(a.getNumberOfIntervals());

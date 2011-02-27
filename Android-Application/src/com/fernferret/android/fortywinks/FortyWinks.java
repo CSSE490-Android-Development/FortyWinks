@@ -340,7 +340,7 @@ public class FortyWinks extends Activity {
 			hours--;
 		}
 		return (days == 0 ? "" : days + (days == 1 ? "day, " : " days, ")) +
-				(hours == 0 ? "" : hours + (hours == 1 ? "hour, " : " hours, ")) +
+				(hours == 0 ? "" : hours + (hours == 1 ? " hour, " : " hours, ")) +
 				minutes + (minutes == 1 ? " minute" : " minutes");
 	}
 	

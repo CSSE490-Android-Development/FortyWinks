@@ -67,6 +67,7 @@ public class ProposedAlarm {
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.HOUR_OF_DAY, mHour);
 		c.set(Calendar.MINUTE, mMinute);
+		c.add(Calendar.MINUTE, mTimeTillSleep);
 		return DateFormat.format("h:mm aa", c).toString();
 	}
 	
