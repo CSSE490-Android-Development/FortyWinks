@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="pref_personal_category">Personal Settings</string>
+	<string name="pref_defaults_category">Alarm Defaults</string>
+	<string name="pref_debugging_category">Debugging</string>
+
 	<string name="pref_cycle_time_dialog_title">@string/pref_cycle_time_title</string>
 	<string name="pref_cycle_time_dialog_summary">Set the average length of one sleep cycle in minutes</string>
 	<string name="pref_cycle_time_title">Sleep cycle length</string>
@@ -24,7 +28,7 @@
 	<string name="pref_followup_interval_summary">Default time between follow-up alarms</string>
 	<string name="pref_key_followup_interval">key_followup_interval</string>
 	
-	<string name="pref_ringtone_title">Default alarm sound</string>
+	<string name="pref_ringtone_title">Alarm sound</string>
 	<string name="pref_ringtone_summary">Default ringtone for alarms</string>
 	<string name="pref_key_ringtone">key_default_ringtone</string>
 	
