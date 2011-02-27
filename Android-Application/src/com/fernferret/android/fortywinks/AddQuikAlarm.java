@@ -51,20 +51,20 @@ public class AddQuikAlarm extends Activity {
 				int timeTillSleep;
 				
 				try {
-					numberOfFollowups = Integer.parseInt(mSettings.getString(getString(R.string.key_followup_alarms), "4"));
+					numberOfFollowups = Integer.parseInt(mSettings.getString(getString(R.string.pref_key_num_followups), "4"));
 				} catch (NumberFormatException e) {
 					numberOfFollowups = 4;
 				}
 				
 				try {
-				    timeTillSleep = Integer.parseInt(mSettings.getString(getString(R.string.key_time_till_sleep), "14"));
+				    timeTillSleep = Integer.parseInt(mSettings.getString(getString(R.string.pref_key_time_till_sleep), "14"));
 				} catch (NumberFormatException e) {
 				    timeTillSleep = 14;
 				}
 				
 				int lengthBetweenFollowup;
 				try {
-					lengthBetweenFollowup = Integer.parseInt(mSettings.getString(getString(R.string.key_followup_interval), "5"));
+					lengthBetweenFollowup = Integer.parseInt(mSettings.getString(getString(R.string.pref_key_followup_interval), "5"));
 				} catch (NumberFormatException e) {
 					lengthBetweenFollowup = 5;
 				}
