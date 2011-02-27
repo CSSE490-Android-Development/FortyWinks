@@ -29,6 +29,21 @@
 			android:defaultValue="14"/>
 	</PreferenceCategory>
 	<PreferenceCategory
+		android:title="@string/pref_application_category">
+		<EditTextPreference
+			android:dialogTitle="@string/pref_num_powernap_suggestions_dialog_title"
+			android:dialogMessage="@string/pref_num_powernap_suggestions_dialog_summary"
+			android:positiveButtonText="@string/ok"
+			android:negativeButtonText="@string/cancel"
+			android:key="@string/pref_key_num_powernap_suggestions"
+			android:title="@string/pref_num_powernap_suggestions_title"
+			android:summary="@string/pref_num_powernap_suggestions_summary"
+			android:inputType="number"
+			android:maxLength="2"
+			android:selectAllOnFocus="true"
+			android:defaultValue="6"/>
+	</PreferenceCategory>
+	<PreferenceCategory
 		android:title="@string/pref_defaults_category">
 		<EditTextPreference
 			android:dialogTitle="@string/pref_num_followups_dialog_title"
