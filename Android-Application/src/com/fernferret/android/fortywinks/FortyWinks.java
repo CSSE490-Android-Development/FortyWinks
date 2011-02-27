@@ -143,7 +143,7 @@ public class FortyWinks extends Activity {
 	protected void onResume() {
 		super.onResume();
 		try {
-			mNumberOfAlarms = Integer.parseInt(mSettings.getString(getString(R.string.pref_key_num_displayed_alarms), "6"));
+			mNumberOfAlarms = Integer.parseInt(mSettings.getString(getString(R.string.pref_key_num_powernap_suggestions), "6"));
 		} catch (NumberFormatException e) {
 			mNumberOfAlarms = 6;
 		}
@@ -447,7 +447,6 @@ public class FortyWinks extends Activity {
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
 		return super.onPrepareOptionsMenu(menu);
 	}
 	
@@ -467,7 +466,6 @@ public class FortyWinks extends Activity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
