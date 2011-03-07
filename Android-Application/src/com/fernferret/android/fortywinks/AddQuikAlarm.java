@@ -69,6 +69,7 @@ public class AddQuikAlarm extends Activity {
 				Alarm transport = new Alarm(mProposedAlarm);
 				result.putExtra("ALARM", transport);
 				setResult(Activity.RESULT_OK, result);
+				finish();
 			}
 		});
 		mCancel.setOnClickListener(new OnClickListener() {

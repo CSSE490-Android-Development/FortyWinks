@@ -318,6 +318,7 @@ public class SQLiteAdapter implements DBAdapter {
         }
         
         writeAlarmData(a);
+        Log.w("40W", );
         
         Log.d(TAG, "Alarm saved");
         

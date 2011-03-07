@@ -93,7 +93,7 @@ public class FortyWinks extends Activity {
 	AlarmManager mAlarmManager;
 	
 	private static final int NO_FLAGS = 0;
-	private static final int ADD_QUIK_REQUEST_CODE = 13;
+	public static final int ADD_QUIK_REQUEST_CODE = 13;
 	
 	private final CharSequence[] mPowerNapRightClickChoices = { "Delete" };
 	
@@ -460,8 +460,15 @@ public class FortyWinks extends Activity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == ADD_QUIK_REQUEST_CODE && resultCode == RESULT_OK) {
+			Alarm a = (Alarm)data.getParcelableExtra("ALARM");
+			Log.d("40W", "About to save alarm: " + a + "with ID: " + a.getId() + ", and is it a quick alarm?: " + a.isQuikAlarm());
+			mDatabaseAdapter.saveAlarm(a);
+			mDatabaseAdapter.updateFullAlarmList(mUpcomingAlarms);
+			Log.d("40W", "" + mUpcomingAlarms);
+			mNextAlarmsAdapter.notifyDataSetChanged();
+			
+		}
 	}
 	
 	private Runnable mUpdateSingleTimerTask = new Runnable() {
