@@ -1,9 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="pref_sleep_cycle_title">Enter Sleep Cycle Time</string>
-<string name="pref_sleep_cycle_summary">Please enter how long you need to complete one REM cycle on average</string>
-<string name="key_cycle_time">key_cycle_time</string>
-<string name="key_number_quick_alarms">key_number_quick_alarms</string>
-<string name="key_followup_alarms">key_followup_alarms</string>
-<string name="key_followup_interval">key_followup_interval</string>
-<string name="key_default_alarm_tone">key_default_alarm_tone</string>
+<resources>
+	<string name="pref_personal_category">Personal Settings</string>
+	<string name="pref_application_category">Application Settings</string>
+	<string name="pref_defaults_category">Alarm Defaults</string>
+	<string name="pref_debugging_category">Debugging</string>
+
+	<string name="pref_cycle_time_dialog_title">@string/pref_cycle_time_title</string>
+	<string name="pref_cycle_time_dialog_summary">Set the average length of one sleep cycle in minutes</string>
+	<string name="pref_cycle_time_title">Sleep cycle length</string>
+	<string name="pref_cycle_time_summary">Average length of one sleep cycle</string>
+	<string name="pref_key_cycle_time">key_cycle_time</string>
+
+	<string name="pref_time_till_sleep_dialog_title">@string/pref_time_till_sleep_title</string>
+	<string name="pref_time_till_sleep_dialog_message">Set the average amount of time it takes you to fall asleep in minutes</string>
+	<string name="pref_time_till_sleep_title">Time till sleep</string>
+	<string name="pref_time_till_sleep_summary">Average amount of time it takes you to fall asleep</string>
+	<string name="pref_key_time_till_sleep">key_time_till_sleep</string>
+	
+	<string name="pref_num_powernap_suggestions_dialog_title">Power nap suggestions</string>
+	<string name="pref_num_powernap_suggestions_dialog_summary">Set the number of suggested power naps in the pull-up drawer</string>
+	<string name="pref_num_powernap_suggestions_title">Power nap suggestions</string>
+	<string name="pref_num_powernap_suggestions_summary">Number of power nap suggestions in the pull-up drawer</string>
+	<string name="pref_key_num_powernap_suggestions">key_num_displayed_alarms</string>
+	
+	<string name="pref_num_followups_dialog_title">@string/pref_num_followups_title</string>
+	<string name="pref_num_followups_dialog_summary">Set the default number of follow-up alarms (used in quick alarms and power naps)</string>
+	<string name="pref_num_followups_title">Follow-up alarms</string>
+	<string name="pref_num_followups_summary">Default number of follow-up alarms</string>
+	<string name="pref_key_num_followups">key_num_followups</string>
+	
+	<string name="pref_followup_interval_dialog_title">@string/pref_followup_interval_title</string>
+	<string name="pref_followup_interval_dialog_summary">Set the default amount of time between follow-up alarms (used in quick alarms and power naps)</string>
+	<string name="pref_followup_interval_title">Follow-up alarm interval</string>
+	<string name="pref_followup_interval_summary">Default time between follow-up alarms</string>
+	<string name="pref_key_followup_interval">key_followup_interval</string>
+	
+	<string name="pref_ringtone_title">Alarm sound</string>
+	<string name="pref_ringtone_summary">Default ringtone for alarms</string>
+	<string name="pref_key_ringtone">key_default_ringtone</string>
+
 </resources>

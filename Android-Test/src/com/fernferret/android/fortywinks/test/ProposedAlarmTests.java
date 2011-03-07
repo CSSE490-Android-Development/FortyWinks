@@ -10,39 +10,39 @@ import com.fernferret.android.fortywinks.ProposedAlarm;
 
 public class ProposedAlarmTests extends TestCase {
 	public void testProposedAlarmCanBeCreated() {
-		ProposedAlarm pa = new ProposedAlarm(0, 0, 1, 90);
+		ProposedAlarm pa = new ProposedAlarm(0, 0, 1, 90, 0);
 		assertNotNull(pa);
 	}
 	
 	public void testTimePrintsCorrectly() {
-		ProposedAlarm pa = new ProposedAlarm(1, 11, 1, 90, ProposedAlarm.ProposedAlarmType.QuickAlarm);
+		ProposedAlarm pa = new ProposedAlarm(1, 11, 1, 90, 0, ProposedAlarm.ProposedAlarmType.QuickAlarm);
 		assertEquals("1:11 am", pa.getPrettyTime());
 		
-		pa = new ProposedAlarm(13, 11, 1, 90, ProposedAlarm.ProposedAlarmType.QuickAlarm);
+		pa = new ProposedAlarm(13, 11, 1, 90, 0, ProposedAlarm.ProposedAlarmType.QuickAlarm);
 		assertEquals("1:11 pm", pa.getPrettyTime());
 		
-		pa = new ProposedAlarm(0, 11, 1, 90, ProposedAlarm.ProposedAlarmType.QuickAlarm);
+		pa = new ProposedAlarm(0, 11, 1, 90, 0, ProposedAlarm.ProposedAlarmType.QuickAlarm);
 		assertEquals("12:11 am", pa.getPrettyTime());
 		
-		pa = new ProposedAlarm(12, 11, 1, 90, ProposedAlarm.ProposedAlarmType.QuickAlarm);
+		pa = new ProposedAlarm(12, 11, 1, 90, 0, ProposedAlarm.ProposedAlarmType.QuickAlarm);
 		assertEquals("12:11 pm", pa.getPrettyTime());
 	}
 	
 	public void testQuickAlarmTimes() {
 		Calendar time = Calendar.getInstance();
-		ProposedAlarm pa = new ProposedAlarm(1, 0, 4, 5);
+		ProposedAlarm pa = new ProposedAlarm(1, 0, 4, 5, 0);
 		time.add(Calendar.HOUR, 1);
 		assertEquals(DateFormat.format("h:mm aa", time).toString(), pa.getPrettyTime());
 		
 		time = Calendar.getInstance();
 		time.add(Calendar.MINUTE, 10);
-		pa = new ProposedAlarm(0, 10, 4, 5);
+		pa = new ProposedAlarm(0, 10, 4, 5, 0);
 		
 		assertEquals(DateFormat.format("h:mm aa", time).toString(), pa.getPrettyTime());
 		
 		time = Calendar.getInstance();
 		
-		pa = new ProposedAlarm(1, 15, 4, 5);
+		pa = new ProposedAlarm(1, 15, 4, 5, 0);
 		time.add(Calendar.HOUR, 1);
 		time.add(Calendar.MINUTE, 15);
 		
@@ -50,21 +50,21 @@ public class ProposedAlarmTests extends TestCase {
 	}
 	
 	public void testTimeTillAlarm() {
-		ProposedAlarm pa = new ProposedAlarm(1, 11, 1, 90);
+		ProposedAlarm pa = new ProposedAlarm(1, 11, 1, 90, 0);
 		assertEquals("1.5 Hours", pa.getPrettyCyclesTillAlarm());
 		
-		pa = new ProposedAlarm(13, 11, 1, 120);
+		pa = new ProposedAlarm(13, 11, 1, 120, 0);
 		assertEquals("2 Hours", pa.getPrettyCyclesTillAlarm());
 		
-		pa = new ProposedAlarm(0, 11, 1, 60);
+		pa = new ProposedAlarm(0, 11, 1, 60, 0);
 		assertEquals("1 Hour", pa.getPrettyCyclesTillAlarm());
 		
-		pa = new ProposedAlarm(12, 11, 1, 0);
+		pa = new ProposedAlarm(12, 11, 1, 0, 0);
 		assertEquals("0 Hours", pa.getPrettyCyclesTillAlarm());
 	}
 	
 	public void testAddingTimesWorks() {
-		ProposedAlarm pa = new ProposedAlarm(1, 11, 1, 90);
+		ProposedAlarm pa = new ProposedAlarm(1, 11, 1, 90, 0);
 		assertEquals("1.5 Hours", pa.getPrettyCyclesTillAlarm());
 		pa.setTimeTill(1, 15);
 		Calendar time = Calendar.getInstance();

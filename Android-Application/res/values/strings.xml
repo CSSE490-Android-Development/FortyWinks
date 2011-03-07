@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, FortyWinks!</string>
     <string name="app_name">FortyWinks</string>
     <string name="preferences">Preferences</string>
     <string name="intent_alarm_id">ALARM_ID</string>
@@ -10,4 +9,6 @@
     <string name="help_time_for">Enter the time you would like the Alarm to go off. This is basically a standard alarm, but quicker!</string>
     <string name="intent_alarm_followup_number">ALARM_FOLLOWUP_NUMBER</string>
     <string name="intent_alarm_mgr_id">AlarmManagerAlarmID</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -84,6 +84,7 @@ public class FortyWinks extends Activity {
 	// Important values used in generating the drawer items
 	int mNumberOfAlarms;
 	int mCycleTime;
+	int mTimeTillSleep;
 	SharedPreferences mSettings;
 	
 	// Handler for runnable to update the listView once a second
@@ -142,16 +143,22 @@ public class FortyWinks extends Activity {
 	protected void onResume() {
 		super.onResume();
 		try {
-			mNumberOfAlarms = Integer.parseInt(mSettings.getString(getString(R.string.key_number_quick_alarms), "6"));
+			mNumberOfAlarms = Integer.parseInt(mSettings.getString(getString(R.string.pref_key_num_powernap_suggestions), "6"));
 		} catch (NumberFormatException e) {
 			mNumberOfAlarms = 6;
 		}
 		
 		try {
-			mCycleTime = Integer.parseInt(mSettings.getString(getString(R.string.key_cycle_time), "90"));
+			mCycleTime = Integer.parseInt(mSettings.getString(getString(R.string.pref_key_cycle_time), "90"));
 		} catch (NumberFormatException e) {
 			// Someone entered NaN for their default value of REM cycle, let's use 90, the industry standard!
 			mCycleTime = 90;
+		}
+		
+		try {
+		    mTimeTillSleep = Integer.parseInt(mSettings.getString(getString(R.string.pref_key_time_till_sleep), "14"));
+		} catch (NumberFormatException e) {
+		    mTimeTillSleep = 14;
 		}
 		// Populate ListViews for the Drawer
 		generateAlarms();
@@ -248,9 +255,9 @@ public class FortyWinks extends Activity {
 		// If there are no followups, this is the LAST alarm!
 		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_last), (a.getNumFollowups() == 0));
 		rootAlarmIntent.putExtra(getString(R.string.intent_alarm_followup_number), 0);
-		Log.d("40W", "Loading item from settings: " + mSettings.getString(getString(R.string.key_default_alarm_tone), "FAILURE"));
+		Log.d("40W", "Loading item from settings: " + mSettings.getString(getString(R.string.pref_key_ringtone), "FAILURE"));
 		
-		rootAlarmIntent.putExtra("ALARM_SOUND", mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
+		rootAlarmIntent.putExtra("ALARM_SOUND", mSettings.getString(getString(R.string.pref_key_ringtone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
 		Log.d("40W", "Proposed bundle: " + rootAlarmIntent.getExtras());
 		PendingIntent singleAlarmPendingIntent = PendingIntent.getBroadcast(FortyWinks.this, (int) a.getIdentifier(), rootAlarmIntent, NO_FLAGS);
 		calendar.setTimeInMillis(futureTime);
@@ -283,7 +290,7 @@ public class FortyWinks extends Activity {
 			
 			rootAlarmIntent.putExtra(getString(R.string.intent_alarm_mgr_id), (int) unRoundedTime);
 			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_followup_number), alarmFollowUpId);
-			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_sound), mSettings.getString(getString(R.string.key_default_alarm_tone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
+			followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_sound), mSettings.getString(getString(R.string.pref_key_ringtone), Settings.System.DEFAULT_ALARM_ALERT_URI.toString()));
 			if (a.getNumFollowups() == currentFollowup) {
 				// This is the last followup, make it remove things from the original intent.
 				followUpAlarmIntent.putExtra(getString(R.string.intent_alarm_last), true);
@@ -333,7 +340,7 @@ public class FortyWinks extends Activity {
 			hours--;
 		}
 		return (days == 0 ? "" : days + (days == 1 ? "day, " : " days, ")) +
-				(hours == 0 ? "" : hours + (hours == 1 ? "hour, " : " hours, ")) +
+				(hours == 0 ? "" : hours + (hours == 1 ? " hour, " : " hours, ")) +
 				minutes + (minutes == 1 ? " minute" : " minutes");
 	}
 	
@@ -348,7 +355,7 @@ public class FortyWinks extends Activity {
 		
 		for (int i = 1; i <= mNumberOfAlarms; i++) {
 			calendar.add(Calendar.MINUTE, mCycleTime);
-			listItems.add(new ProposedAlarm(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), i, mCycleTime, ProposedAlarm.ProposedAlarmType.PowerNap));
+			listItems.add(new ProposedAlarm(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), i, mCycleTime, mTimeTillSleep, ProposedAlarm.ProposedAlarmType.PowerNap));
 		}
 		mQuickProposedAlarms = listItems;
 		
@@ -371,12 +378,12 @@ public class FortyWinks extends Activity {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			ProposedAlarm a = mQuickProposedAlarms.get(position);
 			try {
-				a.setIntervalLength(Integer.parseInt(mSettings.getString(getString(R.string.key_followup_interval), "5")));
+				a.setIntervalLength(Integer.parseInt(mSettings.getString(getString(R.string.pref_key_followup_interval), "5")));
 			} catch (NumberFormatException e) {
 				a.setIntervalLength(5);
 			}
 			try {
-				a.setNumberOfIntervals(Integer.parseInt(mSettings.getString(getString(R.string.key_followup_alarms), "4")));
+				a.setNumberOfIntervals(Integer.parseInt(mSettings.getString(getString(R.string.pref_key_num_followups), "4")));
 			} catch (NumberFormatException e) {
 				a.setNumberOfIntervals(4);
 			}
@@ -440,7 +447,6 @@ public class FortyWinks extends Activity {
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
 		return super.onPrepareOptionsMenu(menu);
 	}
 	
@@ -460,6 +466,7 @@ public class FortyWinks extends Activity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode == ADD_QUIK_REQUEST_CODE && resultCode == RESULT_OK) {
 			Alarm a = (Alarm)data.getParcelableExtra("ALARM");
 			Log.d("40W", "About to save alarm: " + a + "with ID: " + a.getId() + ", and is it a quick alarm?: " + a.isQuikAlarm());
@@ -467,7 +474,6 @@ public class FortyWinks extends Activity {
 			mDatabaseAdapter.updateFullAlarmList(mUpcomingAlarms);
 			Log.d("40W", "" + mUpcomingAlarms);
 			mNextAlarmsAdapter.notifyDataSetChanged();
-			
 		}
 	}
 	

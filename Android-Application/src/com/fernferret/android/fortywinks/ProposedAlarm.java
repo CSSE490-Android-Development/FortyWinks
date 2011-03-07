@@ -21,6 +21,7 @@ public class ProposedAlarm {
 	private int mMinute;
 	private int mIntervalNumber;
 	private int mIntervalLength;
+	private int mTimeTillSleep;
 	private ProposedAlarmType mAlarmType;
 	/**
 	 * Creates a new proposed alarm that the user can turn into a PowerNap alarm.
@@ -29,11 +30,12 @@ public class ProposedAlarm {
 	 * @param intervalNumber How many intervals is this from now
 	 * @param intervalLength The length of one interval
 	 */
-	public ProposedAlarm(int hour, int minute, int intervalNumber, int intervalLength, ProposedAlarmType type) {
+	public ProposedAlarm(int hour, int minute, int intervalNumber, int intervalLength, int timeTillSleep, ProposedAlarmType type) {
 		mHour = hour;
 		mMinute = minute;
 		mIntervalNumber = intervalNumber;
 		mIntervalLength = intervalLength;
+		mTimeTillSleep = timeTillSleep;
 		mAlarmType = type;
 	}
 	/**
@@ -43,13 +45,15 @@ public class ProposedAlarm {
 	 * @param intervalNumber How many intervals is this from now
 	 * @param intervalLength The length of one interval
 	 */
-	public ProposedAlarm(int hours, int minutes, int intervalNumber, int intervalLength) {
+	public ProposedAlarm(int hours, int minutes, int intervalNumber, int intervalLength, int timeTillSleep) {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.HOUR, hours);
 		c.add(Calendar.MINUTE, minutes);
 		
 		mHour = c.get(Calendar.HOUR_OF_DAY);
 		mMinute = c.get(Calendar.MINUTE);
+		
+		mTimeTillSleep = timeTillSleep;
 		
 		mIntervalNumber = intervalNumber;
 		mIntervalLength = intervalLength;
@@ -63,6 +67,7 @@ public class ProposedAlarm {
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.HOUR_OF_DAY, mHour);
 		c.set(Calendar.MINUTE, mMinute);
+		c.add(Calendar.MINUTE, mTimeTillSleep);
 		return DateFormat.format("h:mm aa", c).toString();
 	}
 	
@@ -71,7 +76,7 @@ public class ProposedAlarm {
 	 * @return a human readable representation of time the user will be asleep
 	 */
 	public String getPrettyCyclesTillAlarm() {
-		float timeInHours = ((float)mIntervalLength/(float)60.0) * mIntervalNumber;
+		float timeInHours = ((float)mIntervalLength/(float)60.0) * mIntervalNumber + ((float) mTimeTillSleep / ((float) 60));
 		// Grammar Matters.
 		if(timeInHours == 1) {
 			return  "1 Hour";
@@ -115,6 +120,14 @@ public class ProposedAlarm {
 	}
 	public int getNumberOfIntervals() {
 		return mIntervalNumber;
+	}
+	
+	public void setTimeTillSleep(int timeTillSleep) {
+	    mTimeTillSleep = timeTillSleep;
+	}
+	
+	public int getTimeTillSleep() {
+	    return mTimeTillSleep;
 	}
 	
 	public void setTimeTill(int hours, int minutes) {

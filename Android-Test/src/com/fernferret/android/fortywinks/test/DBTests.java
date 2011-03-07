@@ -1,5 +1,7 @@
 package com.fernferret.android.fortywinks.test;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,8 +27,31 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         mDba.resetDatabase();
     }
     
+    @Override
+    protected void tearDown() throws Exception {
+        mDba.resetDatabase();
+        super.tearDown();
+    }
+    
     public void testPreconditions() {
         assertNotNull(mDba);
+    }
+    
+    private void testFollowUpEquality(Alarm a, Alarm b) {
+        HashMap<Integer, Long> followUpsA = a.getFollowups();
+        HashMap<Integer, Long> followUpsB = b.getFollowups();
+        
+        ArrayList<Integer> idsA = new ArrayList<Integer>(followUpsA.keySet());
+        ArrayList<Integer> idsB = new ArrayList<Integer>(followUpsB.keySet());
+        
+        Collections.sort(idsA);
+        Collections.sort(idsB);
+        
+        assertEquals(idsA.size(), idsB.size());
+        
+        for (int i : idsA) {
+            assertEquals(followUpsA.get(i), followUpsB.get(i));
+        }
     }
     
     private void testBasicEquality(Alarm a, Alarm b) {
@@ -39,6 +64,11 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         assertEquals(a.getIntervalEnd(), b.getIntervalEnd());
         assertEquals(a.isActive(), b.isActive());
         assertEquals(a.getIdentifier(), b.getIdentifier());
+    }
+    
+    private void testFullEquality(Alarm a, Alarm b) {
+        testBasicEquality(a, b);
+        testFollowUpEquality(a, b);
     }
     
     public void testSaveSimpleAlarm() {
@@ -56,7 +86,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         mDba.saveAlarm(a);
         assertFalse(a.getId() == -1);
         Alarm result = mDba.getAlarm(a.getId());
-        testBasicEquality(a, result);
+        testFullEquality(a, result);
     }
     
     public void testSavePowerNap() {
@@ -73,7 +103,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         
         Alarm result = mDba.getPowerNap();
         assertNotNull(result);
-        testBasicEquality(a, result);
+        testFullEquality(a, result);
     }
     
     public void testOverridePowerNap() {
@@ -105,7 +135,7 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         
         Alarm result = mDba.getPowerNap();
         assertNotNull(result);
-        testBasicEquality(b, result);
+        testFullEquality(b, result);
     }
     
     public void testSetQuikAlarms() {
@@ -142,11 +172,11 @@ public class DBTests extends ActivityInstrumentationTestCase2<FortyWinks> {
         mDba.saveAlarm(c);
         assertFalse(c.getId() == -1);
         
-        List<Alarm> quikAlarms = mDba.getQuikAlarmsAndAlarms();
+        List<Alarm> quikAlarms = mDba.getQuikAlarmsAndScheduledAlarms();
         assertEquals(quikAlarms.size(), 3);
         testBasicEquality(quikAlarms.get(0), c);
         testBasicEquality(quikAlarms.get(1), a);
-        testBasicEquality(quikAlarms.get(2), b);
+        testFullEquality(quikAlarms.get(2), b);
         
     }
     
